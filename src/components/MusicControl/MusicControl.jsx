@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import weddingConfig from '../../config/weddingConfig';
 import { useScrollDirection } from '../../hooks/useScrollDirection';
+import { getAssetUrl } from '../../utils/assetUtils';
 import './MusicControl.css';
 
 /* ── SVG Icons ── */
@@ -41,7 +42,7 @@ const MusicControl = forwardRef((props, ref) => {
     if (!music.enabled || !music.url) return;
 
     const audio = new Audio();
-    audio.src = music.url;
+    audio.src = getAssetUrl(music.url);
     audio.loop = true;
     audio.volume = 0.5;
     audio.preload = 'auto';

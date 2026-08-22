@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { usePrefersReducedMotion } from '../../hooks/useMediaQuery';
 import useAnalytics, { EVENTS } from '../../hooks/useAnalytics';
+import { getAssetUrl } from '../../utils/assetUtils';
 import './Envelope.css';
 
 const HeartSVG = () => (
@@ -57,10 +58,10 @@ const Envelope = ({ onOpen, onTriggerMusic }) => {
   return (
     <div className="envelope-screen">
       <div className="envelope-screen__watercolors" aria-hidden="true">
-        <img src="/watercolor-splash.png" alt="" className="wc wc--tl" />
-        <img src="/watercolor-splash.png" alt="" className="wc wc--br" />
-        <img src="/watercolor-floral.png" alt="" className="wc wc--bl-floral" />
-        <img src="/watercolor-floral.png" alt="" className="wc wc--tr-floral" />
+        <img src={getAssetUrl('/watercolor-splash.png')} alt="" className="wc wc--tl" />
+        <img src={getAssetUrl('/watercolor-splash.png')} alt="" className="wc wc--br" />
+        <img src={getAssetUrl('/watercolor-floral.png')} alt="" className="wc wc--bl-floral" />
+        <img src={getAssetUrl('/watercolor-floral.png')} alt="" className="wc wc--tr-floral" />
       </div>
 
       <motion.p
@@ -111,7 +112,7 @@ const Envelope = ({ onOpen, onTriggerMusic }) => {
           >
             <div className="envelope__card-frame">
               <img
-                src="/og-image.jpg"
+                src={getAssetUrl('/og-image.jpg')}
                 alt="Save the Date"
                 className="envelope__card-img"
               />

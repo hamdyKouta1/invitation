@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import weddingConfig from '../../config/weddingConfig';
 import OrnamentDivider from '../ui/OrnamentDivider';
 import FloralCornerSVG from '../ui/FloralCornerSVG';
+import { getAssetUrl } from '../../utils/assetUtils';
 import './Hero.css';
 
 const Hero = () => {
@@ -77,7 +78,7 @@ const Hero = () => {
 
           <motion.div className="hero__illustration-wrap" variants={fadeUp}>
             <img
-              src="/couple-illustration.png"
+              src={getAssetUrl('/couple-illustration.png')}
               alt={`${groomName} & ${brideName}`}
               className="hero__illustration"
               loading="eager"
