@@ -1,10 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// Change base to match your GitHub Pages repo name
-// e.g., if your repo is https://github.com/username/wedding
-// then base should be '/wedding/'
-const base = process.env.GITHUB_PAGES === 'true' ? '/wedding/' : '/'
+// Base path for GitHub Pages repo: https://hamdyKouta1.github.io/invitation/
+const base = process.env.NODE_ENV === 'production' || process.env.GITHUB_PAGES === 'true' ? '/invitation/' : '/'
 
 export default defineConfig({
   plugins: [react()],

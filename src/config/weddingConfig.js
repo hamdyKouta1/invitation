@@ -132,24 +132,24 @@ const weddingConfig = {
    * ─── SHARING ──────────────────────────────────────────────
    */
   sharing: {
-    // Replace with your actual GitHub Pages URL
-    url: "https://username.github.io/wedding/",
+    // Live GitHub Pages URL
+    url: "https://hamdyKouta1.github.io/invitation/",
     // WhatsApp share message template (use {url} placeholder)
-    messageAr: "🎉 دعوة زفاف — شاركنا فرحتنا! {url}",
-    messageEn: "🎉 Wedding Invitation — Join us on our special day! {url}",
+    messageAr: "🎉 دعوة زفاف حمدى ورودينا — شاركونا فرحتنا! {url}",
+    messageEn: "🎉 Hamdy & Rodina's Wedding Invitation — Join us on our special day! {url}",
   },
 
   /**
    * ─── SEO & META ───────────────────────────────────────────
    */
   meta: {
-    titleAr: "دعوة زفاف",
-    titleEn: "Wedding Invitation",
-    descriptionAr: "يسعدنا دعوتكم لمشاركتنا فرحة زفافنا",
-    descriptionEn: "We joyfully invite you to celebrate our wedding",
-    // OG image URL (replace with actual image)
-    ogImageUrl: "",
-    faviconUrl: "",
+    titleAr: "دعوة زفاف حمدى ورودينا",
+    titleEn: "Hamdy & Rodina's Wedding Invitation",
+    descriptionAr: "يسعدنا دعوتكم لمشاركتنا فرحة زفافنا في بورسعيد",
+    descriptionEn: "We joyfully invite you to celebrate our wedding in Port Said",
+    // OG image URL
+    ogImageUrl: "https://hamdyKouta1.github.io/invitation/og-image.jpg",
+    faviconUrl: "/favicon.svg",
   },
 
   /**
