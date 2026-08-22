@@ -1,0 +1,135 @@
+{
+  "lang": "en",
+  "dir": "ltr",
+
+  "nav": {
+    "home": "Home",
+    "details": "Details",
+    "families": "Families",
+    "venue": "Venue",
+    "gallery": "Gallery",
+    "dressCode": "Dress Code",
+    "wishes": "Wishes",
+    "rsvp": "RSVP"
+  },
+
+  "envelope": {
+    "openLabel": "Open Invitation",
+    "tapHint": "Tap to open your invitation"
+  },
+
+  "hero": {
+    "saveTheDate": "Save the Date",
+    "areGettingMarried": "are getting married",
+    "joinUs": "We joyfully invite you to celebrate our wedding",
+    "and": "&"
+  },
+
+  "details": {
+    "title": "Wedding Details",
+    "date": "Date",
+    "time": "Time",
+    "at": "at"
+  },
+
+  "countdown": {
+    "title": "Countdown to the Celebration",
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds",
+    "celebration": "The celebration has begun!"
+  },
+
+  "families": {
+    "title": "Our Families",
+    "groomFamily": "The Groom's Family",
+    "brideFamily": "The Bride's Family",
+    "sonOf": "Son of Mr.",
+    "and": "& Mrs.",
+    "daughterOf": "Daughter of Mr."
+  },
+
+  "venue": {
+    "title": "Venue",
+    "viewLocation": "View Location",
+    "getDirections": "Get Directions"
+  },
+
+  "gallery": {
+    "title": "Gallery",
+    "subtitle": "Moments from our journey",
+    "comingSoon": "Coming Soon — Photos on their way",
+    "close": "Close",
+    "prev": "Previous",
+    "next": "Next"
+  },
+
+  "dressCode": {
+    "title": "Dress Code & Attire Palette",
+    "subtitle": "A friendly guide to our wedding color interest and attire style",
+    "gentlemenTitle": "Gentlemen",
+    "gentlemenDesc": "Any comfortable suit in classic dark or warm earthy tones (Black, Navy, Charcoal, Latte, Beige)",
+    "ladiesTitle": "Ladies",
+    "ladiesDesc": "Elegant dresses in delicate, soft pastel shades (Blush Pink, Dusty Rose, Soft Sage, Lavender, Baby Blue, Peach)",
+    "noteTitle": "Kindly Note",
+    "noteDesc": "We kindly request guests to avoid pure white or ivory dresses to let the bride shine."
+  },
+
+  "wishes": {
+    "title": "Warm Wishes & Congratulations",
+    "subtitle": "Heartfelt messages from loved ones celebrating Hamdy & Rodina",
+    "empty": "Be the first to leave a warm message for the couple!",
+    "from": "With love from"
+  },
+
+  "rsvp": {
+    "title": "RSVP & Wishes",
+    "subtitle": "We'd love to know if you'll join us and hear your warm words",
+    "name": "Full Name",
+    "namePlaceholder": "Enter your full name",
+    "phone": "Phone Number (optional)",
+    "phonePlaceholder": "01XXXXXXXXX",
+    "guestsCount": "Number of Guests",
+    "attendance": "Attendance",
+    "willAttend": "I Will Attend",
+    "wontAttend": "I Can't Attend",
+    "message": "Wishes / Message for the Couple (optional)",
+    "messagePlaceholder": "Write your warm congratulations for Hamdy & Rodina...",
+    "submit": "Confirm Attendance & Send Wishes",
+    "submitting": "Sending...",
+    "successTitle": "Thank You!",
+    "successMessage": "Thank you for confirming your attendance and sending your warm wishes. We look forward to celebrating with you.",
+    "declineMessage": "Thank you for letting us know. We hope to celebrate with you another time.",
+    "errorMessage": "Something went wrong. Please try again.",
+    "alreadySubmitted": "You have already confirmed your attendance. Thank you!",
+    "required": "This field is required",
+    "invalidPhone": "Invalid phone number",
+    "guestsMax": "Maximum {{max}} guests allowed"
+  },
+
+  "share": {
+    "title": "Share the Invitation",
+    "subtitle": "Send the invitation to your loved ones",
+    "whatsapp": "Share on WhatsApp",
+    "copyLink": "Copy Link",
+    "copied": "Link Copied!",
+    "nativeShare": "Share",
+    "shareMessage": "Wedding Invitation — Join us on our special day!"
+  },
+
+  "music": {
+    "on": "Music On",
+    "off": "Music Off"
+  },
+
+  "footer": {
+    "withLove": "With Love",
+    "rights": "All rights reserved"
+  },
+
+  "language": {
+    "ar": "العربية",
+    "en": "English"
+  }
+}

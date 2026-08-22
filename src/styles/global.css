@@ -1,0 +1,326 @@
+/* ============================================================
+   GLOBAL STYLES — Wedding Invitation
+   Design System: Warm Ivory, Blush, Sage, Gold
+   ============================================================ */
+
+/* ─── Google Fonts ─────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&family=Aref+Ruqaa:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&family=Lato:wght@300;400;700&display=swap');
+
+/* ─── CSS Custom Properties ─────────────────────────────────── */
+:root {
+  /* Colors */
+  --cream-50:  #FDFAF6;
+  --cream-100: #F8F4EF;
+  --cream-200: #F0E8DC;
+  --cream-300: #E8DDD1;
+  --cream-400: #D9CBBF;
+
+  --blush-100: #EDCFCF;
+  --blush-200: #D4A5A5;
+  --blush-300: #C08080;
+  --blush-400: #A86060;
+
+  --sage-100:  #C8D5C0;
+  --sage-200:  #A8BE9A;
+  --sage-300:  #8B9E7A;
+  --sage-400:  #6B7E5A;
+  --sage-500:  #4A5E3A;
+
+  --brown-100: #C4A99A;
+  --brown-200: #A07860;
+  --brown-300: #8B6355;
+  --brown-400: #6B4C3B;
+  --brown-500: #4A3028;
+
+  --gold-100:  #EDD9A8;
+  --gold-200:  #D4AF37;
+  --gold-300:  #C9A96E;
+  --gold-400:  #B8924A;
+  --gold-shimmer: linear-gradient(135deg, #D4AF37 0%, #F0D060 40%, #C9A96E 60%, #D4AF37 100%);
+
+  --text-primary:   #3D2B1F;
+  --text-secondary: #6B4C3B;
+  --text-muted:     #A07860;
+  --text-light:     #C4A99A;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* Typography Scale */
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2.25rem;
+  --text-5xl:  3rem;
+  --text-6xl:  3.75rem;
+  --text-7xl:  4.5rem;
+
+  /* Border Radius */
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm:  0 1px 3px rgba(61,43,31,0.06), 0 1px 2px rgba(61,43,31,0.04);
+  --shadow-md:  0 4px 12px rgba(61,43,31,0.08), 0 2px 4px rgba(61,43,31,0.05);
+  --shadow-lg:  0 10px 30px rgba(61,43,31,0.12), 0 4px 8px rgba(61,43,31,0.06);
+  --shadow-xl:  0 20px 60px rgba(61,43,31,0.18), 0 8px 20px rgba(61,43,31,0.10);
+  --shadow-gold: 0 4px 20px rgba(201,169,110,0.30);
+  --shadow-envelope: 0 24px 80px rgba(61,43,31,0.22), 0 8px 24px rgba(61,43,31,0.12);
+
+  /* Transitions */
+  --transition-fast:   150ms ease;
+  --transition-base:   300ms ease;
+  --transition-slow:   600ms ease;
+  --transition-slower: 900ms ease;
+  --transition-luxury: 1200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* Z-index layers */
+  --z-base:    1;
+  --z-overlay: 100;
+  --z-modal:   200;
+  --z-toast:   300;
+  --z-nav:     400;
+  --z-music:   500;
+}
+
+/* ─── Reset ─────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--cream-100);
+  color: var(--text-primary);
+  font-family: 'Lato', 'Amiri', sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Subtle paper texture via noise overlay */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+/* ─── Arabic body ───────────────────────────────────────────── */
+[dir="rtl"] body,
+[dir="rtl"] {
+  font-family: 'Alexandria', 'Lato', sans-serif;
+}
+
+/* ─── Typography Helpers ─────────────────────────────────────── */
+.font-script {
+  font-family: 'Great Vibes', cursive;
+}
+
+.font-serif {
+  font-family: 'Cormorant Garamond', 'Amiri', serif;
+}
+
+.font-sans {
+  font-family: 'Lato', sans-serif;
+}
+
+/* Distinctive Arabic Calligraphy Font for Names */
+[dir="rtl"] .font-script {
+  font-family: 'Aref Ruqaa', serif !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+}
+
+/* Modern & Elegant Arabic Font for Headings & Text */
+[dir="rtl"] .font-serif {
+  font-family: 'Alexandria', sans-serif;
+  font-weight: 400;
+}
+
+.text-gradient-gold {
+  background: var(--gold-shimmer);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tracking-widest {
+  letter-spacing: 0.25em;
+}
+
+.tracking-wide {
+  letter-spacing: 0.1em;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+/* ─── Section Layout ─────────────────────────────────────────── */
+.section {
+  width: 100%;
+  padding: var(--space-20) var(--space-6);
+  position: relative;
+  overflow: hidden;
+}
+
+.section--alt {
+  background-color: var(--cream-200);
+}
+
+.section__container {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.section__header {
+  text-align: center;
+  margin-bottom: var(--space-12);
+}
+
+.section__title {
+  font-family: 'Cormorant Garamond', 'Amiri', serif;
+  font-size: var(--text-3xl);
+  font-weight: 400;
+  color: var(--text-primary);
+  margin-bottom: var(--space-3);
+  line-height: 1.2;
+}
+
+[dir="rtl"] .section__title {
+  font-family: 'Amiri', serif;
+  font-size: calc(var(--text-3xl) * 1.1);
+}
+
+.section__subtitle {
+  font-size: var(--text-base);
+  color: var(--text-muted);
+  font-weight: 300;
+  letter-spacing: 0.05em;
+}
+
+/* ─── Ornamental Divider ─────────────────────────────────────── */
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin: var(--space-6) auto;
+  max-width: 300px;
+}
+
+.ornament-divider__line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold-300), transparent);
+}
+
+.ornament-divider__center {
+  color: var(--gold-300);
+  font-size: var(--text-xl);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* ─── Gold Frame / Arch ──────────────────────────────────────── */
+.arch-frame {
+  position: relative;
+  border: 1px solid var(--gold-300);
+  border-radius: var(--radius-xl) var(--radius-xl) 50% 50% / var(--radius-xl) var(--radius-xl) 30px 30px;
+  padding: var(--space-8);
+}
+
+/* ─── Floral Decoration Positions ───────────────────────────── */
+.floral-corner {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.floral-corner--tl { top: -20px; left: -20px; }
+.floral-corner--tr { top: -20px; right: -20px; transform: scaleX(-1); }
+.floral-corner--bl { bottom: -20px; left: -20px; transform: scaleY(-1); }
+.floral-corner--br { bottom: -20px; right: -20px; transform: scale(-1); }
+
+/* ─── Scroll Behavior ────────────────────────────────────────── */
+.no-scroll {
+  overflow: hidden;
+}
+
+/* ─── Utility Classes ────────────────────────────────────────── */
+.text-center { text-align: center; }
+.text-start  { text-align: start; }
+.text-end    { text-align: end; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--gold-300);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ─── Scrollbar Styling ──────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--cream-200); }
+::-webkit-scrollbar-thumb {
+  background: var(--gold-300);
+  border-radius: var(--radius-full);
+}
+
+/* ─── Selection ──────────────────────────────────────────────── */
+::selection {
+  background: var(--blush-200);
+  color: var(--text-primary);
+}
+
+/* ─── Responsive Utilities ───────────────────────────────────── */
+@media (max-width: 768px) {
+  .section {
+    padding: var(--space-16) var(--space-4);
+  }
+
+  .section__title {
+    font-size: var(--text-2xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .section {
+    padding: var(--space-12) var(--space-4);
+  }
+}

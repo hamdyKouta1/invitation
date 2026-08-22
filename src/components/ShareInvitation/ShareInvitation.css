@@ -1,0 +1,93 @@
+.share-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  justify-content: center;
+  padding: var(--space-6) 0;
+}
+
+/* ─── Share Button Base ──────────────────────────────────────── */
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-8);
+  border: 1px solid rgba(201,169,110,0.3);
+  border-radius: var(--radius-full);
+  background: var(--cream-50);
+  cursor: pointer;
+  font-family: 'Cormorant Garamond', 'Amiri', serif;
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  min-height: 52px;
+  min-width: 180px;
+  justify-content: center;
+  transition: box-shadow var(--transition-base);
+  box-shadow: var(--shadow-sm);
+}
+
+[dir="rtl"] .share-btn {
+  font-family: 'Amiri', serif;
+  flex-direction: row-reverse;
+  font-size: var(--text-lg);
+}
+
+.share-btn:focus-visible {
+  outline: 2px solid var(--gold-300);
+  outline-offset: 2px;
+}
+
+/* WhatsApp */
+.share-btn--whatsapp {
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  border-color: #25D366;
+  color: white;
+}
+
+.share-btn--whatsapp:hover {
+  box-shadow: 0 6px 24px rgba(37,211,102,0.35);
+}
+
+/* Copy */
+.share-btn--copy {
+  background: var(--cream-50);
+  border-color: rgba(201,169,110,0.4);
+  color: var(--text-secondary);
+}
+
+.share-btn--copy:hover {
+  background: rgba(201,169,110,0.06);
+  border-color: var(--gold-300);
+  box-shadow: var(--shadow-gold);
+}
+
+.share-btn--copied {
+  background: rgba(139,158,122,0.1);
+  border-color: var(--sage-300);
+  color: var(--sage-400);
+}
+
+/* Native */
+.share-btn--native {
+  background: linear-gradient(135deg, var(--gold-300), var(--gold-400));
+  border-color: var(--gold-400);
+  color: var(--cream-50);
+}
+
+.share-btn--native:hover {
+  box-shadow: var(--shadow-gold);
+}
+
+/* ─── Icon ───────────────────────────────────────────────────── */
+.share-btn__icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .share-btn {
+    width: 100%;
+    max-width: 320px;
+  }
+}

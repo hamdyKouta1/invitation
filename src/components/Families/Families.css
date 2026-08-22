@@ -1,0 +1,180 @@
+/* ─── Families Section Header Phrase ─────────────────────────── */
+.families__honor-phrase {
+  font-family: 'Cormorant Garamond', 'Alexandria', serif;
+  font-size: var(--text-lg);
+  color: var(--gold-400);
+  font-style: italic;
+  max-width: 600px;
+  margin: var(--space-2) auto var(--space-4);
+  line-height: 1.6;
+  text-align: center;
+}
+
+[dir="rtl"] .families__honor-phrase {
+  font-family: 'Alexandria', sans-serif;
+  font-size: var(--text-xl);
+  font-style: normal;
+  font-weight: 500;
+}
+
+.families-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-6) 0;
+}
+
+/* ─── Family Card ────────────────────────────────────────────── */
+.family-card {
+  width: 100%;
+}
+
+.family-card__inner {
+  background: var(--cream-50);
+  border: 1px solid rgba(201,169,110,0.25);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8) var(--space-6);
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.family-card__inner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--gold-300), transparent);
+}
+
+.family-card__top-ornament {
+  font-size: var(--text-base);
+  color: var(--gold-300);
+  margin-bottom: var(--space-2);
+  display: block;
+}
+
+.family-card__family-title {
+  font-family: 'Cormorant Garamond', 'Aref Ruqaa', serif;
+  font-size: var(--text-xl);
+  color: var(--brown-400);
+  font-weight: 600;
+  margin-bottom: var(--space-1);
+}
+
+[dir="rtl"] .family-card__family-title {
+  font-family: 'Aref Ruqaa', serif;
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--gold-400);
+}
+
+.family-card__title {
+  font-family: 'Lato', 'Alexandria', sans-serif;
+  font-size: var(--text-xs);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-3);
+}
+
+[dir="rtl"] .family-card__title {
+  font-family: 'Alexandria', sans-serif;
+  letter-spacing: 0.05em;
+  font-size: var(--text-sm);
+}
+
+.family-card__name {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  color: var(--brown-400);
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: var(--space-2);
+}
+
+[dir="rtl"] .family-card__name {
+  font-family: 'Aref Ruqaa', serif !important;
+  font-style: normal !important;
+  font-size: clamp(2.2rem, 6vw, 3.2rem);
+  font-weight: 700;
+  color: var(--brown-400);
+}
+
+.family-card__divider {
+  margin: var(--space-4) auto;
+  max-width: 180px;
+}
+
+.family-card__parents {
+  font-family: 'Cormorant Garamond', 'Alexandria', serif;
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  line-height: 1.8;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: var(--space-2);
+}
+
+[dir="rtl"] .family-card__parents {
+  font-family: 'Alexandria', sans-serif;
+  font-size: var(--text-base);
+}
+
+.family-card__parent-label {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+[dir="rtl"] .family-card__parent-label {
+  font-style: normal;
+}
+
+.family-card__father-name,
+.family-card__mother-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ─── Center Heart ───────────────────────────────────────────── */
+.families-heart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.families-heart__icon {
+  font-size: 2.5rem;
+  color: var(--blush-200);
+  animation: float 3s ease-in-out infinite;
+  display: block;
+}
+
+/* ─── Mobile ─────────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .families-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .families-heart {
+    order: 2;
+    padding: var(--space-2) 0;
+  }
+
+  .families-heart__icon {
+    font-size: 2rem;
+    transform: rotate(90deg);
+  }
+
+  .family-card:first-child  { order: 1; }
+  .family-card:last-child   { order: 3; }
+}

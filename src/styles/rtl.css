@@ -1,0 +1,117 @@
+/* ============================================================
+   RTL OVERRIDES — Wedding Invitation
+   Covers layout flips for Arabic (dir="rtl") mode
+   ============================================================ */
+
+/* ─── Text Direction ─────────────────────────────────────────── */
+[dir="rtl"] {
+  text-align: right;
+}
+
+/* ─── Flex Direction Flip ────────────────────────────────────── */
+[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
+
+/* ─── Ornament Divider lines ─────────────────────────────────── */
+[dir="rtl"] .ornament-divider__line:first-child {
+  background: linear-gradient(to left, transparent, var(--gold-300), transparent);
+}
+
+[dir="rtl"] .ornament-divider__line:last-child {
+  background: linear-gradient(to right, transparent, var(--gold-300), transparent);
+}
+
+/* ─── Navigation ─────────────────────────────────────────────── */
+[dir="rtl"] .floating-nav {
+  left: auto;
+  right: var(--space-4);
+}
+
+/* ─── Music Control ──────────────────────────────────────────── */
+[dir="rtl"] .music-control {
+  left: auto;
+  right: var(--space-4);
+}
+
+/* ─── Form Inputs ────────────────────────────────────────────── */
+[dir="rtl"] input,
+[dir="rtl"] select,
+[dir="rtl"] textarea {
+  text-align: right;
+}
+
+[dir="rtl"] .form-group label {
+  text-align: right;
+}
+
+/* ─── Gallery Lightbox Controls ──────────────────────────────── */
+[dir="rtl"] .lightbox__nav--prev {
+  left: auto;
+  right: var(--space-4);
+}
+
+[dir="rtl"] .lightbox__nav--next {
+  right: auto;
+  left: var(--space-4);
+}
+
+/* ─── Share Buttons ──────────────────────────────────────────── */
+[dir="rtl"] .share-grid {
+  direction: rtl;
+}
+
+/* ─── RSVP Radio Buttons ─────────────────────────────────────── */
+[dir="rtl"] .radio-group {
+  flex-direction: row-reverse;
+}
+
+/* ─── Families Section ───────────────────────────────────────── */
+[dir="rtl"] .families-grid {
+  direction: rtl;
+}
+
+/* ─── Wishlist Card ──────────────────────────────────────────── */
+[dir="rtl"] .wishlist-card__meta {
+  text-align: right;
+}
+
+/* ─── Footer ─────────────────────────────────────────────────── */
+[dir="rtl"] .footer__content {
+  direction: rtl;
+}
+
+/* ─── Countdown Labels ───────────────────────────────────────── */
+[dir="rtl"] .countdown-grid {
+  direction: rtl;
+}
+
+/* ─── Language Switcher ──────────────────────────────────────── */
+[dir="rtl"] .lang-switcher {
+  flex-direction: row;
+}
+
+/* ─── Venue Info ─────────────────────────────────────────────── */
+[dir="rtl"] .venue-info {
+  text-align: right;
+}
+
+/* ─── Icon + Text combos ─────────────────────────────────────── */
+[dir="rtl"] .icon-text {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .icon-text .icon {
+  margin-left: var(--space-2);
+  margin-right: 0;
+}
+
+/* ─── Section Header ─────────────────────────────────────────── */
+[dir="rtl"] .section__header {
+  direction: rtl;
+}
+
+/* ─── Envelope open button ───────────────────────────────────── */
+[dir="rtl"] .envelope__cta-text {
+  letter-spacing: 0.1em;
+}

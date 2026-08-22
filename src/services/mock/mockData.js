@@ -1,0 +1,118 @@
+/**
+ * Mock Data — used when Firebase is not enabled.
+ * Replace with real data or Firebase-loaded data in production.
+ */
+
+export const mockGalleryImages = [
+  {
+    id: '1',
+    url: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80',
+    alt: 'Wedding couple',
+    aspectRatio: 'portrait',
+  },
+  {
+    id: '2',
+    url: 'https://images.unsplash.com/photo-1529636798458-92182e662485?w=800&q=80',
+    alt: 'Wedding ceremony',
+    aspectRatio: 'landscape',
+  },
+  {
+    id: '3',
+    url: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=600&q=80',
+    alt: 'Wedding rings',
+    aspectRatio: 'square',
+  },
+  {
+    id: '4',
+    url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&q=80',
+    alt: 'Wedding flowers',
+    aspectRatio: 'portrait',
+  },
+  {
+    id: '5',
+    url: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&q=80',
+    alt: 'Wedding table setting',
+    aspectRatio: 'landscape',
+  },
+  {
+    id: '6',
+    url: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&q=80',
+    alt: 'Bride portrait',
+    aspectRatio: 'portrait',
+  },
+];
+
+export const mockWishlistItems = [
+  {
+    id: '1',
+    titleAr: 'طقم أواني المطبخ الفاخر',
+    titleEn: 'Luxury Kitchen Cookware Set',
+    descriptionAr: 'طقم أواني عالي الجودة من الاستانلس ستيل للمنزل الجديد',
+    descriptionEn: 'Premium stainless steel cookware set for the new home',
+    price: 1200,
+    currency: 'EGP',
+    status: 'available',
+    link: '',
+    imageUrl: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=70',
+  },
+  {
+    id: '2',
+    titleAr: 'مجموعة الشاي والقهوة الفاخرة',
+    titleEn: 'Premium Tea & Coffee Set',
+    descriptionAr: 'طقم أنيق للضيافة من الفضة المطلية',
+    descriptionEn: 'Elegant silver-plated hospitality set',
+    price: 800,
+    currency: 'EGP',
+    status: 'reserved',
+    link: '',
+    imageUrl: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&q=70',
+  },
+  {
+    id: '3',
+    titleAr: 'مرآة غرفة النوم الكلاسيكية',
+    titleEn: 'Classic Bedroom Mirror',
+    descriptionAr: 'مرآة كاملة الطول بإطار ذهبي أنيق',
+    descriptionEn: 'Full-length mirror with elegant golden frame',
+    price: 2500,
+    currency: 'EGP',
+    status: 'available',
+    link: '',
+    imageUrl: 'https://images.unsplash.com/photo-1618220252344-8ec99ec624b1?w=400&q=70',
+  },
+  {
+    id: '4',
+    titleAr: 'مجموعة المناشف القطنية الفاخرة',
+    titleEn: 'Luxury Egyptian Cotton Towels',
+    descriptionAr: 'مناشف قطن مصري فاخرة عالية الجودة',
+    descriptionEn: 'Premium Egyptian cotton towels of highest quality',
+    price: 600,
+    currency: 'EGP',
+    status: 'purchased',
+    link: '',
+    imageUrl: 'https://images.unsplash.com/photo-1615796153287-98eacf0abb13?w=400&q=70',
+  },
+  {
+    id: '5',
+    titleAr: 'طقم طعام فاخر',
+    titleEn: 'Fine Dining Set',
+    descriptionAr: 'طقم أطباق وأدوات مائدة أنيقة',
+    descriptionEn: 'Elegant plates and dining utensils set',
+    price: 3200,
+    currency: 'EGP',
+    status: 'available',
+    link: '',
+    imageUrl: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&q=70',
+  },
+  {
+    id: '6',
+    titleAr: 'فازة زهور كريستالية',
+    titleEn: 'Crystal Flower Vase',
+    descriptionAr: 'فازة كريستالية رفيعة الصنع',
+    descriptionEn: 'Finely crafted crystal flower vase',
+    price: 950,
+    currency: 'EGP',
+    status: 'available',
+    link: '',
+    imageUrl: 'https://images.unsplash.com/photo-1534970028765-bf79f2b33960?w=400&q=70',
+  },
+];

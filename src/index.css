@@ -1,0 +1,18 @@
+/*
+ * src/index.css — Wedding Invitation Entry Styles
+ * Reset the Vite default template styles.
+ * All real design system styles live in src/styles/global.css
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}

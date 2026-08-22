@@ -1,0 +1,305 @@
+.rsvp-card {
+  max-width: 520px;
+  margin: 0 auto;
+  background: var(--cream-50);
+  border: 1px solid rgba(201,169,110,0.25);
+  border-radius: var(--radius-xl);
+  padding: var(--space-10) var(--space-8);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.rsvp-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, var(--gold-300), transparent);
+}
+
+/* ─── Form ───────────────────────────────────────────────────── */
+.rsvp-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.form-label {
+  font-family: 'Lato', sans-serif;
+  font-size: var(--text-xs);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+[dir="rtl"] .form-label {
+  font-family: 'Amiri', serif;
+  letter-spacing: 0.02em;
+  font-size: var(--text-sm);
+}
+
+.form-required {
+  color: var(--blush-300);
+  margin-inline-start: 2px;
+}
+
+.form-input {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: var(--cream-100);
+  border: 1px solid rgba(201,169,110,0.3);
+  border-radius: var(--radius-md);
+  font-family: 'Cormorant Garamond', 'Amiri', serif;
+  font-size: var(--text-lg);
+  color: var(--text-primary);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  min-height: 48px;
+  appearance: none;
+}
+
+.form-textarea {
+  min-height: 90px;
+  resize: vertical;
+  line-height: 1.6;
+  padding: var(--space-3) var(--space-4);
+}
+
+[dir="rtl"] .form-input {
+  font-family: 'Amiri', serif;
+  text-align: right;
+}
+
+.form-input::placeholder {
+  color: var(--text-light);
+  font-style: italic;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--gold-300);
+  box-shadow: 0 0 0 3px rgba(201,169,110,0.15);
+}
+
+.form-input--error {
+  border-color: var(--blush-300);
+}
+
+.form-select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238B6355' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+  padding-right: var(--space-10);
+}
+
+[dir="rtl"] .form-select {
+  background-position: left var(--space-3) center;
+  padding-right: var(--space-4);
+  padding-left: var(--space-10);
+}
+
+.form-error {
+  font-size: var(--text-xs);
+  color: var(--blush-400);
+  display: block;
+}
+
+[dir="rtl"] .form-error {
+  font-family: 'Amiri', serif;
+}
+
+/* ─── Radio Attendance ───────────────────────────────────────── */
+.rsvp-radio-group {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.rsvp-radio {
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid rgba(201,169,110,0.3);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  background: var(--cream-100);
+}
+
+[dir="rtl"] .rsvp-radio {
+  flex-direction: row-reverse;
+}
+
+.rsvp-radio:hover {
+  border-color: var(--gold-300);
+  background: rgba(201,169,110,0.05);
+}
+
+.rsvp-radio__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.rsvp-radio__icon {
+  font-size: var(--text-base);
+  color: var(--text-light);
+  flex-shrink: 0;
+  transition: color var(--transition-fast);
+}
+
+.rsvp-radio__text {
+  font-family: 'Cormorant Garamond', 'Amiri', serif;
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  line-height: 1.3;
+}
+
+[dir="rtl"] .rsvp-radio__text {
+  font-family: 'Amiri', serif;
+  font-size: var(--text-lg);
+}
+
+/* Selected states */
+.rsvp-radio--selected {
+  border-color: var(--gold-300);
+  background: rgba(201,169,110,0.08);
+}
+
+.rsvp-radio--selected .rsvp-radio__icon {
+  color: var(--gold-400);
+}
+
+.rsvp-radio--selected .rsvp-radio__text {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.rsvp-radio--selected.rsvp-radio--decline {
+  border-color: var(--blush-200);
+  background: rgba(212,165,165,0.08);
+}
+
+.rsvp-radio--selected.rsvp-radio--decline .rsvp-radio__icon {
+  color: var(--blush-300);
+}
+
+/* ─── Submit Button ──────────────────────────────────────────── */
+.rsvp-submit-btn {
+  width: 100%;
+  padding: var(--space-4);
+  background: linear-gradient(135deg, var(--gold-300) 0%, var(--gold-400) 100%);
+  border: none;
+  border-radius: var(--radius-full);
+  color: var(--cream-50);
+  font-family: 'Cormorant Garamond', 'Amiri', serif;
+  font-size: var(--text-xl);
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-gold);
+  min-height: 56px;
+}
+
+[dir="rtl"] .rsvp-submit-btn {
+  font-family: 'Amiri', serif;
+  letter-spacing: 0.02em;
+}
+
+.rsvp-submit-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--gold-400) 0%, var(--gold-300) 100%);
+  box-shadow: 0 8px 30px rgba(201,169,110,0.45);
+  transform: translateY(-2px);
+}
+
+.rsvp-submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.rsvp-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.rsvp-submit-btn:focus-visible {
+  outline: 2px solid var(--gold-300);
+  outline-offset: 3px;
+}
+
+/* ─── Error Banner ───────────────────────────────────────────── */
+.rsvp-error-banner {
+  background: rgba(212,165,165,0.12);
+  border: 1px solid var(--blush-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  color: var(--blush-400);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+/* ─── Success State ──────────────────────────────────────────── */
+.rsvp-success {
+  text-align: center;
+  padding: var(--space-8) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.rsvp-success__icon {
+  font-size: var(--text-6xl);
+  animation: float 3s ease-in-out infinite;
+}
+
+.rsvp-success__title {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  color: var(--brown-400);
+  font-weight: 400;
+  line-height: 1.1;
+  margin: 0;
+}
+
+[dir="rtl"] .rsvp-success__title {
+  font-family: 'Amiri', serif;
+  font-style: italic;
+}
+
+.rsvp-success__message {
+  font-family: 'Cormorant Garamond', 'Amiri', serif;
+  font-size: var(--text-xl);
+  color: var(--text-secondary);
+  font-style: italic;
+  max-width: 380px;
+  line-height: 1.7;
+}
+
+[dir="rtl"] .rsvp-success__message {
+  font-family: 'Amiri', serif;
+  font-size: var(--text-2xl);
+  font-style: normal;
+}
+
+@media (max-width: 480px) {
+  .rsvp-card {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .rsvp-radio-group {
+    flex-direction: column;
+  }
+}
