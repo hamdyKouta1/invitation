@@ -55,18 +55,24 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // قواعد تأكيد الحضور والتهاني (RSVP & Wishes)
+    // 1. قواعد إعدادات الزفاف الحية (Config) — القراءة للجميع والكتابة للوحة الإدارة
+    match /config/{document} {
+      allow read: if true;
+      allow write: if true;
+    }
+    
+    // 2. قواعد تأكيد الحضور والتهاني (RSVP & Wishes)
     match /rsvps/{document} {
       allow read: if true;
       allow create: if request.resource.data.name is string 
                    && request.resource.data.name.size() > 0;
-      allow update, delete: if false; // منع التعديل أو الحذف من المتصفح مباشرة
+      allow update, delete: if true; // للوحة التحكم
     }
     
-    // قواعد معرض الصور (Gallery)
+    // 3. قواعد معرض الصور (Gallery)
     match /gallery/{document} {
       allow read: if true;
-      allow write: if false; // القراءة فقط للضيوف
+      allow write: if true; // لإضافة وحذف الصور من لوحة التحكم
     }
   }
 }

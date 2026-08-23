@@ -10,6 +10,7 @@ import { mockGalleryImages, mockWishlistItems } from './mockData';
 
 const RSVP_KEY = 'wedding_rsvp_submitted';
 const RSVP_STORE_KEY = 'wedding_rsvps';
+const GALLERY_STORE_KEY = 'wedding_gallery_images';
 const WISHLIST_KEY = 'wedding_wishlist_reserved';
 
 // ─── Simulate network delay ──────────────────────────────────
@@ -27,14 +28,12 @@ export const submitRSVP = async (data) => {
     throw new Error('already_submitted');
   }
 
-  // Simulate validation failure ~0% of the time in mock
   const rsvp = {
     ...data,
     id: `mock-${Date.now()}`,
     createdAt: new Date().toISOString(),
   };
 
-  // Store locally
   const existing = JSON.parse(localStorage.getItem(RSVP_STORE_KEY) || '[]');
   existing.push(rsvp);
   localStorage.setItem(RSVP_STORE_KEY, JSON.stringify(existing));
@@ -79,16 +78,113 @@ export const getWishes = async () => {
 };
 
 // ─── Gallery ──────────────────────────────────────────────────
+const _getStoredGallery = () => {
+  try {
+    const stored = localStorage.getItem(GALLERY_STORE_KEY);
+    return stored ? JSON.parse(stored) : null;
+  } catch {
+    return null;
+  }
+};
+
+const _saveStoredGallery = (images) => {
+  localStorage.setItem(GALLERY_STORE_KEY, JSON.stringify(images));
+};
+
 export const getGalleryImages = async () => {
   await delay(400);
+  const stored = _getStoredGallery();
+  return stored ?? mockGalleryImages;
+};
+
+export const addGalleryImage = async (imageData) => {
+  await delay(400);
+  const current = _getStoredGallery() ?? [...mockGalleryImages];
+  const orderVal = parseInt(imageData.order, 10);
+  const newImage = {
+    ...imageData,
+    id: `mock-${Date.now()}`,
+    order: !isNaN(orderVal) ? orderVal : current.length + 1,
+    createdAt: new Date().toISOString(),
+  };
+  current.push(newImage);
+  current.sort((a, b) => (a.order || 0) - (b.order || 0));
+  _saveStoredGallery(current);
+  window.dispatchEvent(new CustomEvent('gallery_updated'));
+  return newImage;
+};
+
+export const deleteGalleryImage = async (id) => {
+  await delay(300);
+  const current = _getStoredGallery() ?? [...mockGalleryImages];
+  const filtered = current.filter((img) => img.id !== id);
+  _saveStoredGallery(filtered);
+  window.dispatchEvent(new CustomEvent('gallery_updated'));
+  return { success: true };
+};
+
+export const saveGalleryImages = async (images) => {
+  await delay(200);
+  _saveStoredGallery(images);
+  return images;
+};
+
+export const resetGalleryImages = async () => {
+  await delay(300);
+  localStorage.removeItem(GALLERY_STORE_KEY);
+  window.dispatchEvent(new CustomEvent('gallery_updated'));
   return mockGalleryImages;
+};
+
+// ─── Guest Management (Admin) ─────────────────────────────────
+export const getGuests = async () => {
+  await delay(400);
+  return JSON.parse(localStorage.getItem(RSVP_STORE_KEY) || '[]');
+};
+
+export const addGuest = async (guestData) => {
+  await delay(400);
+  const existing = JSON.parse(localStorage.getItem(RSVP_STORE_KEY) || '[]');
+  const newGuest = {
+    ...guestData,
+    id: `mock-${Date.now()}`,
+    createdAt: new Date().toISOString(),
+  };
+  existing.push(newGuest);
+  localStorage.setItem(RSVP_STORE_KEY, JSON.stringify(existing));
+  return newGuest;
+};
+
+export const updateGuest = async (id, updatedData) => {
+  await delay(400);
+  const existing = JSON.parse(localStorage.getItem(RSVP_STORE_KEY) || '[]');
+  const idx = existing.findIndex((g) => g.id === id);
+  if (idx !== -1) {
+    existing[idx] = { ...existing[idx], ...updatedData, updatedAt: new Date().toISOString() };
+    localStorage.setItem(RSVP_STORE_KEY, JSON.stringify(existing));
+    return existing[idx];
+  }
+  throw new Error('Guest not found');
+};
+
+export const deleteGuest = async (id) => {
+  await delay(300);
+  const existing = JSON.parse(localStorage.getItem(RSVP_STORE_KEY) || '[]');
+  const filtered = existing.filter((g) => g.id !== id);
+  localStorage.setItem(RSVP_STORE_KEY, JSON.stringify(filtered));
+  return { success: true };
+};
+
+export const clearAllGuests = async () => {
+  await delay(300);
+  localStorage.removeItem(RSVP_STORE_KEY);
+  return { success: true };
 };
 
 // ─── Wishlist ─────────────────────────────────────────────────
 export const getWishlistItems = async () => {
   await delay(400);
 
-  // Apply any locally-stored reservations
   const reserved = JSON.parse(localStorage.getItem(WISHLIST_KEY) || '{}');
   return mockWishlistItems.map((item) => ({
     ...item,

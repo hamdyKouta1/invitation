@@ -21,11 +21,16 @@ import WishesWall from './components/WishesWall/WishesWall';
 import ShareInvitation from './components/ShareInvitation/ShareInvitation';
 import Navigation from './components/Navigation/Navigation';
 import MusicControl from './components/MusicControl/MusicControl';
+import AdminPortal from './components/Admin/AdminPortal';
 import OrnamentDivider from './components/ui/OrnamentDivider';
 import FloralCornerSVG from './components/ui/FloralCornerSVG';
 import weddingConfig from './config/weddingConfig';
+import { getWeddingConfigFromDB, saveWeddingConfigToDB } from './services';
+import { syncConfigWithFirestore } from './utils/configManager';
 
 import './App.css';
+
+const SECRET_HASH = import.meta.env.VITE_ADMIN_SECRET_ENDPOINT || 'admin-secret';
 
 /* ─── Footer ──────────────────────────────────────────────── */
 const Footer = () => {
@@ -75,18 +80,39 @@ const Footer = () => {
 /* ─── App ─────────────────────────────────────────────────── */
 function App() {
   const [envelopeOpened, setEnvelopeOpened] = useState(false);
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
   const musicControlRef = useRef(null);
   const wishesRef = useRef(null);
 
+  // Check URL hash / query param for secret admin endpoint on mount and hash changes
+  useEffect(() => {
+    const checkAdminEndpoint = () => {
+      const hash = window.location.hash.replace(/^#/, '');
+      const params = new URLSearchParams(window.location.search);
+      if (hash === SECRET_HASH || hash === 'admin' || hash === 'admin-secret' || params.get('portal') === 'admin') {
+        setIsAdminOpen(true);
+      }
+    };
+
+    checkAdminEndpoint();
+    window.addEventListener('hashchange', checkAdminEndpoint);
+    return () => window.removeEventListener('hashchange', checkAdminEndpoint);
+  }, []);
+
+  // Priority 1: Fetch live wedding config from Firestore DB on init (and auto-seed if missing)
+  useEffect(() => {
+    syncConfigWithFirestore(getWeddingConfigFromDB, saveWeddingConfigToDB);
+  }, []);
+
   // Prevent body scroll while envelope is displayed
   useEffect(() => {
-    if (!envelopeOpened) {
+    if (!envelopeOpened && !isAdminOpen) {
       document.body.classList.add('no-scroll');
     } else {
       document.body.classList.remove('no-scroll');
     }
     return () => document.body.classList.remove('no-scroll');
-  }, [envelopeOpened]);
+  }, [envelopeOpened, isAdminOpen]);
 
   const handleTriggerMusic = () => {
     if (musicControlRef.current) {
@@ -105,8 +131,18 @@ function App() {
     }
   };
 
+  const handleCloseAdmin = () => {
+    setIsAdminOpen(false);
+    if (window.location.hash) {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  };
+
   return (
     <div className="app">
+      {/* ── Secret Admin Management Portal (2FA Protected) ── */}
+      {isAdminOpen && <AdminPortal onClose={handleCloseAdmin} />}
+
       {/* Floating Music Control — Always rendered so music is available anywhere */}
       <MusicControl ref={musicControlRef} />
 

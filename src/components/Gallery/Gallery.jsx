@@ -157,14 +157,13 @@ const Gallery = () => {
   const [loading, setLoading] = useState(true);
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
-  useEffect(() => {
+  const loadImages = useCallback(() => {
     if (!weddingConfig.gallery.enabled) { setLoading(false); return; }
     getGalleryImages()
       .then((data) => {
         if (data && data.length > 0) {
           setImages(data.map(img => ({ ...img, url: transformDriveUrl(img.url) })));
         } else {
-          // Fallback if Firestore collection has no items yet
           const fallback = (weddingConfig.gallery.mockImages || [])
             .filter(img => img.url)
             .map(img => ({ ...img, url: transformDriveUrl(img.url) }));
@@ -179,6 +178,20 @@ const Gallery = () => {
       })
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    loadImages();
+  }, [loadImages]);
+
+  // Auto-refresh gallery when admin adds/deletes photos (gallery_updated event)
+  useEffect(() => {
+    const handleGalleryUpdate = () => {
+      console.info('[Gallery] Refreshing due to admin update...');
+      loadImages();
+    };
+    window.addEventListener('gallery_updated', handleGalleryUpdate);
+    return () => window.removeEventListener('gallery_updated', handleGalleryUpdate);
+  }, [loadImages]);
 
   // Lock scroll when lightbox open
   useEffect(() => {
