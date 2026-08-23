@@ -16,7 +16,7 @@ const buildSchema = (t, maxGuests) =>
     name:        z.string().min(2, t('rsvp.required')).max(60),
     phone:       z.string()
                   .optional()
-                  .refine((v) => !v || /^[\d\s\+\-]{7,15}$/.test(v), t('rsvp.invalidPhone')),
+                  .refine((v) => !v || /^[\d\s+-]{7,15}$/.test(v), t('rsvp.invalidPhone')),
     guestsCount: z.coerce.number().min(0).max(maxGuests, t('rsvp.guestsMax', { max: maxGuests })),
     attendance:  z.enum(['will_attend', 'wont_attend'], { required_error: t('rsvp.required') }),
     message:     z.string().optional(),
@@ -24,6 +24,9 @@ const buildSchema = (t, maxGuests) =>
 
 const RSVP = ({ onWishesUpdated }) => {
   const { t, i18n } = useTranslation();
+  const isAr = i18n.language === 'ar';
+  const groomName = isAr ? weddingConfig.groom.name : weddingConfig.groom.nameEn;
+  const brideName = isAr ? weddingConfig.bride.name : weddingConfig.bride.nameEn;
   const { track } = useAnalytics();
   const [status, setStatus] = useState(
     checkAlreadySubmitted() ? 'already_submitted' : 'idle'
@@ -221,7 +224,7 @@ const RSVP = ({ onWishesUpdated }) => {
                   id="rsvp-message"
                   className="form-input form-textarea"
                   rows={3}
-                  placeholder={t('rsvp.messagePlaceholder')}
+                  placeholder={t('rsvp.messagePlaceholder', { groom: groomName, bride: brideName })}
                   {...register('message')}
                 />
               </div>

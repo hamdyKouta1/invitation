@@ -3,12 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { MessageCircleHeart, Quote } from 'lucide-react';
 import { getWishes } from '../../services/index.js';
+import weddingConfig from '../../config/weddingConfig';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
 import './WishesWall.css';
 
 const WishesWall = forwardRef((props, ref) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isAr = i18n.language === 'ar';
+  const groomName = isAr ? weddingConfig.groom.name : weddingConfig.groom.nameEn;
+  const brideName = isAr ? weddingConfig.bride.name : weddingConfig.bride.nameEn;
   const [wishes, setWishes] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -36,7 +40,7 @@ const WishesWall = forwardRef((props, ref) => {
     <SectionWrapper id="wishes">
       <div className="section__header">
         <h2 className="section__title font-serif">{t('wishes.title')}</h2>
-        <p className="section__subtitle">{t('wishes.subtitle')}</p>
+        <p className="section__subtitle">{t('wishes.subtitle', { groom: groomName, bride: brideName })}</p>
         <OrnamentDivider symbol="✦" />
       </div>
 

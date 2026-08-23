@@ -83,7 +83,13 @@ const Lightbox = ({ images, activeIndex, onClose, onPrev, onNext }) => {
   const handleTouchEnd = (e) => {
     if (touchStartX.current === null) return;
     const diff = e.changedTouches[0].clientX - touchStartX.current;
-    if (Math.abs(diff) > 50) { diff < 0 ? onNext() : onPrev(); }
+    if (Math.abs(diff) > 50) {
+      if (diff < 0) {
+        onNext();
+      } else {
+        onPrev();
+      }
+    }
     touchStartX.current = null;
   };
 

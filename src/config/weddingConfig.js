@@ -5,37 +5,48 @@
  * ============================================================
  */
 
+// ─── 1. COUPLE & FAMILIES (Single Source of Truth) ──────────
+const groom = {
+  name: "حمـدى",
+  nameEn: "Hamdy",
+  familyTitleAr: "عائلة قوطه",
+  familyTitleEn: "The Kouta Family",
+  father: "محمد قوطه",
+  fatherEn: "Mohamed Kouta",
+  mother: "سلوي عبد المقصود",
+  motherEn: "Salwa Abdelmaksoud",
+  showMother: false, // Toggle to false to hide mother's name
+};
+
+const bride = {
+  name: "رودينـا",
+  nameEn: "Rodina",
+  familyTitleAr: "عائلة حمودة",
+  familyTitleEn: "The Hamoda Family",
+  father: "محمد حمودة",
+  fatherEn: "Mohamed Hamoda",
+  mother: "عبير غانم",
+  motherEn: "Abeer Ghanem",
+  showMother: false, // Toggle to false to hide mother's name
+};
+
+// ─── 2. MAIN CONFIGURATION OBJECT ────────────────────────────
 const weddingConfig = {
+  /**
+   * ─── LANGUAGE ─────────────────────────────────────────────
+   * Default language for the invitation: 'ar' (Arabic) or 'en' (English)
+   */
+  defaultLanguage: "en",
+
   /**
    * ─── COUPLE ──────────────────────────────────────────────
    */
-  groom: {
-    name: "حمـدى",
-    nameEn: "Hamdy",
-    familyTitleAr: "عائلة قوطه",
-    familyTitleEn: "The Kouta Family",
-    father: "محمد قوطه",
-    fatherEn: "Mohamed Kouta",
-    mother: "سلوي عبد المقصود",
-    motherEn: "Salwa Abdelmaksoud",
-    showMother: false, // Toggle to false to hide mother's name
-  },
+  groom,
+  bride,
 
-  bride: {
-    name: "رودينـا",
-    nameEn: "Rodina",
-    familyTitleAr: "عائلة حمودة",
-    familyTitleEn: "The Hamoda Family",
-    father: "محمد حمودة",
-    fatherEn: "Mohamed Hamoda",
-    mother: "عبير غانم",
-    motherEn: "Abeer Ghanem",
-    showMother: false, // Toggle to false to hide mother's name
-  },
-
-  // Family Invitation Phrase
-  invitationPhraseAr: "تتشرف عائلتا قوطه وحمودة بدعوتكم لحضور حفل زفاف نجليهما",
-  invitationPhraseEn: "The Kouta & Hamoda families cordially request the honor of your presence at the wedding of their children",
+  // Family Invitation Phrase (Auto-generated from family titles)
+  invitationPhraseAr: `تتشرف ${groom.familyTitleAr} و${bride.familyTitleAr} بدعوتكم لحضور حفل زفاف نجليهما`,
+  invitationPhraseEn: `${groom.familyTitleEn} & ${bride.familyTitleEn} cordially request the honor of your presence at the wedding of their children`,
 
   /**
    * ─── WEDDING DATE & TIME ─────────────────────────────────
@@ -81,8 +92,8 @@ const weddingConfig = {
    */
   music: {
     enabled: true,
-    // Local romantic piano track
-    url: "/wedding-song.mp3",
+    // Background wedding song
+    url: "/Die-with-a-smile.mp3",
     titleAr: "موسيقى الحفل",
     titleEn: "Wedding Music",
   },
@@ -135,16 +146,16 @@ const weddingConfig = {
     // Live GitHub Pages URL
     url: "https://hamdyKouta1.github.io/invitation/",
     // WhatsApp share message template (use {url} placeholder)
-    messageAr: "🎉 دعوة زفاف حمدى ورودينا — شاركونا فرحتنا! {url}",
-    messageEn: "🎉 Hamdy & Rodina's Wedding Invitation — Join us on our special day! {url}",
+    messageAr: `🎉 دعوة زفاف ${groom.name} و${bride.name} — شاركونا فرحتنا! {url}`,
+    messageEn: `🎉 ${groom.nameEn} & ${bride.nameEn}'s Wedding Invitation — Join us on our special day! {url}`,
   },
 
   /**
    * ─── SEO & META ───────────────────────────────────────────
    */
   meta: {
-    titleAr: "دعوة زفاف حمدى ورودينا",
-    titleEn: "Hamdy & Rodina's Wedding Invitation",
+    titleAr: `دعوة زفاف ${groom.name} و${bride.name}`,
+    titleEn: `${groom.nameEn} & ${bride.nameEn}'s Wedding Invitation`,
     descriptionAr: "يسعدنا دعوتكم لمشاركتنا فرحة زفافنا في بورسعيد",
     descriptionEn: "We joyfully invite you to celebrate our wedding in Port Said",
     // OG image URL

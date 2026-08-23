@@ -2,10 +2,12 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import ar from './ar.json';
 import en from './en.json';
+import weddingConfig from '../config/weddingConfig';
 
 const LANG_KEY = 'wedding_lang';
 
-const savedLang = localStorage.getItem(LANG_KEY) || 'ar';
+const defaultLang = weddingConfig?.defaultLanguage || 'ar';
+const savedLang = localStorage.getItem(LANG_KEY) || defaultLang;
 
 i18n
   .use(initReactI18next)
@@ -15,7 +17,7 @@ i18n
       en: { translation: en },
     },
     lng: savedLang,
-    fallbackLng: 'ar',
+    fallbackLng: defaultLang,
     interpolation: {
       escapeValue: false,
     },

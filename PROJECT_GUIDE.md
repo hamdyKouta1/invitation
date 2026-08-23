@@ -92,35 +92,40 @@ npm run deploy
 إليك شرح الحقول وكيفية التعديل عليها:
 
 ```javascript
+// ─── 1. بيانات العريس والعروسة والعائلتين (المصدر الموحد) ───
+const groom = {
+  name: "حمدى",                // اسم العريس بالعربي
+  nameEn: "Hamdy",            // اسم العريس بالإنكليزي
+  familyTitleAr: "عائلة قوطة",  // اسم عائلة العريس بالعربي
+  familyTitleEn: "The Kouta Family", // اسم عائلة العريس بالإنكليزي
+  father: "محمد قوطة",          // اسم والد العريس
+  fatherEn: "Mohamed Kouta",
+  mother: "سلوي عبد المقصود",   // اسم والدة العريس
+  motherEn: "Salwa Abdelmaksoud",
+  showMother: false,          // 👈 اجعلها false لإخفاء اسم الأم، أو true لإظهاره
+};
+
+const bride = {
+  name: "رودينا",               // اسم العروسة بالعربي
+  nameEn: "Rodina",           // اسم العروسة بالإنكليزي
+  familyTitleAr: "عائلة حمودة", // اسم عائلة العروسة بالعربي
+  familyTitleEn: "The Hamoda Family", // اسم عائلة العروسة بالإنكليزي
+  father: "محمد حمودة",        // اسم والد العروسة
+  fatherEn: "Mohamed Hamoda",
+  mother: "عبير غانم",          // اسم والدة العروسة
+  motherEn: "Abeer Ghanem",
+  showMother: false,          // 👈 اجعلها false لإخفاء اسم الأم، أو true لإظهاره
+};
+
 const weddingConfig = {
-  // ─── بيانات العريس والعروسة ──────────────────────────────
-  groom: {
-    name: "حمدى",                // اسم العريس بالعربي
-    nameEn: "Hamdy",            // اسم العريس بالإنكليزي
-    familyTitleAr: "عائلة قوطة",  // اسم عائلة العريس
-    familyTitleEn: "The Kouta Family",
-    father: "محمد قوطة",          // اسم والد العريس
-    fatherEn: "Mohamed Kouta",
-    mother: "سلوي عبد المقصود",   // اسم والدة العريس
-    motherEn: "Salwa Abdelmaksoud",
-    showMother: false,          // 👈 اجعلها false لإخفاء اسم الأم، أو true لإظهاره
-  },
+  // ─── اللغة الافتراضية للدعوة ──────────────────────────
+  defaultLanguage: "ar",        // 'ar' للغة العربية أو 'en' للغة الإنجليزية
 
-  bride: {
-    name: "رودينا",               // اسم العروسة بالعربي
-    nameEn: "Rodina",           // اسم العروسة بالإنكليزي
-    familyTitleAr: "عائلة حمودة", // اسم عائلة العروسة
-    familyTitleEn: "The Hamoda Family",
-    father: "محمد حمودة",        // اسم والد العروسة
-    fatherEn: "Mohamed Hamoda",
-    mother: "عبير غانم",          // اسم والدة العروسة
-    motherEn: "Abeer Ghanem",
-    showMother: false,          // 👈 اجعلها false لإخفاء اسم الأم، أو true لإظهاره
-  },
+  groom,
+  bride,
 
-  // عبارة التشرف والدعوة الرسمية في سكشن العائلات
-  invitationPhraseAr: "تتشرف عائلتا قوطة وحمودة بدعوتكم لحضور حفل زفاف نجليهما",
-  invitationPhraseEn: "The Kouta & Hamoda families cordially request the honor of your presence at the wedding of their children",
+  // يتم توليد عبارة الدعوة والروابط ورسائل المشاركة وعناوين SEO تلقائياً من بيانات العروسين والعائلتين:
+  // invitationPhraseAr, invitationPhraseEn, sharing, meta...
 
   // ─── الموعد والوقت والعد التنازلي ──────────────────────────
   wedding: {

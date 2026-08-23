@@ -78,7 +78,7 @@
 
   "wishes": {
     "title": "Warm Wishes & Congratulations",
-    "subtitle": "Heartfelt messages from loved ones celebrating Hamdy & Rodina",
+    "subtitle": "Heartfelt messages from loved ones celebrating {{groom}} & {{bride}}",
     "empty": "Be the first to leave a warm message for the couple!",
     "from": "With love from"
   },
@@ -86,8 +86,8 @@
   "rsvp": {
     "title": "RSVP & Wishes",
     "subtitle": "We'd love to know if you'll join us and hear your warm words",
-    "name": "Full Name",
-    "namePlaceholder": "Enter your full name",
+    "name": "First Name & Surname",
+    "namePlaceholder": "First name & surname",
     "phone": "Phone Number (optional)",
     "phonePlaceholder": "01XXXXXXXXX",
     "guestsCount": "Number of Guests",
@@ -95,7 +95,7 @@
     "willAttend": "I Will Attend",
     "wontAttend": "I Can't Attend",
     "message": "Wishes / Message for the Couple (optional)",
-    "messagePlaceholder": "Write your warm congratulations for Hamdy & Rodina...",
+    "messagePlaceholder": "Write your warm congratulations for {{groom}} & {{bride}}...",
     "submit": "Confirm Attendance & Send Wishes",
     "submitting": "Sending...",
     "successTitle": "Thank You!",
