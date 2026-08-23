@@ -10,11 +10,11 @@ const weddingConfig = {
    * ─── COUPLE ──────────────────────────────────────────────
    */
   groom: {
-    name: "حمدى",
+    name: "حمـدى",
     nameEn: "Hamdy",
-    familyTitleAr: "عائلة قوطة",
+    familyTitleAr: "عائلة قوطه",
     familyTitleEn: "The Kouta Family",
-    father: "محمد قوطة",
+    father: "محمد قوطه",
     fatherEn: "Mohamed Kouta",
     mother: "سلوي عبد المقصود",
     motherEn: "Salwa Abdelmaksoud",
@@ -22,7 +22,7 @@ const weddingConfig = {
   },
 
   bride: {
-    name: "رودينا",
+    name: "رودينـا",
     nameEn: "Rodina",
     familyTitleAr: "عائلة حمودة",
     familyTitleEn: "The Hamoda Family",
@@ -34,7 +34,7 @@ const weddingConfig = {
   },
 
   // Family Invitation Phrase
-  invitationPhraseAr: "تتشرف عائلتا قوطة وحمودة بدعوتكم لحضور حفل زفاف نجليهما",
+  invitationPhraseAr: "تتشرف عائلتا قوطه وحمودة بدعوتكم لحضور حفل زفاف نجليهما",
   invitationPhraseEn: "The Kouta & Hamoda families cordially request the honor of your presence at the wedding of their children",
 
   /**
