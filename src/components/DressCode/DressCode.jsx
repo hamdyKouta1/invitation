@@ -1,6 +1,6 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import useWeddingConfig from '../../hooks/useWeddingConfig';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
 import './DressCode.css';
@@ -43,7 +43,10 @@ const WOMEN_COLORS = [
 
 const DressCode = () => {
   const { t, i18n } = useTranslation();
+  const weddingConfig = useWeddingConfig();
   const isAr = i18n.language === 'ar';
+
+  if (weddingConfig.dressCode && weddingConfig.dressCode.enabled === false) return null;
 
   return (
     <SectionWrapper id="dress-code" alt>

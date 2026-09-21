@@ -31,9 +31,11 @@ import {
   serverTimestamp,
   where,
   limit,
+  onSnapshot,
 } from 'firebase/firestore';
 import { db } from './config';
 import weddingConfig from '../../config/weddingConfig';
+import { getActiveConfig } from '../../utils/configManager';
 
 // ─── RSVP ─────────────────────────────────────────────────────
 export const checkAlreadySubmitted = () => {
@@ -53,7 +55,7 @@ export const submitRSVP = async (data) => {
       attendance:   data.attendance,
       message:      data.message || '',
       language:     data.language || 'ar',
-      invitationId: weddingConfig.rsvp.invitationId,
+      invitationId: getActiveConfig()?.rsvp?.invitationId || weddingConfig.rsvp.invitationId,
       createdAt:    serverTimestamp(),
     });
 
@@ -150,7 +152,7 @@ export const addGuest = async (guestData) => {
       attendance: guestData.attendance || 'will_attend',
       message: guestData.message || '',
       language: guestData.language || 'ar',
-      invitationId: weddingConfig.rsvp.invitationId,
+      invitationId: getActiveConfig()?.rsvp?.invitationId || weddingConfig.rsvp.invitationId,
       createdAt: serverTimestamp(),
     });
     return { id: docRef.id, ...guestData };
@@ -287,6 +289,27 @@ export const saveWeddingConfigFirestore = async (config) => {
   } catch (error) {
     console.error('[FirebaseService] Save wedding config failed:', error);
     throw error;
+  }
+};
+
+export const subscribeWeddingConfigFirestore = (onUpdate, onError) => {
+  try {
+    const docRef = doc(db, 'config', 'wedding');
+    return onSnapshot(
+      docRef,
+      (snap) => {
+        if (snap.exists()) {
+          onUpdate(snap.data());
+        }
+      },
+      (error) => {
+        console.warn('[FirebaseService] Live config listener error:', error);
+        if (onError) onError(error);
+      }
+    );
+  } catch (error) {
+    console.error('[FirebaseService] Subscribe wedding config failed:', error);
+    return () => {};
   }
 };
 

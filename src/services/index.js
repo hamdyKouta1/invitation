@@ -162,6 +162,29 @@ export const saveWeddingConfigToDB = async (config) => {
   return { success: true };
 };
 
+export const subscribeWeddingConfigFromDB = (callback) => {
+  if (FIREBASE_ENABLED) {
+    let unsubscribe = null;
+    let isCancelled = false;
+
+    import('./firebase/firestore.js').then(({ subscribeWeddingConfigFirestore }) => {
+      if (!isCancelled) {
+        unsubscribe = subscribeWeddingConfigFirestore(callback);
+      }
+    }).catch((err) => {
+      console.warn('[Service] Failed to load Firestore config subscription:', err);
+    });
+
+    return () => {
+      isCancelled = true;
+      if (typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
+    };
+  }
+  return () => {};
+};
+
 // ─── Wishlist ──────────────────────────────────────────────────
 export const getWishlistItems = async () => {
   if (FIREBASE_ENABLED) {

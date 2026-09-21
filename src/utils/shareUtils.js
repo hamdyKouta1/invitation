@@ -2,19 +2,21 @@
  * Share Utilities — WhatsApp, clipboard, native share
  */
 
-import weddingConfig from '../config/weddingConfig';
+import { getActiveConfig } from './configManager';
 
-export const buildWhatsAppUrl = (lang = 'ar') => {
+export const buildWhatsAppUrl = (lang = 'ar', customConfig = null) => {
+  const config = customConfig || getActiveConfig();
   const template = lang === 'ar'
-    ? weddingConfig.sharing.messageAr
-    : weddingConfig.sharing.messageEn;
+    ? config.sharing.messageAr
+    : config.sharing.messageEn;
 
-  const message = template.replace('{url}', weddingConfig.sharing.url);
+  const message = template.replace('{url}', config.sharing.url);
   return `https://wa.me/?text=${encodeURIComponent(message)}`;
 };
 
-export const copyToClipboard = async () => {
-  const url = weddingConfig.sharing.url;
+export const copyToClipboard = async (customConfig = null) => {
+  const config = customConfig || getActiveConfig();
+  const url = config.sharing.url;
   try {
     await navigator.clipboard.writeText(url);
     return true;
@@ -32,22 +34,24 @@ export const copyToClipboard = async () => {
   }
 };
 
-export const nativeShare = async (lang = 'ar') => {
+export const nativeShare = async (lang = 'ar', customConfig = null) => {
   if (!navigator.share) return false;
 
+  const config = customConfig || getActiveConfig();
+
   const title = lang === 'ar'
-    ? weddingConfig.meta.titleAr
-    : weddingConfig.meta.titleEn;
+    ? config.meta.titleAr
+    : config.meta.titleEn;
 
   const text = lang === 'ar'
-    ? weddingConfig.meta.descriptionAr
-    : weddingConfig.meta.descriptionEn;
+    ? config.meta.descriptionAr
+    : config.meta.descriptionEn;
 
   try {
     await navigator.share({
       title,
       text,
-      url: weddingConfig.sharing.url,
+      url: config.sharing.url,
     });
     return true;
   } catch (err) {

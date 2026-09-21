@@ -66,6 +66,9 @@ const weddingConfig = {
     // Full ISO datetime — used for countdown (Egypt = UTC+2)
     dateTime: "2026-09-11T17:00:00+02:00",
     timezone: "Africa/Cairo",
+    // Quote when countdown finishes
+    celebrationQuoteAr: "بدأ الاحتفال!",
+    celebrationQuoteEn: "The celebration has begun!",
   },
 
   /**
@@ -123,10 +126,18 @@ const weddingConfig = {
   },
 
   /**
-   * ─── WISHLIST (Disabled) ──────────────────────────────────
+   * ─── WISHLIST / GIFTS ─────────────────────────────────────
    */
   wishlist: {
     enabled: false,
+    titleAr: "قائمة الهدايا",
+    titleEn: "Wedding Gifts",
+    subtitleAr: "حضوركم ومشاركتكم فرحتنا هي أثمن وأجمل هدية لنا",
+    subtitleEn: "Your presence and sharing our joy is the greatest gift of all",
+    instapay: "",
+    bankAccount: "",
+    registryUrl: "",
+    items: [],
   },
 
   /**

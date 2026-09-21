@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapPin, Navigation } from 'lucide-react';
-import weddingConfig from '../../config/weddingConfig';
+import useWeddingConfig from '../../hooks/useWeddingConfig';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
 import useAnalytics, { EVENTS } from '../../hooks/useAnalytics';
@@ -10,15 +10,16 @@ import './Venue.css';
 const Venue = () => {
   const { t, i18n } = useTranslation();
   const { track } = useAnalytics();
+  const weddingConfig = useWeddingConfig();
   const isAr = i18n.language === 'ar';
-  const { venue } = weddingConfig;
+  const venue = weddingConfig.venue || {};
 
   const handleMapsClick = () => {
     track(EVENTS.VENUE_CLICKED);
     window.open(venue.mapsUrl, '_blank', 'noopener,noreferrer');
   };
 
-  const embedUrl = venue.mapsEmbedUrl || `https://maps.google.com/maps?q=${encodeURIComponent(venue.nameEn + ' ' + venue.cityEn)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+  const embedUrl = venue.mapsEmbedUrl || `https://maps.google.com/maps?q=${encodeURIComponent((venue.nameEn || '') + ' ' + (venue.cityEn || ''))}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
 
   return (
     <SectionWrapper id="venue">

@@ -9,6 +9,7 @@
     "venue": "Venue",
     "gallery": "Gallery",
     "dressCode": "Dress Code",
+    "wishlist": "Gifts",
     "wishes": "Wishes",
     "rsvp": "RSVP"
   },
@@ -122,12 +123,30 @@
     "on": "Music On",
     "off": "Music Off"
   },
-
+  "wishlist": {
+    "title": "Wedding Gifts & Registry",
+    "subtitle": "Your presence and prayers are the greatest gifts of all",
+    "cashGiftTitle": "Gifting & Contribution",
+    "cashGiftSubtitle": "For those who would like to celebrate with a gift or token of love:",
+    "instapay": "Instapay / Digital Wallet",
+    "bankAccount": "Bank Account / IBAN",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "externalRegistry": "Gift Registry",
+    "viewRegistry": "Visit Registry ↗",
+    "suggestedGifts": "Suggested Gift Items",
+    "reserve": "Reserve Gift",
+    "reserved": "Reserved",
+    "available": "Available",
+    "purchased": "Purchased",
+    "viewItem": "View Item ↗",
+    "comingSoon": "Coming soon — gift list is being updated",
+    "reserveSuccess": "Gift reserved successfully! Thank you so much!"
+  },
   "footer": {
     "withLove": "With Love",
     "rights": "All rights reserved"
   },
-
   "language": {
     "ar": "العربية",
     "en": "English"

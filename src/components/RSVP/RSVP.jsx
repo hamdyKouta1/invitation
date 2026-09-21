@@ -8,7 +8,7 @@ import { submitRSVP, checkAlreadySubmitted } from '../../services/index.js';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
 import useAnalytics, { EVENTS } from '../../hooks/useAnalytics';
-import weddingConfig from '../../config/weddingConfig';
+import useWeddingConfig from '../../hooks/useWeddingConfig';
 import './RSVP.css';
 
 const buildSchema = (t, maxGuests) =>
@@ -24,15 +24,16 @@ const buildSchema = (t, maxGuests) =>
 
 const RSVP = ({ onWishesUpdated }) => {
   const { t, i18n } = useTranslation();
+  const weddingConfig = useWeddingConfig();
   const isAr = i18n.language === 'ar';
-  const groomName = isAr ? weddingConfig.groom.name : weddingConfig.groom.nameEn;
-  const brideName = isAr ? weddingConfig.bride.name : weddingConfig.bride.nameEn;
+  const groomName = isAr ? weddingConfig.groom?.name : weddingConfig.groom?.nameEn;
+  const brideName = isAr ? weddingConfig.bride?.name : weddingConfig.bride?.nameEn;
   const { track } = useAnalytics();
   const [status, setStatus] = useState(
     checkAlreadySubmitted() ? 'already_submitted' : 'idle'
   );
   const [submittedAttendance, setSubmittedAttendance] = useState(null);
-  const maxGuests = weddingConfig.rsvp.maxGuests || 10;
+  const maxGuests = weddingConfig.rsvp?.maxGuests || 10;
 
   const schema = buildSchema(t, maxGuests);
 
@@ -54,7 +55,7 @@ const RSVP = ({ onWishesUpdated }) => {
       await submitRSVP({
         ...data,
         language: i18n.language,
-        invitationId: weddingConfig.rsvp.invitationId,
+        invitationId: weddingConfig.rsvp?.invitationId,
       });
       setSubmittedAttendance(data.attendance);
       setStatus('success');
@@ -73,7 +74,7 @@ const RSVP = ({ onWishesUpdated }) => {
     }
   };
 
-  if (!weddingConfig.rsvp.enabled) return null;
+  if (weddingConfig.rsvp && weddingConfig.rsvp.enabled === false) return null;
 
   return (
     <SectionWrapper id="rsvp" alt>

@@ -16,6 +16,7 @@ import Families from './components/Families/Families';
 import Venue from './components/Venue/Venue';
 import Gallery from './components/Gallery/Gallery';
 import DressCode from './components/DressCode/DressCode';
+import Wishlist from './components/Wishlist/Wishlist';
 import RSVP from './components/RSVP/RSVP';
 import WishesWall from './components/WishesWall/WishesWall';
 import ShareInvitation from './components/ShareInvitation/ShareInvitation';
@@ -24,9 +25,9 @@ import MusicControl from './components/MusicControl/MusicControl';
 import AdminPortal from './components/Admin/AdminPortal';
 import OrnamentDivider from './components/ui/OrnamentDivider';
 import FloralCornerSVG from './components/ui/FloralCornerSVG';
-import weddingConfig from './config/weddingConfig';
 import { getWeddingConfigFromDB, saveWeddingConfigToDB } from './services';
 import { syncConfigWithFirestore } from './utils/configManager';
+import { WeddingConfigProvider, useWeddingConfig } from './context/WeddingConfigContext';
 
 import './App.css';
 
@@ -35,10 +36,11 @@ const SECRET_HASH = import.meta.env.VITE_ADMIN_SECRET_ENDPOINT || 'admin-secret'
 /* ─── Footer ──────────────────────────────────────────────── */
 const Footer = () => {
   const { t, i18n } = useTranslation();
+  const weddingConfig = useWeddingConfig();
   const isAr = i18n.language === 'ar';
 
-  const groomName = isAr ? weddingConfig.groom.name  : weddingConfig.groom.nameEn;
-  const brideName = isAr ? weddingConfig.bride.name  : weddingConfig.bride.nameEn;
+  const groomName = isAr ? weddingConfig.groom?.name : weddingConfig.groom?.nameEn;
+  const brideName = isAr ? weddingConfig.bride?.name : weddingConfig.bride?.nameEn;
   const year = new Date().getFullYear();
 
   const handleScrollToTop = () => {
@@ -77,12 +79,24 @@ const Footer = () => {
   );
 };
 
-/* ─── App ─────────────────────────────────────────────────── */
-function App() {
+/* ─── App Content ─────────────────────────────────────────── */
+function AppContent() {
   const [envelopeOpened, setEnvelopeOpened] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const musicControlRef = useRef(null);
   const wishesRef = useRef(null);
+
+  const weddingConfig = useWeddingConfig();
+  const { i18n } = useTranslation();
+
+  // Dynamic SEO title
+  useEffect(() => {
+    const isAr = i18n.language === 'ar';
+    const title = isAr ? weddingConfig.meta?.titleAr : weddingConfig.meta?.titleEn;
+    if (title) {
+      document.title = title;
+    }
+  }, [weddingConfig.meta, i18n.language]);
 
   // Check URL hash / query param for secret admin endpoint on mount and hash changes
   useEffect(() => {
@@ -177,6 +191,7 @@ function App() {
             <Venue />
             <Gallery />
             <DressCode />
+            <Wishlist />
             <RSVP onWishesUpdated={handleWishesUpdated} />
             <WishesWall ref={wishesRef} />
             <ShareInvitation />
@@ -185,6 +200,15 @@ function App() {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+/* ─── App ─────────────────────────────────────────────────── */
+function App() {
+  return (
+    <WeddingConfigProvider>
+      <AppContent />
+    </WeddingConfigProvider>
   );
 }
 

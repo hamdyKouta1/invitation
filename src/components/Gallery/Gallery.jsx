@@ -6,7 +6,7 @@ import { getGalleryImages } from '../../services/index.js';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
 import useAnalytics, { EVENTS } from '../../hooks/useAnalytics';
-import weddingConfig from '../../config/weddingConfig';
+import useWeddingConfig from '../../hooks/useWeddingConfig';
 import './Gallery.css';
 
 const transformDriveUrl = (url) => {
@@ -153,65 +153,61 @@ const Lightbox = ({ images, activeIndex, onClose, onPrev, onNext }) => {
 const Gallery = () => {
   const { t } = useTranslation();
   const { track } = useAnalytics();
+  const weddingConfig = useWeddingConfig();
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
   const loadImages = useCallback(() => {
-    if (!weddingConfig.gallery.enabled) { setLoading(false); return; }
+    if (weddingConfig.gallery && weddingConfig.gallery.enabled === false) { setLoading(false); return; }
     getGalleryImages()
       .then((data) => {
         if (data && data.length > 0) {
           setImages(data.map(img => ({ ...img, url: transformDriveUrl(img.url) })));
         } else {
-          const fallback = (weddingConfig.gallery.mockImages || [])
+          const fallback = (weddingConfig.gallery?.mockImages || [])
             .filter(img => img.url)
             .map(img => ({ ...img, url: transformDriveUrl(img.url) }));
           setImages(fallback);
         }
       })
       .catch(() => {
-        const fallback = (weddingConfig.gallery.mockImages || [])
+        const fallback = (weddingConfig.gallery?.mockImages || [])
           .filter(img => img.url)
           .map(img => ({ ...img, url: transformDriveUrl(img.url) }));
         setImages(fallback);
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [weddingConfig.gallery]);
 
   useEffect(() => {
     loadImages();
+    window.addEventListener('gallery_updated', loadImages);
+    return () => window.removeEventListener('gallery_updated', loadImages);
   }, [loadImages]);
 
-  // Auto-refresh gallery when admin adds/deletes photos (gallery_updated event)
-  useEffect(() => {
-    const handleGalleryUpdate = () => {
-      console.info('[Gallery] Refreshing due to admin update...');
-      loadImages();
-    };
-    window.addEventListener('gallery_updated', handleGalleryUpdate);
-    return () => window.removeEventListener('gallery_updated', handleGalleryUpdate);
-  }, [loadImages]);
+  const openLightbox = (idx) => {
+    track(EVENTS.GALLERY_OPENED, { imageIndex: idx });
+    setLightboxIndex(idx);
+  };
 
-  // Lock scroll when lightbox open
-  useEffect(() => {
-    if (lightboxIndex !== null) {
-      document.body.classList.add('no-scroll');
-      track(EVENTS.GALLERY_OPENED, { imageIndex: lightboxIndex });
-    } else {
-      document.body.classList.remove('no-scroll');
-    }
-    return () => document.body.classList.remove('no-scroll');
-  }, [lightboxIndex]);
-
-  const openLightbox = useCallback((idx) => setLightboxIndex(idx), []);
-  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
+  const closeLightbox = () => setLightboxIndex(null);
   const prevImage = useCallback(() =>
     setLightboxIndex((i) => (i - 1 + images.length) % images.length), [images.length]);
   const nextImage = useCallback(() =>
     setLightboxIndex((i) => (i + 1) % images.length), [images.length]);
 
-  if (!weddingConfig.gallery.enabled) return null;
+  if (weddingConfig.gallery && weddingConfig.gallery.enabled === false) return null;
+
+  // Lock scroll when lightbox open
+  useEffect(() => {
+    if (lightboxIndex !== null) {
+      document.body.classList.add('no-scroll');
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+    return () => document.body.classList.remove('no-scroll');
+  }, [lightboxIndex]);
 
   return (
     <SectionWrapper id="gallery" alt>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import weddingConfig from '../../config/weddingConfig';
+import useWeddingConfig from '../../hooks/useWeddingConfig';
 import OrnamentDivider from '../ui/OrnamentDivider';
 import FloralCornerSVG from '../ui/FloralCornerSVG';
 import { getAssetUrl } from '../../utils/assetUtils';
@@ -9,11 +9,12 @@ import './Hero.css';
 
 const Hero = () => {
   const { t, i18n } = useTranslation();
+  const weddingConfig = useWeddingConfig();
   const lang = i18n.language;
   const isAr = lang === 'ar';
 
-  const groomName = isAr ? weddingConfig.groom.name  : weddingConfig.groom.nameEn;
-  const brideName = isAr ? weddingConfig.bride.name  : weddingConfig.bride.nameEn;
+  const groomName = isAr ? weddingConfig.groom?.name  : weddingConfig.groom?.nameEn;
+  const brideName = isAr ? weddingConfig.bride?.name  : weddingConfig.bride?.nameEn;
 
   const container = {
     hidden: {},

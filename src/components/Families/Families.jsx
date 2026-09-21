@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import weddingConfig from '../../config/weddingConfig';
+import useWeddingConfig from '../../hooks/useWeddingConfig';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
 import './Families.css';
@@ -39,10 +39,11 @@ const FamilyCard = ({ familyTitle, titleKey, name, fatherLabel, fatherName, moth
 
 const Families = () => {
   const { t, i18n } = useTranslation();
+  const weddingConfig = useWeddingConfig();
   const isAr = i18n.language === 'ar';
 
-  const groom = weddingConfig.groom;
-  const bride = weddingConfig.bride;
+  const groom = weddingConfig.groom || {};
+  const bride = weddingConfig.bride || {};
   const honorPhrase = isAr ? weddingConfig.invitationPhraseAr : weddingConfig.invitationPhraseEn;
 
   return (
@@ -61,9 +62,9 @@ const Families = () => {
           titleKey="families.groomFamily"
           name={isAr ? groom.name : groom.nameEn}
           fatherLabel={t('families.sonOf')}
-          fatherName={isAr ? groom.father : groom.fatherEn}
-          motherName={isAr ? groom.mother : groom.motherEn}
-          showMother={groom.showMother !== false}
+          fatherName={isAr ? groom.father : (groom.fatherEn || groom.father)}
+          motherName={isAr ? groom.mother : (groom.motherEn || groom.mother)}
+          showMother={Boolean(groom.showMother)}
           delay={0}
         />
 
@@ -77,9 +78,9 @@ const Families = () => {
           titleKey="families.brideFamily"
           name={isAr ? bride.name : bride.nameEn}
           fatherLabel={t('families.daughterOf')}
-          fatherName={isAr ? bride.father : bride.fatherEn}
-          motherName={isAr ? bride.mother : bride.motherEn}
-          showMother={bride.showMother !== false}
+          fatherName={isAr ? bride.father : (bride.fatherEn || bride.father)}
+          motherName={isAr ? bride.mother : (bride.motherEn || bride.mother)}
+          showMother={Boolean(bride.showMother)}
           delay={0.15}
         />
       </div>

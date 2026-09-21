@@ -1,6 +1,3 @@
-import { useState, useEffect } from 'react';
-import { getActiveConfig, CONFIG_UPDATE_EVENT } from '../utils/configManager';
-
 /**
  * Reactive Hook to access the live wedding configuration.
  *
@@ -11,23 +8,4 @@ import { getActiveConfig, CONFIG_UPDATE_EVENT } from '../utils/configManager';
  *
  * Automatically updates when config changes anywhere in the app or from Firestore.
  */
-export const useWeddingConfig = () => {
-  const [config, setConfig] = useState(() => getActiveConfig());
-
-  useEffect(() => {
-    const handleConfigChange = (e) => {
-      if (e.detail) {
-        setConfig(e.detail);
-      } else {
-        setConfig(getActiveConfig());
-      }
-    };
-
-    window.addEventListener(CONFIG_UPDATE_EVENT, handleConfigChange);
-    return () => window.removeEventListener(CONFIG_UPDATE_EVENT, handleConfigChange);
-  }, []);
-
-  return config;
-};
-
-export default useWeddingConfig;
+export { useWeddingConfig, useWeddingConfig as default } from '../context/WeddingConfigContext';

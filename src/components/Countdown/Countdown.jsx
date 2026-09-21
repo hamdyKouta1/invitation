@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import useCountdown from '../../hooks/useCountdown';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
-import weddingConfig from '../../config/weddingConfig';
+import useWeddingConfig from '../../hooks/useWeddingConfig';
 import './Countdown.css';
 
 const CountdownUnit = ({ value, label }) => (
@@ -23,9 +23,15 @@ const CountdownUnit = ({ value, label }) => (
 );
 
 const Countdown = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isAr = i18n.language === 'ar';
+  const weddingConfig = useWeddingConfig();
   const { days, hours, minutes, seconds, isComplete, isReady } =
-    useCountdown(weddingConfig.wedding.dateTime);
+    useCountdown(weddingConfig.wedding?.dateTime);
+
+  const celebrationQuote = isAr
+    ? (weddingConfig.wedding?.celebrationQuoteAr || t('countdown.celebration'))
+    : (weddingConfig.wedding?.celebrationQuoteEn || t('countdown.celebration'));
 
   return (
     <SectionWrapper id="countdown">
@@ -47,7 +53,7 @@ const Countdown = () => {
           >
             <span className="countdown-complete__icon" aria-hidden="true">🎉</span>
             <p className="countdown-complete__text font-script">
-              {t('countdown.celebration')}
+              {celebrationQuote}
             </p>
           </motion.div>
         ) : (

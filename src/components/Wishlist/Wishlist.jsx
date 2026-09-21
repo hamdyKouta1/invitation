@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
-import { ExternalLink, Check } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ExternalLink, Check, Copy, Gift, Smartphone, Landmark } from 'lucide-react';
 import { getWishlistItems, reserveWishlistItem } from '../../services/index.js';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
 import useAnalytics, { EVENTS } from '../../hooks/useAnalytics';
-import weddingConfig from '../../config/weddingConfig';
+import useWeddingConfig from '../../hooks/useWeddingConfig';
 import './Wishlist.css';
 
 const STATUS_CONFIG = {
@@ -21,8 +21,8 @@ const WishlistCard = ({ item, onReserve, isReserving }) => {
   const status = item.status || 'available';
   const statusConfig = STATUS_CONFIG[status] || STATUS_CONFIG.available;
 
-  const title = isAr ? item.titleAr : item.titleEn;
-  const description = isAr ? item.descriptionAr : item.descriptionEn;
+  const title = isAr ? (item.titleAr || item.title) : (item.titleEn || item.title);
+  const description = isAr ? (item.descriptionAr || item.description) : (item.descriptionEn || item.description);
 
   return (
     <motion.div
@@ -63,7 +63,7 @@ const WishlistCard = ({ item, onReserve, isReserving }) => {
         {/* Price */}
         {item.price && (
           <p className="wishlist-card__price font-serif">
-            {item.price.toLocaleString('ar-EG')} {item.currency}
+            {typeof item.price === 'number' ? item.price.toLocaleString(isAr ? 'ar-EG' : 'en-US') : item.price} {item.currency || (isAr ? 'جنيه' : 'EGP')}
           </p>
         )}
 
@@ -101,37 +101,65 @@ const WishlistCard = ({ item, onReserve, isReserving }) => {
 };
 
 const Wishlist = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isAr = i18n.language === 'ar';
   const { track } = useAnalytics();
+  const weddingConfig = useWeddingConfig();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [reservingId, setReservingId] = useState(null);
   const [reserveSuccess, setReserveSuccess] = useState(null);
+  const [copiedKey, setCopiedKey] = useState(null);
+
+  const wishlistConfig = weddingConfig.wishlist || {};
 
   useEffect(() => {
-    if (!weddingConfig.wishlist.enabled) { setLoading(false); return; }
+    if (wishlistConfig.enabled === false) {
+      setLoading(false);
+      return;
+    }
     track(EVENTS.WISHLIST_VIEWED);
+
+    if (Array.isArray(wishlistConfig.items) && wishlistConfig.items.length > 0) {
+      setItems(wishlistConfig.items);
+      setLoading(false);
+      return;
+    }
+
     getWishlistItems()
-      .then(setItems)
-      .catch(console.error)
+      .then((data) => {
+        if (data && data.length > 0) {
+          setItems(data);
+        } else {
+          setItems([]);
+        }
+      })
+      .catch((err) => {
+        console.warn('[Wishlist] Firestore load failed, using local/config items:', err);
+        setItems(wishlistConfig.items || []);
+      })
       .finally(() => setLoading(false));
-  }, []);
+  }, [wishlistConfig.enabled, wishlistConfig.items]);
 
   const handleReserve = async (itemId) => {
     const guestName = window.prompt(t('rsvp.name') + ':');
-    if (!guestName) return;
+    if (!guestName || !guestName.trim()) return;
 
     setReservingId(itemId);
     try {
-      await reserveWishlistItem(itemId, guestName);
+      try {
+        await reserveWishlistItem(itemId, guestName.trim());
+      } catch (err) {
+        console.warn('[Wishlist] Standalone item reserve failed, updating state:', err);
+      }
       track(EVENTS.WISHLIST_RESERVED, { itemId });
       setItems((prev) =>
         prev.map((item) =>
-          item.id === itemId ? { ...item, status: 'reserved', reservedBy: guestName } : item
+          item.id === itemId ? { ...item, status: 'reserved', reservedBy: guestName.trim() } : item
         )
       );
       setReserveSuccess(itemId);
-      setTimeout(() => setReserveSuccess(null), 3000);
+      setTimeout(() => setReserveSuccess(null), 3500);
     } catch (err) {
       console.error('Reserve failed:', err);
     } finally {
@@ -139,37 +167,135 @@ const Wishlist = () => {
     }
   };
 
-  if (!weddingConfig.wishlist.enabled) return null;
+  const handleCopy = (text, key) => {
+    if (!text) return;
+    navigator.clipboard.writeText(text);
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(null), 2500);
+  };
+
+  if (wishlistConfig.enabled === false) return null;
+
+  const sectionTitle = isAr
+    ? (wishlistConfig.titleAr || t('wishlist.title'))
+    : (wishlistConfig.titleEn || t('wishlist.title'));
+
+  const sectionSubtitle = isAr
+    ? (wishlistConfig.subtitleAr || t('wishlist.subtitle'))
+    : (wishlistConfig.subtitleEn || t('wishlist.subtitle'));
+
+  const hasDigitalCash = Boolean(wishlistConfig.instapay || wishlistConfig.bankAccount || wishlistConfig.registryUrl);
 
   return (
-    <SectionWrapper id="wishlist">
+    <SectionWrapper id="wishlist" alt>
       <div className="section__header">
-        <h2 className="section__title font-serif">{t('wishlist.title')}</h2>
-        <p className="section__subtitle">{t('wishlist.subtitle')}</p>
+        <h2 className="section__title font-serif">{sectionTitle}</h2>
+        {sectionSubtitle && <p className="section__subtitle">{sectionSubtitle}</p>}
         <OrnamentDivider symbol="✦" />
       </div>
 
+      {/* ─── Digital Gifting Options (Instapay / Bank / Registry) ─── */}
+      {hasDigitalCash && (
+        <div className="wishlist-cash-section">
+          <div className="wishlist-cash-grid">
+            {wishlistConfig.instapay && (
+              <div className="wishlist-cash-card">
+                <div className="wishlist-cash-card__icon">
+                  <Smartphone size={24} />
+                </div>
+                <div className="wishlist-cash-card__content">
+                  <span className="wishlist-cash-card__label">{t('wishlist.instapay')}</span>
+                  <strong className="wishlist-cash-card__value">{wishlistConfig.instapay}</strong>
+                </div>
+                <button
+                  type="button"
+                  className="wishlist-cash-card__copy-btn"
+                  onClick={() => handleCopy(wishlistConfig.instapay, 'instapay')}
+                  title={t('wishlist.copy')}
+                >
+                  {copiedKey === 'instapay' ? <Check size={16} /> : <Copy size={16} />}
+                  <span>{copiedKey === 'instapay' ? t('wishlist.copied') : t('wishlist.copy')}</span>
+                </button>
+              </div>
+            )}
+
+            {wishlistConfig.bankAccount && (
+              <div className="wishlist-cash-card">
+                <div className="wishlist-cash-card__icon">
+                  <Landmark size={24} />
+                </div>
+                <div className="wishlist-cash-card__content">
+                  <span className="wishlist-cash-card__label">{t('wishlist.bankAccount')}</span>
+                  <strong className="wishlist-cash-card__value font-mono">{wishlistConfig.bankAccount}</strong>
+                </div>
+                <button
+                  type="button"
+                  className="wishlist-cash-card__copy-btn"
+                  onClick={() => handleCopy(wishlistConfig.bankAccount, 'bank')}
+                  title={t('wishlist.copy')}
+                >
+                  {copiedKey === 'bank' ? <Check size={16} /> : <Copy size={16} />}
+                  <span>{copiedKey === 'bank' ? t('wishlist.copied') : t('wishlist.copy')}</span>
+                </button>
+              </div>
+            )}
+
+            {wishlistConfig.registryUrl && (
+              <div className="wishlist-cash-card">
+                <div className="wishlist-cash-card__icon">
+                  <Gift size={24} />
+                </div>
+                <div className="wishlist-cash-card__content">
+                  <span className="wishlist-cash-card__label">{t('wishlist.externalRegistry')}</span>
+                  <a
+                    href={wishlistConfig.registryUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="wishlist-cash-card__link"
+                  >
+                    {t('wishlist.viewRegistry')}
+                  </a>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ─── Gift Items List ─── */}
       {loading ? (
         <div className="wishlist-skeleton-grid">
           {[...Array(4)].map((_, i) => <div key={i} className="wishlist-skeleton-item" />)}
         </div>
       ) : items.length === 0 ? (
-        <div className="wishlist-empty">
-          <span className="wishlist-empty__icon" aria-hidden="true">🎁</span>
-          <p className="wishlist-empty__text font-serif">{t('wishlist.comingSoon')}</p>
-        </div>
+        !hasDigitalCash && (
+          <div className="wishlist-empty">
+            <span className="wishlist-empty__icon" aria-hidden="true">🎁</span>
+            <p className="wishlist-empty__text font-serif">{t('wishlist.comingSoon')}</p>
+          </div>
+        )
       ) : (
         <>
-          {reserveSuccess && (
-            <motion.div
-              className="wishlist-success-toast"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-            >
-              ✓ {t('wishlist.reserveSuccess')}
-            </motion.div>
+          {hasDigitalCash && (
+            <div className="wishlist-items-header">
+              <h3 className="wishlist-items-title font-serif">{t('wishlist.suggestedGifts')}</h3>
+              <OrnamentDivider symbol="❧" />
+            </div>
           )}
+
+          <AnimatePresence>
+            {reserveSuccess && (
+              <motion.div
+                className="wishlist-success-toast"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+              >
+                ✓ {t('wishlist.reserveSuccess')}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           <div className="wishlist-grid">
             {items.map((item) => (
               <WishlistCard

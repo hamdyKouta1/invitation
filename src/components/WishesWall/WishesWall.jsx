@@ -3,16 +3,17 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { MessageCircleHeart, Quote } from 'lucide-react';
 import { getWishes } from '../../services/index.js';
-import weddingConfig from '../../config/weddingConfig';
+import useWeddingConfig from '../../hooks/useWeddingConfig';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
 import './WishesWall.css';
 
 const WishesWall = forwardRef((props, ref) => {
   const { t, i18n } = useTranslation();
+  const weddingConfig = useWeddingConfig();
   const isAr = i18n.language === 'ar';
-  const groomName = isAr ? weddingConfig.groom.name : weddingConfig.groom.nameEn;
-  const brideName = isAr ? weddingConfig.bride.name : weddingConfig.bride.nameEn;
+  const groomName = isAr ? weddingConfig.groom?.name : weddingConfig.groom?.nameEn;
+  const brideName = isAr ? weddingConfig.bride?.name : weddingConfig.bride?.nameEn;
   const [wishes, setWishes] = useState([]);
   const [loading, setLoading] = useState(true);
 

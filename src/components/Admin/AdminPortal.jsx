@@ -30,6 +30,7 @@ import {
   ShieldCheck,
   Send,
   X,
+  Gift,
 } from 'lucide-react';
 
 import {
@@ -164,7 +165,7 @@ const AdminPortal = ({ onClose }) => {
         const cloudConfig = await getWeddingConfigFromDB();
         if (cloudConfig) {
           saveActiveConfig(cloudConfig);
-          setConfigData(cloudConfig);
+          setConfigData(getActiveConfig(cloudConfig));
         }
       } catch (err) {
         console.error(err);
@@ -422,12 +423,59 @@ const AdminPortal = ({ onClose }) => {
   // ─── Config Actions ───
   const handleConfigChange = (section, field, value) => {
     setConfigData((prev) => {
-      const next = clone(prev);
+      const next = clone(prev) || {};
       if (section) {
+        if (!next[section]) next[section] = {};
         next[section][field] = value;
       } else {
         next[field] = value;
       }
+      return next;
+    });
+  };
+
+  const handleAddWishlistItem = () => {
+    setConfigData((prev) => {
+      const next = clone(prev) || {};
+      if (!next.wishlist) next.wishlist = {};
+      const currentItems = Array.isArray(next.wishlist.items) ? [...next.wishlist.items] : [];
+      const newItem = {
+        id: 'gift-' + Date.now(),
+        titleAr: '',
+        titleEn: '',
+        descriptionAr: '',
+        descriptionEn: '',
+        price: '',
+        currency: 'EGP',
+        link: '',
+        imageUrl: '',
+        status: 'available',
+        reservedBy: '',
+      };
+      next.wishlist.items = [...currentItems, newItem];
+      return next;
+    });
+  };
+
+  const handleUpdateWishlistItem = (itemId, field, value) => {
+    setConfigData((prev) => {
+      const next = clone(prev) || {};
+      if (!next.wishlist) next.wishlist = {};
+      const currentItems = Array.isArray(next.wishlist.items) ? [...next.wishlist.items] : [];
+      next.wishlist.items = currentItems.map((item) =>
+        item.id === itemId ? { ...item, [field]: value } : item
+      );
+      return next;
+    });
+  };
+
+  const handleDeleteWishlistItem = (itemId) => {
+    if (!window.confirm('هل أنت متأكد من حذف هذه الهدية من القائمة؟')) return;
+    setConfigData((prev) => {
+      const next = clone(prev) || {};
+      if (!next.wishlist) next.wishlist = {};
+      const currentItems = Array.isArray(next.wishlist.items) ? [...next.wishlist.items] : [];
+      next.wishlist.items = currentItems.filter((item) => item.id !== itemId);
       return next;
     });
   };
@@ -1165,7 +1213,7 @@ const AdminPortal = ({ onClose }) => {
                     />
                   </div>
                   <div className="admin-form-group">
-                    <label className="admin-label">اسم والد العريس</label>
+                    <label className="admin-label">اسم والد العريس (بالعربي)</label>
                     <input
                       type="text"
                       className="admin-input"
@@ -1174,13 +1222,41 @@ const AdminPortal = ({ onClose }) => {
                     />
                   </div>
                   <div className="admin-form-group">
-                    <label className="admin-label">اسم والدة العريس</label>
+                    <label className="admin-label">Groom's Father (English)</label>
+                    <input
+                      type="text"
+                      className="admin-input"
+                      value={configData.groom?.fatherEn || ''}
+                      onChange={(e) => handleConfigChange('groom', 'fatherEn', e.target.value)}
+                    />
+                  </div>
+                  <div className="admin-form-group">
+                    <label className="admin-label">اسم والدة العريس (بالعربي)</label>
                     <input
                       type="text"
                       className="admin-input"
                       value={configData.groom?.mother || ''}
                       onChange={(e) => handleConfigChange('groom', 'mother', e.target.value)}
                     />
+                  </div>
+                  <div className="admin-form-group">
+                    <label className="admin-label">Groom's Mother (English)</label>
+                    <input
+                      type="text"
+                      className="admin-input"
+                      value={configData.groom?.motherEn || ''}
+                      onChange={(e) => handleConfigChange('groom', 'motherEn', e.target.value)}
+                    />
+                  </div>
+                  <div className="admin-form-group" style={{ gridColumn: '1 / -1' }}>
+                    <label className="admin-toggle-label" style={{ fontWeight: 600 }}>
+                      <input
+                        type="checkbox"
+                        checked={configData.groom?.showMother === true}
+                        onChange={(e) => handleConfigChange('groom', 'showMother', e.target.checked)}
+                      />
+                      <span>إظهار اسم والدة العريس في بطاقة العائلة بالدعوة</span>
+                    </label>
                   </div>
                 </div>
 
@@ -1223,7 +1299,7 @@ const AdminPortal = ({ onClose }) => {
                     />
                   </div>
                   <div className="admin-form-group">
-                    <label className="admin-label">اسم والد العروسة</label>
+                    <label className="admin-label">اسم والد العروسة (بالعربي)</label>
                     <input
                       type="text"
                       className="admin-input"
@@ -1232,13 +1308,41 @@ const AdminPortal = ({ onClose }) => {
                     />
                   </div>
                   <div className="admin-form-group">
-                    <label className="admin-label">اسم والدة العروسة</label>
+                    <label className="admin-label">Bride's Father (English)</label>
+                    <input
+                      type="text"
+                      className="admin-input"
+                      value={configData.bride?.fatherEn || ''}
+                      onChange={(e) => handleConfigChange('bride', 'fatherEn', e.target.value)}
+                    />
+                  </div>
+                  <div className="admin-form-group">
+                    <label className="admin-label">اسم والدة العروسة (بالعربي)</label>
                     <input
                       type="text"
                       className="admin-input"
                       value={configData.bride?.mother || ''}
                       onChange={(e) => handleConfigChange('bride', 'mother', e.target.value)}
                     />
+                  </div>
+                  <div className="admin-form-group">
+                    <label className="admin-label">Bride's Mother (English)</label>
+                    <input
+                      type="text"
+                      className="admin-input"
+                      value={configData.bride?.motherEn || ''}
+                      onChange={(e) => handleConfigChange('bride', 'motherEn', e.target.value)}
+                    />
+                  </div>
+                  <div className="admin-form-group" style={{ gridColumn: '1 / -1' }}>
+                    <label className="admin-toggle-label" style={{ fontWeight: 600 }}>
+                      <input
+                        type="checkbox"
+                        checked={configData.bride?.showMother === true}
+                        onChange={(e) => handleConfigChange('bride', 'showMother', e.target.checked)}
+                      />
+                      <span>إظهار اسم والدة العروسة في بطاقة العائلة بالدعوة</span>
+                    </label>
                   </div>
                 </div>
               </div>
@@ -1304,6 +1408,26 @@ const AdminPortal = ({ onClose }) => {
                       onChange={(e) => handleConfigChange('wedding', 'timeEn', e.target.value)}
                     />
                   </div>
+                  <div className="admin-form-group">
+                    <label className="admin-label">جملة انتهاء العد التنازلي (بالعربي)</label>
+                    <input
+                      type="text"
+                      className="admin-input"
+                      placeholder="مثال: بدأ الاحتفال!"
+                      value={configData.wedding?.celebrationQuoteAr || ''}
+                      onChange={(e) => handleConfigChange('wedding', 'celebrationQuoteAr', e.target.value)}
+                    />
+                  </div>
+                  <div className="admin-form-group">
+                    <label className="admin-label">جملة انتهاء العد التنازلي (English)</label>
+                    <input
+                      type="text"
+                      className="admin-input"
+                      placeholder="e.g. The celebration has begun!"
+                      value={configData.wedding?.celebrationQuoteEn || ''}
+                      onChange={(e) => handleConfigChange('wedding', 'celebrationQuoteEn', e.target.value)}
+                    />
+                  </div>
                 </div>
 
                 <h4 className="admin-subset-title" style={{ marginTop: '1.5rem' }}>تفاصيل القاعة والمكان (Venue)</h4>
@@ -1336,6 +1460,278 @@ const AdminPortal = ({ onClose }) => {
                     />
                   </div>
                 </div>
+              </div>
+
+              {/* Gifts / Wishlist Section */}
+              <div className="admin-card">
+                <h3 className="admin-card-title">
+                  <Gift size={20} />
+                  قسم الهدايا (Gifts / Wishlist)
+                </h3>
+
+                <label className="admin-toggle-label" style={{ marginBottom: '1.25rem', fontWeight: 600 }}>
+                  <input
+                    type="checkbox"
+                    checked={configData.wishlist?.enabled === true}
+                    onChange={(e) => handleConfigChange('wishlist', 'enabled', e.target.checked)}
+                  />
+                  <span>تفعيل ظهور قسم الهدايا في صفحة الدعوة</span>
+                </label>
+
+                <div className="admin-form-grid-2">
+                  <div className="admin-form-group">
+                    <label className="admin-label">عنوان القسم (بالعربي)</label>
+                    <input
+                      type="text"
+                      className="admin-input"
+                      placeholder="مثال: قائمة الهدايا"
+                      value={configData.wishlist?.titleAr || ''}
+                      onChange={(e) => handleConfigChange('wishlist', 'titleAr', e.target.value)}
+                    />
+                  </div>
+                  <div className="admin-form-group">
+                    <label className="admin-label">عنوان القسم (English)</label>
+                    <input
+                      type="text"
+                      className="admin-input"
+                      placeholder="e.g. Wedding Gifts"
+                      value={configData.wishlist?.titleEn || ''}
+                      onChange={(e) => handleConfigChange('wishlist', 'titleEn', e.target.value)}
+                    />
+                  </div>
+                  <div className="admin-form-group">
+                    <label className="admin-label">الوصف الترحيبي (بالعربي)</label>
+                    <input
+                      type="text"
+                      className="admin-input"
+                      value={configData.wishlist?.subtitleAr || ''}
+                      onChange={(e) => handleConfigChange('wishlist', 'subtitleAr', e.target.value)}
+                    />
+                  </div>
+                  <div className="admin-form-group">
+                    <label className="admin-label">الوصف الترحيبي (English)</label>
+                    <input
+                      type="text"
+                      className="admin-input"
+                      value={configData.wishlist?.subtitleEn || ''}
+                      onChange={(e) => handleConfigChange('wishlist', 'subtitleEn', e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <h4 className="admin-subset-title" style={{ marginTop: '1.5rem' }}>بيانات التحويل المالي الرقمي</h4>
+                <div className="admin-form-grid-2">
+                  <div className="admin-form-group">
+                    <label className="admin-label">معرف أو هاتف انستاباي (Instapay)</label>
+                    <input
+                      type="text"
+                      className="admin-input"
+                      placeholder="username@instapay أو رقم الهاتف"
+                      value={configData.wishlist?.instapay || ''}
+                      onChange={(e) => handleConfigChange('wishlist', 'instapay', e.target.value)}
+                    />
+                  </div>
+                  <div className="admin-form-group">
+                    <label className="admin-label">رقم الحساب البنكي / IBAN</label>
+                    <input
+                      type="text"
+                      className="admin-input"
+                      placeholder="مثال: EG1234567890..."
+                      value={configData.wishlist?.bankAccount || ''}
+                      onChange={(e) => handleConfigChange('wishlist', 'bankAccount', e.target.value)}
+                    />
+                  </div>
+                  <div className="admin-form-group" style={{ gridColumn: '1 / -1' }}>
+                    <label className="admin-label">رابط قائمة هدايا خارجية (External Registry Link - اختياري)</label>
+                    <input
+                      type="url"
+                      className="admin-input"
+                      placeholder="https://example.com/registry"
+                      value={configData.wishlist?.registryUrl || ''}
+                      onChange={(e) => handleConfigChange('wishlist', 'registryUrl', e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                {/* ─── Wishlist Items List with Reservation & Availability Check ─── */}
+                <div className="admin-wishlist-header-row">
+                  <div>
+                    <h4 className="admin-subset-title" style={{ margin: 0 }}>
+                      قائمة الهدايا (Wishlist Items)
+                    </h4>
+                    <p style={{ fontSize: '0.82rem', color: '#a89a87', marginTop: '0.25rem' }}>
+                      يمكنك تفعيل خيار الحجز (Reserved / Available) لكل هدية على حدة وتحديد تفاصيلها.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleAddWishlistItem}
+                    className="admin-btn admin-btn--primary admin-btn--sm"
+                    style={{ whiteSpace: 'nowrap' }}
+                  >
+                    <Plus size={16} />
+                    <span>إضافة هدية</span>
+                  </button>
+                </div>
+
+                {(!configData.wishlist?.items || configData.wishlist.items.length === 0) ? (
+                  <div className="admin-wishlist-empty">
+                    <Gift size={32} style={{ opacity: 0.4, marginBottom: '0.5rem' }} />
+                    <p>لا توجد هدايا مضافة بعد في القائمة.</p>
+                    <button
+                      type="button"
+                      onClick={handleAddWishlistItem}
+                      className="admin-btn admin-btn--outline admin-btn--sm"
+                      style={{ marginTop: '0.75rem' }}
+                    >
+                      <Plus size={14} />
+                      <span>إضافة أول هدية الآن</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="admin-wishlist-items-list">
+                    {configData.wishlist.items.map((item, idx) => {
+                      const isReserved = item.status === 'reserved';
+                      return (
+                        <div
+                          key={item.id || idx}
+                          className={`admin-wishlist-item-card ${isReserved ? 'admin-wishlist-item-card--reserved' : ''}`}
+                        >
+                          <div className="admin-wishlist-item-top">
+                            <div className="admin-wishlist-status-check">
+                              <span style={{ fontWeight: 700, color: '#d4af37', fontSize: '0.9rem' }}>
+                                #{idx + 1}
+                              </span>
+
+                              {/* Availability / Reservation Check */}
+                              <label
+                                className="admin-toggle-label"
+                                style={{
+                                  fontWeight: 600,
+                                  cursor: 'pointer',
+                                  margin: 0,
+                                  background: isReserved ? 'rgba(224, 86, 102, 0.12)' : 'rgba(46, 204, 113, 0.12)',
+                                  padding: '0.3rem 0.75rem',
+                                  borderRadius: '20px',
+                                  border: `1px solid ${isReserved ? 'rgba(224, 86, 102, 0.35)' : 'rgba(46, 204, 113, 0.35)'}`,
+                                }}
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={isReserved}
+                                  onChange={(e) => {
+                                    handleUpdateWishlistItem(
+                                      item.id,
+                                      'status',
+                                      e.target.checked ? 'reserved' : 'available'
+                                    );
+                                  }}
+                                />
+                                <span style={{ color: isReserved ? '#e05666' : '#2ecc71', fontSize: '0.85rem' }}>
+                                  {isReserved ? '✓ محجوز (Reserved)' : '○ متاح للحجز (Available)'}
+                                </span>
+                              </label>
+
+                              {isReserved && (
+                                <input
+                                  type="text"
+                                  className="admin-input admin-input--sm"
+                                  placeholder="اسم الحاجز (اختياري)..."
+                                  value={item.reservedBy || ''}
+                                  onChange={(e) => handleUpdateWishlistItem(item.id, 'reservedBy', e.target.value)}
+                                  style={{ maxWidth: '190px', padding: '0.25rem 0.6rem', fontSize: '0.8rem' }}
+                                />
+                              )}
+                            </div>
+
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteWishlistItem(item.id)}
+                              className="admin-btn admin-btn--danger-sm"
+                              title="حذف الهدية"
+                            >
+                              <Trash2 size={14} />
+                              <span>حذف</span>
+                            </button>
+                          </div>
+
+                          <div className="admin-form-grid-2">
+                            <div className="admin-form-group">
+                              <label className="admin-label">اسم الهدية (بالعربي) *</label>
+                              <input
+                                type="text"
+                                className="admin-input"
+                                placeholder="مثال: طقم أدوات مائدة فاخر"
+                                value={item.titleAr || item.title || ''}
+                                onChange={(e) => handleUpdateWishlistItem(item.id, 'titleAr', e.target.value)}
+                              />
+                            </div>
+                            <div className="admin-form-group">
+                              <label className="admin-label">اسم الهدية (English)</label>
+                              <input
+                                type="text"
+                                className="admin-input"
+                                placeholder="e.g. Luxury Dinnerware Set"
+                                value={item.titleEn || ''}
+                                onChange={(e) => handleUpdateWishlistItem(item.id, 'titleEn', e.target.value)}
+                              />
+                            </div>
+                            <div className="admin-form-group">
+                              <label className="admin-label">السعر التقريبي</label>
+                              <input
+                                type="text"
+                                className="admin-input"
+                                placeholder="مثال: 1500"
+                                value={item.price || ''}
+                                onChange={(e) => handleUpdateWishlistItem(item.id, 'price', e.target.value)}
+                              />
+                            </div>
+                            <div className="admin-form-group">
+                              <label className="admin-label">العملة (Currency)</label>
+                              <input
+                                type="text"
+                                className="admin-input"
+                                placeholder="EGP / جنيه"
+                                value={item.currency || 'EGP'}
+                                onChange={(e) => handleUpdateWishlistItem(item.id, 'currency', e.target.value)}
+                              />
+                            </div>
+                            <div className="admin-form-group">
+                              <label className="admin-label">رابط صورة الهدية (Image URL)</label>
+                              <input
+                                type="url"
+                                className="admin-input"
+                                placeholder="https://..."
+                                value={item.imageUrl || ''}
+                                onChange={(e) => handleUpdateWishlistItem(item.id, 'imageUrl', e.target.value)}
+                              />
+                            </div>
+                            <div className="admin-form-group">
+                              <label className="admin-label">رابط شراء خارجي (Store / Product Link)</label>
+                              <input
+                                type="url"
+                                className="admin-input"
+                                placeholder="https://..."
+                                value={item.link || ''}
+                                onChange={(e) => handleUpdateWishlistItem(item.id, 'link', e.target.value)}
+                              />
+                            </div>
+                            <div className="admin-form-group" style={{ gridColumn: '1 / -1' }}>
+                              <label className="admin-label">وصف الهدية (بالعربي)</label>
+                              <input
+                                type="text"
+                                className="admin-input"
+                                placeholder="تفاصيل أو مواصفات الهدية..."
+                                value={item.descriptionAr || item.description || ''}
+                                onChange={(e) => handleUpdateWishlistItem(item.id, 'descriptionAr', e.target.value)}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
               {/* Music & Toggles */}
@@ -1395,6 +1791,15 @@ const AdminPortal = ({ onClose }) => {
                       onChange={(e) => handleConfigChange('dressCode', 'enabled', e.target.checked)}
                     />
                     <span>الدريس كود (Dress Code)</span>
+                  </label>
+
+                  <label className="admin-toggle-label">
+                    <input
+                      type="checkbox"
+                      checked={configData.wishlist?.enabled === true}
+                      onChange={(e) => handleConfigChange('wishlist', 'enabled', e.target.checked)}
+                    />
+                    <span>قسم الهدايا (Gifts / Wishlist)</span>
                   </label>
 
                   <label className="admin-toggle-label">

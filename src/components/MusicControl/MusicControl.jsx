@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useImperativeHandle, forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import weddingConfig from '../../config/weddingConfig';
+import useWeddingConfig from '../../hooks/useWeddingConfig';
 import { useScrollDirection } from '../../hooks/useScrollDirection';
 import { getAssetUrl } from '../../utils/assetUtils';
 import './MusicControl.css';
@@ -29,12 +29,13 @@ const MusicOffIcon = () => (
 
 const MusicControl = forwardRef((props, ref) => {
   const { t, i18n } = useTranslation();
+  const weddingConfig = useWeddingConfig();
   const isAr = i18n.language === 'ar';
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef(null);
   const { scrollDirection, scrolled } = useScrollDirection();
 
-  const { music } = weddingConfig;
+  const music = weddingConfig.music || {};
   const isHidden = scrolled && scrollDirection === 'down';
 
   /* ── Initialize Audio Instance ── */

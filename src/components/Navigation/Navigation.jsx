@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Menu, X, Heart } from 'lucide-react';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import { useScrollDirection } from '../../hooks/useScrollDirection';
+import useWeddingConfig from '../../hooks/useWeddingConfig';
 import './Navigation.css';
 
 const NAV_ITEMS = [
@@ -11,14 +12,24 @@ const NAV_ITEMS = [
   { key: 'venue',      section: 'venue' },
   { key: 'gallery',    section: 'gallery' },
   { key: 'dressCode',  section: 'dress-code' },
+  { key: 'wishlist',   section: 'wishlist' },
   { key: 'wishes',     section: 'wishes' },
   { key: 'rsvp',       section: 'rsvp' },
 ];
 
 const Navigation = () => {
   const { t } = useTranslation();
+  const weddingConfig = useWeddingConfig();
   const [isOpen, setIsOpen] = useState(false);
   const { scrollDirection, scrolled } = useScrollDirection();
+
+  const navItems = NAV_ITEMS.filter((item) => {
+    if (item.key === 'dressCode' && weddingConfig.dressCode?.enabled === false) return false;
+    if (item.key === 'wishlist' && weddingConfig.wishlist?.enabled !== true) return false;
+    if (item.key === 'gallery' && weddingConfig.gallery?.enabled === false) return false;
+    if (item.key === 'rsvp' && weddingConfig.rsvp?.enabled === false) return false;
+    return true;
+  });
 
   const isHidden = scrolled && scrollDirection === 'down' && !isOpen;
 
@@ -65,7 +76,7 @@ const Navigation = () => {
 
         {isOpen && (
           <div className="floating-nav__dropdown" role="menu">
-            {NAV_ITEMS.map((item) => (
+            {navItems.map((item) => (
               <button
                 key={item.key}
                 className="floating-nav__item"

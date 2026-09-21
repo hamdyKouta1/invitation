@@ -1,4 +1,4 @@
-import weddingConfig from '../config/weddingConfig';
+import weddingConfig from '../config/weddingConfig.js';
 
 const CONFIG_STORAGE_KEY = 'wedding_config_override';
 export const CONFIG_UPDATE_EVENT = 'wedding_config_changed';
@@ -9,44 +9,56 @@ export const CONFIG_UPDATE_EVENT = 'wedding_config_changed';
 export const clone = (obj) => JSON.parse(JSON.stringify(obj));
 
 /**
- * Merges default static configuration with any local storage overrides
+ * Safely merges configuration overrides (from Firestore or LocalStorage)
+ * with the base static weddingConfig defaults.
  */
-export const getActiveConfig = () => {
+export const mergeConfig = (override) => {
+  if (!override || typeof override !== 'object') return weddingConfig;
+
+  const groom = { ...weddingConfig.groom, ...(override.groom || {}) };
+  const bride = { ...weddingConfig.bride, ...(override.bride || {}) };
+
+  return {
+    ...weddingConfig,
+    ...override,
+    groom,
+    bride,
+    wedding: { ...weddingConfig.wedding, ...(override.wedding || {}) },
+    venue: { ...weddingConfig.venue, ...(override.venue || {}) },
+    music: { ...weddingConfig.music, ...(override.music || {}) },
+    gallery: { ...weddingConfig.gallery, ...(override.gallery || {}) },
+    dressCode: { ...weddingConfig.dressCode, ...(override.dressCode || {}) },
+    wishlist: { ...weddingConfig.wishlist, ...(override.wishlist || {}) },
+    rsvp: { ...weddingConfig.rsvp, ...(override.rsvp || {}) },
+    sharing: {
+      ...weddingConfig.sharing,
+      ...(override.sharing || {}),
+      messageAr: override.sharing?.messageAr || `🎉 دعوة زفاف ${groom.name} و${bride.name} — شاركونا فرحتنا! {url}`,
+      messageEn: override.sharing?.messageEn || `🎉 ${groom.nameEn} & ${bride.nameEn}'s Wedding Invitation — Join us on our special day! {url}`,
+    },
+    meta: {
+      ...weddingConfig.meta,
+      ...(override.meta || {}),
+      titleAr: override.meta?.titleAr || `دعوة زفاف ${groom.name} و${bride.name}`,
+      titleEn: override.meta?.titleEn || `${groom.nameEn} & ${bride.nameEn}'s Wedding Invitation`,
+    },
+    invitationPhraseAr: override.invitationPhraseAr || `تتشرف ${groom.familyTitleAr} و${bride.familyTitleAr} بدعوتكم لحضور حفل زفاف نجليهما`,
+    invitationPhraseEn: override.invitationPhraseEn || `${groom.familyTitleEn} & ${bride.familyTitleEn} cordially request the honor of your presence at the wedding of their children`,
+  };
+};
+
+/**
+ * Merges default static configuration with any local storage or passed overrides
+ */
+export const getActiveConfig = (override = null) => {
   try {
-    const stored = localStorage.getItem(CONFIG_STORAGE_KEY);
+    if (override && typeof override === 'object') {
+      return mergeConfig(override);
+    }
+    const stored = typeof localStorage !== 'undefined' ? localStorage.getItem(CONFIG_STORAGE_KEY) : null;
     if (!stored) return weddingConfig;
 
-    const parsed = JSON.parse(stored);
-    const groom = { ...weddingConfig.groom, ...(parsed.groom || {}) };
-    const bride = { ...weddingConfig.bride, ...(parsed.bride || {}) };
-
-    return {
-      ...weddingConfig,
-      ...parsed,
-      groom,
-      bride,
-      wedding: { ...weddingConfig.wedding, ...(parsed.wedding || {}) },
-      venue: { ...weddingConfig.venue, ...(parsed.venue || {}) },
-      music: { ...weddingConfig.music, ...(parsed.music || {}) },
-      gallery: { ...weddingConfig.gallery, ...(parsed.gallery || {}) },
-      dressCode: { ...weddingConfig.dressCode, ...(parsed.dressCode || {}) },
-      wishlist: { ...weddingConfig.wishlist, ...(parsed.wishlist || {}) },
-      rsvp: { ...weddingConfig.rsvp, ...(parsed.rsvp || {}) },
-      sharing: {
-        ...weddingConfig.sharing,
-        ...(parsed.sharing || {}),
-        messageAr: parsed.sharing?.messageAr || `🎉 دعوة زفاف ${groom.name} و${bride.name} — شاركونا فرحتنا! {url}`,
-        messageEn: parsed.sharing?.messageEn || `🎉 ${groom.nameEn} & ${bride.nameEn}'s Wedding Invitation — Join us on our special day! {url}`,
-      },
-      meta: {
-        ...weddingConfig.meta,
-        ...(parsed.meta || {}),
-        titleAr: parsed.meta?.titleAr || `دعوة زفاف ${groom.name} و${bride.name}`,
-        titleEn: parsed.meta?.titleEn || `${groom.nameEn} & ${bride.nameEn}'s Wedding Invitation`,
-      },
-      invitationPhraseAr: parsed.invitationPhraseAr || `تتشرف ${groom.familyTitleAr} و${bride.familyTitleAr} بدعوتكم لحضور حفل زفاف نجليهما`,
-      invitationPhraseEn: parsed.invitationPhraseEn || `${groom.familyTitleEn} & ${bride.familyTitleEn} cordially request the honor of your presence at the wedding of their children`,
-    };
+    return mergeConfig(JSON.parse(stored));
   } catch (err) {
     console.error('[ConfigManager] Failed to load config overrides:', err);
     return weddingConfig;
@@ -58,8 +70,13 @@ export const getActiveConfig = () => {
  */
 export const saveActiveConfig = (newConfig) => {
   try {
-    localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(newConfig));
-    window.dispatchEvent(new CustomEvent(CONFIG_UPDATE_EVENT, { detail: newConfig }));
+    const merged = mergeConfig(newConfig);
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(merged));
+    }
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent(CONFIG_UPDATE_EVENT, { detail: merged }));
+    }
     return true;
   } catch (err) {
     console.error('[ConfigManager] Failed to save config:', err);

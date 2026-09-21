@@ -1,19 +1,20 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import weddingConfig from '../../config/weddingConfig';
+import useWeddingConfig from '../../hooks/useWeddingConfig';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
 import './WeddingDetails.css';
 
 const WeddingDetails = () => {
   const { t, i18n } = useTranslation();
+  const weddingConfig = useWeddingConfig();
   const lang = i18n.language;
   const isAr = lang === 'ar';
 
-  const day  = isAr ? weddingConfig.wedding.dayAr  : weddingConfig.wedding.dayEn;
-  const date = isAr ? weddingConfig.wedding.dateDisplay : weddingConfig.wedding.dateDisplayEn;
-  const time = isAr ? weddingConfig.wedding.time  : weddingConfig.wedding.timeEn;
+  const day  = isAr ? weddingConfig.wedding?.dayAr  : weddingConfig.wedding?.dayEn;
+  const date = isAr ? weddingConfig.wedding?.dateDisplay : weddingConfig.wedding?.dateDisplayEn;
+  const time = isAr ? weddingConfig.wedding?.time  : weddingConfig.wedding?.timeEn;
 
   const fadeUp = {
     hidden: { opacity: 0, y: 25 },
