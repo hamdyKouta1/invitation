@@ -39,6 +39,13 @@ const weddingConfig = {
   defaultLanguage: "en",
 
   /**
+   * ─── THEME ────────────────────────────────────────────────
+   * Active invitation theme:
+   * 'default' | 'elegant-luxury' | 'minimalist-modern' | 'romantic-floral' | 'royal-classic'
+   */
+  theme: "default",
+
+  /**
    * ─── COUPLE ──────────────────────────────────────────────
    */
   groom,

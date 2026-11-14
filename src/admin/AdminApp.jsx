@@ -28,6 +28,7 @@ import {
   Save,
   FileCode,
   ShieldCheck,
+  Palette,
 } from 'lucide-react';
 
 import {
@@ -50,6 +51,8 @@ import {
   downloadConfigFile,
   clone,
 } from '../utils/configManager';
+import { DEFAULT_THEME_ID, getThemeById, applyThemeToDOM } from '../config/themesConfig';
+import ThemeManager from '../components/Admin/ThemeManager';
 
 const ADMIN_SESSION_KEY = 'wedding_admin_authenticated';
 const DEFAULT_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'wedding2026';
@@ -92,6 +95,7 @@ const AdminApp = () => {
   // ─── Config State ───
   const [configData, setConfigData] = useState(() => getActiveConfig());
   const [savingConfig, setSavingConfig] = useState(false);
+  const activeThemeId = configData?.theme || DEFAULT_THEME_ID;
 
   const showToast = (msg, type = 'success') => {
     setToastMessage({ text: msg, type });
@@ -357,6 +361,36 @@ const AdminApp = () => {
     showToast('تمت استعادة الإعدادات الأصلية');
   };
 
+  // ─── Theme Selection & Instant Persistence Handler ───
+  const handleApplyAndSaveTheme = async (themeId) => {
+    const selectedTheme = getThemeById(themeId);
+    const updatedConfig = {
+      ...clone(configData),
+      theme: selectedTheme.id,
+    };
+
+    setConfigData(updatedConfig);
+    setSavingConfig(true);
+
+    try {
+      saveActiveConfig(updatedConfig);
+      applyThemeToDOM(selectedTheme.id);
+
+      if (FIREBASE_ENABLED) {
+        await saveWeddingConfigToDB(updatedConfig);
+      }
+
+      showToast(
+        `تم تفعيل وحفظ التصميم "${selectedTheme.nameAr} (${selectedTheme.nameEn})" بنجاح!`
+      );
+    } catch (err) {
+      console.error(err);
+      showToast('تم تطبيق التصميم محلياً، ولكن تعذر الحفظ السحابي', 'error');
+    } finally {
+      setSavingConfig(false);
+    }
+  };
+
   // ─── Filtered Guests ───
   const filteredGuests = guests.filter((g) => {
     const matchesSearch =
@@ -515,6 +549,14 @@ const AdminApp = () => {
         >
           <ImageIcon size={18} />
           <span>معرض الصور ({galleryImages.length})</span>
+        </button>
+
+        <button
+          className={`admin-tab ${activeTab === 'themes' ? 'admin-tab--active' : ''}`}
+          onClick={() => setActiveTab('themes')}
+        >
+          <Palette size={18} />
+          <span>تصاميم الدعوة (Themes)</span>
         </button>
 
         <button
@@ -913,7 +955,21 @@ const AdminApp = () => {
         )}
 
         {/* ────────────────────────────────────────────────────────── */}
-        {/* TAB 4: WEDDING CONFIG EDITOR */}
+        {/* TAB 4: WEDDING THEMES MANAGER */}
+        {/* ────────────────────────────────────────────────────────── */}
+        {activeTab === 'themes' && (
+          <div className="admin-section">
+            <ThemeManager
+              activeThemeId={activeThemeId}
+              configData={configData}
+              saving={savingConfig}
+              onApplyAndSaveTheme={handleApplyAndSaveTheme}
+            />
+          </div>
+        )}
+
+        {/* ────────────────────────────────────────────────────────── */}
+        {/* TAB 5: WEDDING CONFIG EDITOR */}
         {/* ────────────────────────────────────────────────────────── */}
         {activeTab === 'config' && (
           <div className="admin-section">
@@ -946,6 +1002,14 @@ const AdminApp = () => {
                 </button>
               </div>
             </div>
+
+            {/* Integrated Theme Selector inside Config Tab */}
+            <ThemeManager
+              activeThemeId={activeThemeId}
+              configData={configData}
+              saving={savingConfig}
+              onApplyAndSaveTheme={handleApplyAndSaveTheme}
+            />
 
             <div className="admin-config-grid">
               {/* Couple & Families Section */}

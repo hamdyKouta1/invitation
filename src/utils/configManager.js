@@ -1,4 +1,10 @@
-import weddingConfig from '../config/weddingConfig';
+import weddingConfig from '../config/weddingConfig.js';
+import {
+  DEFAULT_THEME_ID,
+  THEME_STORAGE_KEY,
+  isValidThemeId,
+  applyThemeToDOM,
+} from '../config/themesConfig.js';
 
 const CONFIG_STORAGE_KEY = 'wedding_config_override';
 export const CONFIG_UPDATE_EVENT = 'wedding_config_changed';
@@ -13,16 +19,32 @@ export const clone = (obj) => JSON.parse(JSON.stringify(obj));
  */
 export const getActiveConfig = () => {
   try {
+    const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
     const stored = localStorage.getItem(CONFIG_STORAGE_KEY);
-    if (!stored) return weddingConfig;
+
+    if (!stored) {
+      const resolvedTheme = isValidThemeId(storedTheme)
+        ? storedTheme
+        : isValidThemeId(weddingConfig.theme)
+          ? weddingConfig.theme
+          : DEFAULT_THEME_ID;
+      return {
+        ...weddingConfig,
+        theme: resolvedTheme,
+      };
+    }
 
     const parsed = JSON.parse(stored);
     const groom = { ...weddingConfig.groom, ...(parsed.groom || {}) };
     const bride = { ...weddingConfig.bride, ...(parsed.bride || {}) };
 
+    const candidateTheme = parsed.theme || storedTheme || weddingConfig.theme || DEFAULT_THEME_ID;
+    const resolvedTheme = isValidThemeId(candidateTheme) ? candidateTheme : DEFAULT_THEME_ID;
+
     return {
       ...weddingConfig,
       ...parsed,
+      theme: resolvedTheme,
       groom,
       bride,
       wedding: { ...weddingConfig.wedding, ...(parsed.wedding || {}) },
@@ -54,12 +76,22 @@ export const getActiveConfig = () => {
 };
 
 /**
- * Save configuration overrides to localStorage and dispatch update event
+ * Save configuration overrides to localStorage, apply theme to DOM, and dispatch update event
  */
 export const saveActiveConfig = (newConfig) => {
   try {
-    localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(newConfig));
-    window.dispatchEvent(new CustomEvent(CONFIG_UPDATE_EVENT, { detail: newConfig }));
+    const resolvedTheme = isValidThemeId(newConfig?.theme) ? newConfig.theme : DEFAULT_THEME_ID;
+    const payload = {
+      ...newConfig,
+      theme: resolvedTheme,
+    };
+
+    localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(payload));
+    localStorage.setItem(THEME_STORAGE_KEY, resolvedTheme);
+    applyThemeToDOM(resolvedTheme);
+
+    const merged = getActiveConfig();
+    window.dispatchEvent(new CustomEvent(CONFIG_UPDATE_EVENT, { detail: merged }));
     return true;
   } catch (err) {
     console.error('[ConfigManager] Failed to save config:', err);
@@ -70,7 +102,7 @@ export const saveActiveConfig = (newConfig) => {
 /**
  * Synchronizes configuration with Firestore as the 1st Priority.
  * If Firestore has a config document -> merges and sets as active.
- * If Firestore has NO config document yet -> uploads default weddingConfig to Firestore.
+ * If Firestore has NO config document yet -> preserves local overrides (or default weddingConfig) and uploads to Firestore if enabled.
  */
 export const syncConfigWithFirestore = async (getWeddingConfigFromDB, saveWeddingConfigToDB) => {
   try {
@@ -78,27 +110,34 @@ export const syncConfigWithFirestore = async (getWeddingConfigFromDB, saveWeddin
     if (cloudConfig && Object.keys(cloudConfig).length > 0) {
       console.info('[ConfigManager] Priority 1: Loaded wedding config from Firestore DB');
       saveActiveConfig(cloudConfig);
-      return cloudConfig;
+      return getActiveConfig();
     } else {
-      console.info('[ConfigManager] No config in Firestore yet. Uploading default weddingConfig to Firestore...');
-      if (saveWeddingConfigToDB) {
-        await saveWeddingConfigToDB(weddingConfig);
+      const currentActive = getActiveConfig();
+      applyThemeToDOM(currentActive.theme);
+
+      const firebaseEnabled = import.meta?.env?.VITE_FIREBASE_ENABLED === 'true';
+      if (firebaseEnabled && saveWeddingConfigToDB) {
+        console.info('[ConfigManager] No config in Firestore yet. Uploading weddingConfig to Firestore...');
+        await saveWeddingConfigToDB(currentActive);
       }
-      saveActiveConfig(weddingConfig);
-      return weddingConfig;
+      return currentActive;
     }
   } catch (err) {
     console.warn('[ConfigManager] Firestore config sync skipped (using local/fallback):', err);
-    return getActiveConfig();
+    const fallback = getActiveConfig();
+    applyThemeToDOM(fallback.theme);
+    return fallback;
   }
 };
 
 /**
- * Reset config to original defaults
+ * Reset config to original defaults (including restoring default theme)
  */
 export const resetActiveConfig = () => {
   try {
     localStorage.removeItem(CONFIG_STORAGE_KEY);
+    localStorage.removeItem(THEME_STORAGE_KEY);
+    applyThemeToDOM(DEFAULT_THEME_ID);
     window.dispatchEvent(new CustomEvent(CONFIG_UPDATE_EVENT, { detail: weddingConfig }));
     return true;
   } catch (err) {
@@ -123,6 +162,7 @@ export const generateConfigFileContent = (cfg) => {
   const sharing = cfg.sharing || weddingConfig.sharing;
   const meta = cfg.meta || weddingConfig.meta;
   const analytics = cfg.analytics || weddingConfig.analytics;
+  const theme = isValidThemeId(cfg.theme) ? cfg.theme : DEFAULT_THEME_ID;
 
   return `/**
  * ============================================================
@@ -143,6 +183,13 @@ const weddingConfig = {
    * Default language for the invitation: 'ar' (Arabic) or 'en' (English)
    */
   defaultLanguage: ${JSON.stringify(cfg.defaultLanguage || "ar")},
+
+  /**
+   * ─── THEME ────────────────────────────────────────────────
+   * Active invitation theme:
+   * 'default' | 'elegant-luxury' | 'minimalist-modern' | 'romantic-floral' | 'royal-classic'
+   */
+  theme: ${JSON.stringify(theme)},
 
   /**
    * ─── COUPLE ──────────────────────────────────────────────
@@ -235,3 +282,9 @@ export const downloadConfigFile = (config) => {
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
 };
+
+// Synchronously initialize theme attribute on load to prevent any FOUC (Flash of Unstyled Content)
+if (typeof window !== 'undefined') {
+  const initialCfg = getActiveConfig();
+  applyThemeToDOM(initialCfg?.theme);
+}

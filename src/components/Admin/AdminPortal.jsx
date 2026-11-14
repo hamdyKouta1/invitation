@@ -30,6 +30,7 @@ import {
   ShieldCheck,
   Send,
   X,
+  Palette,
 } from 'lucide-react';
 
 import {
@@ -54,6 +55,8 @@ import {
 } from '../../utils/configManager';
 
 import { generateOTP, sendOTPEmail, verifyOTP, isMailProviderConfigured } from '../../services/mail/otpService';
+import { DEFAULT_THEME_ID, getThemeById } from '../../config/themesConfig';
+import ThemeManager from './ThemeManager';
 import './AdminPortal.css';
 
 const AUTH_STORAGE_KEY = 'wedding_admin_2fa_auth';
@@ -105,6 +108,7 @@ const AdminPortal = ({ onClose }) => {
 
   // Config
   const [configData, setConfigData] = useState(() => getActiveConfig());
+  const [activeThemeId, setActiveThemeId] = useState(() => getActiveConfig().theme || DEFAULT_THEME_ID);
   const [savingConfig, setSavingConfig] = useState(false);
 
   const showToast = (msg, type = 'success') => {
@@ -164,11 +168,17 @@ const AdminPortal = ({ onClose }) => {
         const cloudConfig = await getWeddingConfigFromDB();
         if (cloudConfig) {
           saveActiveConfig(cloudConfig);
-          setConfigData(cloudConfig);
+          const merged = getActiveConfig();
+          setConfigData(merged);
+          setActiveThemeId(merged.theme || DEFAULT_THEME_ID);
         }
       } catch (err) {
         console.error(err);
       }
+    } else {
+      const localCfg = getActiveConfig();
+      setConfigData(localCfg);
+      setActiveThemeId(localCfg.theme || DEFAULT_THEME_ID);
     }
   };
 
@@ -436,6 +446,7 @@ const AdminPortal = ({ onClose }) => {
     setSavingConfig(true);
     try {
       saveActiveConfig(configData);
+      setActiveThemeId(configData.theme || DEFAULT_THEME_ID);
 
       if (FIREBASE_ENABLED) {
         await saveWeddingConfigToDB(configData);
@@ -454,6 +465,35 @@ const AdminPortal = ({ onClose }) => {
     }
   };
 
+  const handleApplyAndSaveTheme = async (themeId) => {
+    setSavingConfig(true);
+    try {
+      const nextConfig = {
+        ...clone(configData),
+        theme: themeId,
+      };
+      setConfigData(nextConfig);
+      saveActiveConfig(nextConfig);
+      setActiveThemeId(themeId);
+
+      if (FIREBASE_ENABLED) {
+        await saveWeddingConfigToDB(nextConfig);
+      }
+
+      const themeObj = getThemeById(themeId);
+      showToast(
+        FIREBASE_ENABLED
+          ? `تم تفعيل وحفظ التصميم "${themeObj.nameAr}" في Firestore ومحلياً!`
+          : `تم تفعيل وحفظ التصميم "${themeObj.nameAr}" بنجاح!`
+      );
+    } catch (err) {
+      console.error(err);
+      showToast('حدث خطأ أثناء تطبيق وحفظ التصميم', 'error');
+    } finally {
+      setSavingConfig(false);
+    }
+  };
+
   const handleUploadDefaultToFirestore = async () => {
     if (!window.confirm('هل تريد رفع الإعدادات الافتراضية (weddingConfig) وتعيينها كأولوية أولى في Firestore DB؟')) return;
     setSavingConfig(true);
@@ -462,6 +502,7 @@ const AdminPortal = ({ onClose }) => {
         await saveWeddingConfigToDB(configData);
       }
       saveActiveConfig(configData);
+      setActiveThemeId(configData.theme || DEFAULT_THEME_ID);
       showToast('تم رفع وتعيين الإعدادات بنجاح في قاعدة بيانات Firestore!');
     } catch (err) {
       console.error(err);
@@ -474,8 +515,10 @@ const AdminPortal = ({ onClose }) => {
   const handleResetConfig = () => {
     if (!window.confirm('هل تريد استعادة الإعدادات الأصلية؟')) return;
     resetActiveConfig();
-    setConfigData(getActiveConfig());
-    showToast('تمت استعادة الإعدادات الأصلية');
+    const fresh = getActiveConfig();
+    setConfigData(fresh);
+    setActiveThemeId(fresh.theme || DEFAULT_THEME_ID);
+    showToast('تمت استعادة الإعدادات الأصلية والتصميم الافتراضي');
   };
 
   // ─── Metrics ───
@@ -699,8 +742,18 @@ const AdminPortal = ({ onClose }) => {
         </button>
 
         <button
+          className={`admin-tab ${activeTab === 'themes' ? 'admin-tab--active' : ''}`}
+          onClick={() => setActiveTab('themes')}
+          id="admin-tab-themes"
+        >
+          <Palette size={18} />
+          <span>تصاميم الدعوة (Themes)</span>
+        </button>
+
+        <button
           className={`admin-tab ${activeTab === 'config' ? 'admin-tab--active' : ''}`}
           onClick={() => setActiveTab('config')}
+          id="admin-tab-config"
         >
           <Settings size={18} />
           <span>إعدادات الزفاف المباشرة</span>
@@ -1076,6 +1129,29 @@ const AdminPortal = ({ onClose }) => {
           </div>
         )}
 
+        {/* TAB: THEMES */}
+        {activeTab === 'themes' && (
+          <div className="admin-section">
+            <div className="admin-config-header">
+              <div>
+                <h2 className="admin-section-title font-serif">قوالب وتصاميم دعوة الزفاف (5 تصاميم جاهزة)</h2>
+                <p className="admin-section-desc">
+                  اختر من بين 5 تصاميم احترافية متكاملة (التصميم الأصلي الافتراضي + 4 تصاميم جديدة). يمكنك معاينة أي تصميم وتطبيقه وحفظه ليظهر لجميع زوار الموقع.
+                </p>
+              </div>
+            </div>
+
+            <ThemeManager
+              activeThemeId={activeThemeId}
+              selectedThemeId={configData.theme || DEFAULT_THEME_ID}
+              configData={configData}
+              saving={savingConfig}
+              onSelectTheme={(id) => handleConfigChange(null, 'theme', id)}
+              onApplyAndSaveTheme={handleApplyAndSaveTheme}
+            />
+          </div>
+        )}
+
         {/* TAB 4: CONFIG */}
         {activeTab === 'config' && (
           <div className="admin-section">
@@ -1119,6 +1195,22 @@ const AdminPortal = ({ onClose }) => {
             </div>
 
             <div className="admin-config-grid">
+              {/* Themes Selector Card inside Config Tab */}
+              <div className="admin-card">
+                <h3 className="admin-card-title">
+                  <Palette size={20} />
+                  تصميم وقالب بطاقة الدعوة (Wedding Invitation Theme)
+                </h3>
+                <ThemeManager
+                  activeThemeId={activeThemeId}
+                  selectedThemeId={configData.theme || DEFAULT_THEME_ID}
+                  configData={configData}
+                  saving={savingConfig}
+                  onSelectTheme={(id) => handleConfigChange(null, 'theme', id)}
+                  onApplyAndSaveTheme={handleApplyAndSaveTheme}
+                />
+              </div>
+
               {/* Couple */}
               <div className="admin-card">
                 <h3 className="admin-card-title">

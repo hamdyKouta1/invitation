@@ -25,10 +25,13 @@ import AdminPortal from './components/Admin/AdminPortal';
 import OrnamentDivider from './components/ui/OrnamentDivider';
 import FloralCornerSVG from './components/ui/FloralCornerSVG';
 import weddingConfig from './config/weddingConfig';
+import { applyThemeToDOM } from './config/themesConfig';
 import { getWeddingConfigFromDB, saveWeddingConfigToDB } from './services';
 import { syncConfigWithFirestore } from './utils/configManager';
+import { useWeddingConfig } from './hooks/useWeddingConfig';
 
 import './App.css';
+import './styles/themes.css';
 
 const SECRET_HASH = import.meta.env.VITE_ADMIN_SECRET_ENDPOINT || 'admin-secret';
 
@@ -36,9 +39,10 @@ const SECRET_HASH = import.meta.env.VITE_ADMIN_SECRET_ENDPOINT || 'admin-secret'
 const Footer = () => {
   const { t, i18n } = useTranslation();
   const isAr = i18n.language === 'ar';
+  const config = useWeddingConfig() || weddingConfig;
 
-  const groomName = isAr ? weddingConfig.groom.name  : weddingConfig.groom.nameEn;
-  const brideName = isAr ? weddingConfig.bride.name  : weddingConfig.bride.nameEn;
+  const groomName = isAr ? config.groom.name  : config.groom.nameEn;
+  const brideName = isAr ? config.bride.name  : config.bride.nameEn;
   const year = new Date().getFullYear();
 
   const handleScrollToTop = () => {
@@ -83,6 +87,13 @@ function App() {
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const musicControlRef = useRef(null);
   const wishesRef = useRef(null);
+  const activeConfig = useWeddingConfig() || weddingConfig;
+  const activeTheme = activeConfig?.theme || 'default';
+
+  // Ensure the active theme attribute is synced onto <html> whenever it changes
+  useEffect(() => {
+    applyThemeToDOM(activeTheme);
+  }, [activeTheme]);
 
   // Check URL hash / query param for secret admin endpoint on mount and hash changes
   useEffect(() => {
@@ -139,7 +150,7 @@ function App() {
   };
 
   return (
-    <div className="app">
+    <div className="app" data-theme={activeTheme}>
       {/* ── Secret Admin Management Portal (2FA Protected) ── */}
       {isAdminOpen && <AdminPortal onClose={handleCloseAdmin} />}
 
