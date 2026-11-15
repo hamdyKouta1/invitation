@@ -7,7 +7,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { submitRSVP, checkAlreadySubmitted } from '../../services/index.js';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
+import { ThemeHeaderCrest } from '../ui/ThemeVisuals';
 import useAnalytics, { EVENTS } from '../../hooks/useAnalytics';
+import weddingConfig from '../../config/weddingConfig';
 import useWeddingConfig from '../../hooks/useWeddingConfig';
 import './RSVP.css';
 
@@ -24,16 +26,16 @@ const buildSchema = (t, maxGuests) =>
 
 const RSVP = ({ onWishesUpdated }) => {
   const { t, i18n } = useTranslation();
-  const weddingConfig = useWeddingConfig();
   const isAr = i18n.language === 'ar';
-  const groomName = isAr ? weddingConfig.groom?.name : weddingConfig.groom?.nameEn;
-  const brideName = isAr ? weddingConfig.bride?.name : weddingConfig.bride?.nameEn;
+  const liveConfig = useWeddingConfig() || weddingConfig;
+  const groomName = isAr ? liveConfig.groom?.name : liveConfig.groom?.nameEn;
+  const brideName = isAr ? liveConfig.bride?.name : liveConfig.bride?.nameEn;
   const { track } = useAnalytics();
   const [status, setStatus] = useState(
     checkAlreadySubmitted() ? 'already_submitted' : 'idle'
   );
   const [submittedAttendance, setSubmittedAttendance] = useState(null);
-  const maxGuests = weddingConfig.rsvp?.maxGuests || 10;
+  const maxGuests = liveConfig.rsvp?.maxGuests || 10;
 
   const schema = buildSchema(t, maxGuests);
 
@@ -55,7 +57,7 @@ const RSVP = ({ onWishesUpdated }) => {
       await submitRSVP({
         ...data,
         language: i18n.language,
-        invitationId: weddingConfig.rsvp?.invitationId,
+        invitationId: liveConfig.rsvp?.invitationId,
       });
       setSubmittedAttendance(data.attendance);
       setStatus('success');
@@ -74,13 +76,25 @@ const RSVP = ({ onWishesUpdated }) => {
     }
   };
 
-  if (weddingConfig.rsvp && weddingConfig.rsvp.enabled === false) return null;
+  const isRsvpEnabled =
+    liveConfig.rsvp?.enabled !== false && liveConfig.sections?.rsvp?.enabled !== false;
+
+  if (!isRsvpEnabled) return null;
+
+  const secCfg = liveConfig.sections?.rsvp || {};
+  const sectionTitle = isAr
+    ? (secCfg.titleAr || t('rsvp.title'))
+    : (secCfg.titleEn || t('rsvp.title'));
+  const sectionSubtitle = isAr
+    ? (secCfg.subtitleAr || t('rsvp.subtitle'))
+    : (secCfg.subtitleEn || t('rsvp.subtitle'));
 
   return (
     <SectionWrapper id="rsvp" alt>
       <div className="section__header">
-        <h2 className="section__title font-serif">{t('rsvp.title')}</h2>
-        <p className="section__subtitle">{t('rsvp.subtitle')}</p>
+        <ThemeHeaderCrest sectionIndex="09" />
+        <h2 className="section__title font-serif">{sectionTitle}</h2>
+        <p className="section__subtitle">{sectionSubtitle}</p>
         <OrnamentDivider symbol="✦" />
       </div>
 

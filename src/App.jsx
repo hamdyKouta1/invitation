@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 // Styles
 import './styles/global.css';
+import './styles/themes.css';
 import './styles/animations.css';
 import './styles/rtl.css';
 
@@ -20,16 +21,20 @@ import Wishlist from './components/Wishlist/Wishlist';
 import RSVP from './components/RSVP/RSVP';
 import WishesWall from './components/WishesWall/WishesWall';
 import ShareInvitation from './components/ShareInvitation/ShareInvitation';
+import CustomSection from './components/CustomSection/CustomSection';
 import Navigation from './components/Navigation/Navigation';
 import MusicControl from './components/MusicControl/MusicControl';
 import AdminPortal from './components/Admin/AdminPortal';
 import OrnamentDivider from './components/ui/OrnamentDivider';
 import FloralCornerSVG from './components/ui/FloralCornerSVG';
+import { ThemeAmbientEffects, ThemePreviewBanner } from './components/ui/ThemeVisuals';
+import { applyThemeToDOM } from './config/themesConfig';
 import { getWeddingConfigFromDB, saveWeddingConfigToDB } from './services';
-import { syncConfigWithFirestore } from './utils/configManager';
+import { syncConfigWithFirestore, normalizeSectionOrder, isSectionEnabled } from './utils/configManager';
 import { WeddingConfigProvider, useWeddingConfig } from './context/WeddingConfigContext';
 
 import './App.css';
+import './styles/themes.css';
 
 const SECRET_HASH = import.meta.env.VITE_ADMIN_SECRET_ENDPOINT || 'admin-secret';
 
@@ -88,6 +93,12 @@ function AppContent() {
 
   const weddingConfig = useWeddingConfig();
   const { i18n } = useTranslation();
+  const activeTheme = weddingConfig?.theme || 'default';
+
+  // Ensure the active theme attribute is synced onto <html> whenever it changes
+  useEffect(() => {
+    applyThemeToDOM(activeTheme);
+  }, [activeTheme]);
 
   // Dynamic SEO title
   useEffect(() => {
@@ -152,8 +163,70 @@ function AppContent() {
     }
   };
 
+  // Build ordered section list from dynamic configuration
+  const orderedIds = normalizeSectionOrder(
+    weddingConfig.sectionOrder,
+    weddingConfig.customSections
+  );
+  const customSectionsMap = new Map(
+    (Array.isArray(weddingConfig.customSections) ? weddingConfig.customSections : [])
+      .filter((cs) => cs && cs.id)
+      .map((cs) => [cs.id, cs])
+  );
+
+  const renderSectionById = (sectionId, idx) => {
+    if (customSectionsMap.has(sectionId)) {
+      const customSec = customSectionsMap.get(sectionId);
+      if (customSec.enabled === false) return null;
+      return (
+        <CustomSection
+          key={sectionId}
+          section={customSec}
+          sectionIndex={String(idx + 1).padStart(2, '0')}
+        />
+      );
+    }
+
+    if (!isSectionEnabled(weddingConfig, sectionId)) {
+      return null;
+    }
+
+    switch (sectionId) {
+      case 'hero':
+        return <Hero key="hero" />;
+      case 'details':
+        return <WeddingDetails key="details" />;
+      case 'countdown':
+        return <Countdown key="countdown" />;
+      case 'families':
+        return <Families key="families" />;
+      case 'venue':
+        return <Venue key="venue" />;
+      case 'gallery':
+        return <Gallery key="gallery" />;
+      case 'dressCode':
+        return <DressCode key="dressCode" />;
+      case 'wishlist':
+        return <Wishlist key="wishlist" />;
+      case 'rsvp':
+        return <RSVP key="rsvp" onWishesUpdated={handleWishesUpdated} />;
+      case 'wishes':
+        return <WishesWall key="wishes" ref={wishesRef} />;
+      case 'share':
+        return <ShareInvitation key="share" />;
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="app">
+    <div className="app" data-theme={activeTheme}>
+      {/* ── Theme-Specific Live Ambient Effects (Stardust, Petals, Architectural Lines, Lanterns) ── */}
+      <ThemeAmbientEffects />
+
+      {/* ── Temporary Live Theme Preview Floating Banner (Admin Preview Mode) ── */}
+      <ThemePreviewBanner onReopenAdmin={() => setIsAdminOpen(true)} />
+
       {/* ── Secret Admin Management Portal (2FA Protected) ── */}
       {isAdminOpen && <AdminPortal onClose={handleCloseAdmin} />}
 
@@ -184,17 +257,8 @@ function AppContent() {
           >
             <Navigation />
 
-            <Hero />
-            <WeddingDetails />
-            <Countdown />
-            <Families />
-            <Venue />
-            <Gallery />
-            <DressCode />
-            <Wishlist />
-            <RSVP onWishesUpdated={handleWishesUpdated} />
-            <WishesWall ref={wishesRef} />
-            <ShareInvitation />
+            {orderedIds.map((sectionId, idx) => renderSectionById(sectionId, idx))}
+
             <Footer />
           </motion.main>
         )}

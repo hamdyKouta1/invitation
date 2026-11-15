@@ -1,8 +1,11 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import useWeddingConfig from '../../hooks/useWeddingConfig';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
+import { ThemeHeaderCrest } from '../ui/ThemeVisuals';
+import weddingConfig from '../../config/weddingConfig';
+import useWeddingConfig from '../../hooks/useWeddingConfig';
 import './DressCode.css';
 
 const SuitIcon = () => (
@@ -43,16 +46,55 @@ const WOMEN_COLORS = [
 
 const DressCode = () => {
   const { t, i18n } = useTranslation();
-  const weddingConfig = useWeddingConfig();
   const isAr = i18n.language === 'ar';
+  const liveConfig = useWeddingConfig() || weddingConfig;
 
-  if (weddingConfig.dressCode && weddingConfig.dressCode.enabled === false) return null;
+  const isDressCodeEnabled =
+    liveConfig.dressCode?.enabled !== false && liveConfig.sections?.dressCode?.enabled !== false;
+
+  if (!isDressCodeEnabled) return null;
+
+  const dc = liveConfig.dressCode || {};
+  const secCfg = liveConfig.sections?.dressCode || {};
+
+  const sectionTitle = isAr
+    ? (secCfg.titleAr || dc.titleAr || t('dressCode.title'))
+    : (secCfg.titleEn || dc.titleEn || t('dressCode.title'));
+
+  const sectionSubtitle = isAr
+    ? (secCfg.subtitleAr || dc.subtitleAr || t('dressCode.subtitle'))
+    : (secCfg.subtitleEn || dc.subtitleEn || t('dressCode.subtitle'));
+
+  const gentlemenTitle = isAr
+    ? (dc.gentlemenTitleAr || t('dressCode.gentlemenTitle'))
+    : (dc.gentlemenTitleEn || t('dressCode.gentlemenTitle'));
+
+  const gentlemenDesc = isAr
+    ? (dc.gentlemenDescAr || t('dressCode.gentlemenDesc'))
+    : (dc.gentlemenDescEn || t('dressCode.gentlemenDesc'));
+
+  const ladiesTitle = isAr
+    ? (dc.ladiesTitleAr || t('dressCode.ladiesTitle'))
+    : (dc.ladiesTitleEn || t('dressCode.ladiesTitle'));
+
+  const ladiesDesc = isAr
+    ? (dc.ladiesDescAr || t('dressCode.ladiesDesc'))
+    : (dc.ladiesDescEn || t('dressCode.ladiesDesc'));
+
+  const noteTitle = isAr
+    ? (dc.noteTitleAr || t('dressCode.noteTitle'))
+    : (dc.noteTitleEn || t('dressCode.noteTitle'));
+
+  const noteDesc = isAr
+    ? (dc.noteDescAr || t('dressCode.noteDesc'))
+    : (dc.noteDescEn || t('dressCode.noteDesc'));
 
   return (
     <SectionWrapper id="dress-code" alt>
       <div className="section__header">
-        <h2 className="section__title font-serif">{t('dressCode.title')}</h2>
-        <p className="section__subtitle">{t('dressCode.subtitle')}</p>
+        <ThemeHeaderCrest sectionIndex="07" />
+        <h2 className="section__title font-serif">{sectionTitle}</h2>
+        <p className="section__subtitle">{sectionSubtitle}</p>
         <OrnamentDivider symbol="✦" />
       </div>
 
@@ -69,10 +111,10 @@ const DressCode = () => {
               <span className="dress-card__icon" aria-hidden="true">
                 <SuitIcon />
               </span>
-              <h3 className="dress-card__title font-serif">{t('dressCode.gentlemenTitle')}</h3>
+              <h3 className="dress-card__title font-serif">{gentlemenTitle}</h3>
             </div>
 
-            <p className="dress-card__desc">{t('dressCode.gentlemenDesc')}</p>
+            <p className="dress-card__desc">{gentlemenDesc}</p>
 
             <OrnamentDivider symbol="❧" className="dress-card__sep" />
 
@@ -107,10 +149,10 @@ const DressCode = () => {
               <span className="dress-card__icon dress-card__icon--rose" aria-hidden="true">
                 <DressIcon />
               </span>
-              <h3 className="dress-card__title font-serif">{t('dressCode.ladiesTitle')}</h3>
+              <h3 className="dress-card__title font-serif">{ladiesTitle}</h3>
             </div>
 
-            <p className="dress-card__desc">{t('dressCode.ladiesDesc')}</p>
+            <p className="dress-card__desc">{ladiesDesc}</p>
 
             <OrnamentDivider symbol="❧" className="dress-card__sep" />
 
@@ -143,8 +185,8 @@ const DressCode = () => {
       >
         <span className="dress-code-note__icon" aria-hidden="true">🤍</span>
         <div className="dress-code-note__text">
-          <strong className="dress-code-note__title">{t('dressCode.noteTitle')}</strong>
-          <p className="dress-code-note__desc">{t('dressCode.noteDesc')}</p>
+          <strong className="dress-code-note__title">{noteTitle}</strong>
+          <p className="dress-code-note__desc">{noteDesc}</p>
         </div>
       </motion.div>
     </SectionWrapper>

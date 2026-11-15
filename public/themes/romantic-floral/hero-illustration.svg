@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 900" fill="none">
+  <defs>
+    <radialGradient id="rfBg" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#FFFDFD"/>
+      <stop offset="65%" stop-color="#FCEEF1"/>
+      <stop offset="100%" stop-color="#F4DCE0"/>
+    </radialGradient>
+    <linearGradient id="roseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F7CFD6"/>
+      <stop offset="50%" stop-color="#DF92A0"/>
+      <stop offset="100%" stop-color="#B85668"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="900" fill="url(#rfBg)"/>
+
+  <!-- Soft Botanical Oval Archway -->
+  <ellipse cx="400" cy="460" rx="260" ry="340" fill="#FFF9FA" stroke="#E4B4BE" stroke-width="2.5"/>
+  <ellipse cx="400" cy="460" rx="244" ry="324" fill="none" stroke="#C86D7E" stroke-width="1" stroke-dasharray="5 5"/>
+
+  <!-- Lush Eucalyptus & Sage Garland around Arch -->
+  <g stroke="#6E8F7E" stroke-width="2.2" fill="none">
+    <path d="M150 380 Q180 180 400 115 Q620 180 650 380"/>
+    <path d="M165 560 Q210 760 400 805 Q590 760 635 560"/>
+  </g>
+  <!-- Eucalyptus Leaves -->
+  <g fill="#7A9A8B" opacity="0.75">
+    <ellipse cx="220" cy="215" rx="22" ry="10" transform="rotate(-35 220 215)"/>
+    <ellipse cx="275" cy="165" rx="20" ry="9" transform="rotate(-25 275 165)"/>
+    <ellipse cx="580" cy="215" rx="22" ry="10" transform="rotate(35 580 215)"/>
+    <ellipse cx="525" cy="165" rx="20" ry="9" transform="rotate(25 525 165)"/>
+    <ellipse cx="215" cy="690" rx="22" ry="10" transform="rotate(35 215 690)"/>
+    <ellipse cx="585" cy="690" rx="22" ry="10" transform="rotate(-35 585 690)"/>
+  </g>
+
+  <!-- Blooming Blush Peonies & Garden Roses -->
+  <g>
+    <!-- Top Crown Peony Cluster -->
+    <circle cx="400" cy="118" r="36" fill="#F4C2CC"/>
+    <circle cx="400" cy="118" r="24" fill="#DF8E9D"/>
+    <circle cx="400" cy="118" r="12" fill="#C86D7E"/>
+    <circle cx="348" cy="132" r="24" fill="#FADCE2"/>
+    <circle cx="348" cy="132" r="14" fill="#E39AA8"/>
+    <circle cx="452" cy="132" r="24" fill="#FADCE2"/>
+    <circle cx="452" cy="132" r="14" fill="#E39AA8"/>
+
+    <!-- Left & Right Floral Clusters -->
+    <circle cx="152" cy="390" r="32" fill="#F4C2CC"/>
+    <circle cx="152" cy="390" r="19" fill="#C86D7E"/>
+    <circle cx="165" cy="435" r="22" fill="#FADCE2"/>
+    <circle cx="648" cy="390" r="32" fill="#F4C2CC"/>
+    <circle cx="648" cy="390" r="19" fill="#C86D7E"/>
+    <circle cx="635" cy="435" r="22" fill="#FADCE2"/>
+  </g>
+
+  <!-- Romantic Couple in Pastel Garden -->
+  <g transform="translate(0, 15)">
+    <!-- Groom in Warm Taupe/Rose-Beige Suit -->
+    <circle cx="362" cy="330" r="30" fill="#7D5259"/>
+    <path d="M298 710 L312 420 C315 390 335 375 362 375 C390 375 406 392 410 422 L416 710 Z" fill="#8C6269"/>
+    <polygon points="348,375 376,375 362,438" fill="#FFF9FA"/>
+    <!-- Bride in Flowing Blush Tulle Gown & Flower Crown -->
+    <circle cx="445" cy="348" r="28" fill="#9E6B74"/>
+    <!-- Flower Crown -->
+    <circle cx="430" cy="328" r="6" fill="#C86D7E"/>
+    <circle cx="444" cy="324" r="7" fill="#F4C2CC"/>
+    <circle cx="458" cy="328" r="6" fill="#C86D7E"/>
+    <!-- Flowing Tulle Veil & Gown -->
+    <path d="M460 335 C520 375 565 510 595 710 L470 710" fill="#FADCE2" fill-opacity="0.55"/>
+    <path d="M415 415 C425 392 465 392 475 415 L565 710 L372 710 Z" fill="url(#roseGrad)" fill-opacity="0.38" stroke="#C86D7E" stroke-width="2"/>
+    <!-- Bridal Peony Bouquet -->
+    <circle cx="422" cy="485" r="24" fill="#F4C2CC"/>
+    <circle cx="414" cy="480" r="12" fill="#C86D7E"/>
+    <circle cx="432" cy="488" r="11" fill="#DF8E9D"/>
+    <path d="M402 495 L385 520 M442 495 L460 520" stroke="#7A9A8B" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- Bottom Floral Wreath Knot -->
+  <circle cx="400" cy="798" r="26" fill="#F4C2CC"/>
+  <circle cx="400" cy="798" r="15" fill="#C86D7E"/>
+</svg>

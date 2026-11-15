@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" fill="none">
+  <rect width="600" height="400" fill="#F9F4E8"/>
+  <rect x="18" y="18" width="564" height="364" stroke="#072A20" stroke-width="3"/>
+  <rect x="28" y="28" width="544" height="344" stroke="#D4AF37" stroke-width="2"/>
+  <rect x="36" y="36" width="528" height="328" stroke="#721121" stroke-width="1"/>
+  <!-- Royal Crown Emblem -->
+  <polygon points="270,85 282,62 292,75 300,55 308,75 318,62 330,85" fill="#D4AF37" stroke="#072A20" stroke-width="1.2"/>
+  <text x="300" y="135" text-anchor="middle" fill="#721121" font-family="Cinzel, serif" font-size="15" letter-spacing="7">BY ROYAL INVITATION</text>
+  <text x="300" y="220" text-anchor="middle" fill="#072A20" font-family="Pinyon Script, cursive" font-size="64">Save the Date</text>
+  <line x1="180" y1="260" x2="420" y2="260" stroke="#D4AF37" stroke-width="2"/>
+  <polygon points="300,252 308,260 300,268 292,260" fill="#721121"/>
+  <text x="300" y="305" text-anchor="middle" fill="#0A3528" font-family="Cinzel, serif" font-size="13" letter-spacing="5">PALACE HERITAGE COLLECTION</text>
+</svg>

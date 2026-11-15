@@ -1,34 +1,58 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapPin, Navigation } from 'lucide-react';
+import weddingConfig from '../../config/weddingConfig';
 import useWeddingConfig from '../../hooks/useWeddingConfig';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
+import { ThemeHeaderCrest } from '../ui/ThemeVisuals';
+import FloralCornerSVG from '../ui/FloralCornerSVG';
 import useAnalytics, { EVENTS } from '../../hooks/useAnalytics';
 import './Venue.css';
 
 const Venue = () => {
   const { t, i18n } = useTranslation();
   const { track } = useAnalytics();
-  const weddingConfig = useWeddingConfig();
   const isAr = i18n.language === 'ar';
-  const venue = weddingConfig.venue || {};
+  const liveConfig = useWeddingConfig() || weddingConfig;
+  const activeTheme = liveConfig?.theme || 'default';
+  const venue = liveConfig.venue || {};
+
+  if (liveConfig.sections?.venue?.enabled === false) return null;
+
+  const secCfg = liveConfig.sections?.venue || {};
+  const sectionTitle = isAr
+    ? (secCfg.titleAr || t('venue.title'))
+    : (secCfg.titleEn || t('venue.title'));
+  const sectionSubtitle = isAr ? secCfg.subtitleAr : secCfg.subtitleEn;
 
   const handleMapsClick = () => {
     track(EVENTS.VENUE_CLICKED);
     window.open(venue.mapsUrl, '_blank', 'noopener,noreferrer');
   };
 
-  const embedUrl = venue.mapsEmbedUrl || `https://maps.google.com/maps?q=${encodeURIComponent((venue.nameEn || '') + ' ' + (venue.cityEn || ''))}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+  const embedUrl =
+    venue.mapsEmbedUrl ||
+    `https://maps.google.com/maps?q=${encodeURIComponent(
+      (venue.nameEn || '') + ' ' + (venue.cityEn || '')
+    )}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
 
   return (
     <SectionWrapper id="venue">
       <div className="section__header">
-        <h2 className="section__title font-serif">{t('venue.title')}</h2>
+        <ThemeHeaderCrest sectionIndex="05" />
+        <h2 className="section__title font-serif">{sectionTitle}</h2>
+        {sectionSubtitle && <p className="section__subtitle">{sectionSubtitle}</p>}
         <OrnamentDivider symbol="✦" />
       </div>
 
-      <div className="venue-card">
+      <div className={`venue-card venue-card--${activeTheme}`}>
+        {activeTheme !== 'default' && (
+          <>
+            <FloralCornerSVG className="venue-card__corner venue-card__corner--tl" />
+            <FloralCornerSVG className="venue-card__corner venue-card__corner--br" />
+          </>
+        )}
         <div className="venue-card__content venue-info">
           {/* Location pin icon */}
           <div className="venue-card__pin" aria-hidden="true">

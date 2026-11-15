@@ -5,8 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { getGalleryImages } from '../../services/index.js';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
+import { ThemeHeaderCrest } from '../ui/ThemeVisuals';
 import useAnalytics, { EVENTS } from '../../hooks/useAnalytics';
+import weddingConfig from '../../config/weddingConfig';
 import useWeddingConfig from '../../hooks/useWeddingConfig';
+import { getThemeById } from '../../config/themesConfig';
+import { getAssetUrl } from '../../utils/assetUtils';
 import './Gallery.css';
 
 const transformDriveUrl = (url) => {
@@ -16,7 +20,7 @@ const transformDriveUrl = (url) => {
   return match && match[1] ? `https://lh3.googleusercontent.com/d/${match[1]}` : url;
 };
 
-const GalleryImage = ({ image, index, onClick }) => {
+const GalleryImage = ({ image, index, onClick, activeTheme, isAr }) => {
   const imgRef = useRef(null);
   const [loaded, setLoaded] = useState(false);
   const [inView, setInView] = useState(false);
@@ -31,10 +35,13 @@ const GalleryImage = ({ image, index, onClick }) => {
     return () => observer.disconnect();
   }, []);
 
+  const title = isAr ? (image.titleAr || image.alt) : (image.titleEn || image.alt);
+  const caption = isAr ? image.captionAr : image.captionEn;
+
   return (
     <motion.div
       ref={imgRef}
-      className={`gallery-item gallery-item--${image.aspectRatio || 'square'}`}
+      className={`gallery-item gallery-item--${image.aspectRatio || 'square'} gallery-item--theme-${activeTheme}`}
       initial={{ opacity: 0, scale: 0.96 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, margin: '-40px' }}
@@ -46,18 +53,45 @@ const GalleryImage = ({ image, index, onClick }) => {
       onKeyDown={(e) => e.key === 'Enter' && onClick(index)}
       id={`gallery-img-${image.id}`}
     >
-      {inView && (
-        <img
-          src={image.url}
-          alt={image.alt}
-          className={`gallery-item__img ${loaded ? 'gallery-item__img--loaded' : ''}`}
-          onLoad={() => setLoaded(true)}
-          loading="lazy"
-          decoding="async"
-        />
+      {/* Theme-Specific Frame Adornments */}
+      {activeTheme === 'minimalist-modern' && (
+        <div className="gallery-item__editorial-header" aria-hidden="true">
+          <span>PLATE 0{index + 1}</span>
+          <span>/ 06</span>
+        </div>
       )}
-      {!loaded && <div className="gallery-item__skeleton" />}
-      <div className="gallery-item__overlay" aria-hidden="true" />
+      {activeTheme === 'romantic-floral' && (
+        <span className="gallery-item__floral-tape" aria-hidden="true">❀</span>
+      )}
+      {activeTheme === 'royal-classic' && (
+        <span className="gallery-item__royal-crest" aria-hidden="true">⚜</span>
+      )}
+      {activeTheme === 'elegant-luxury' && (
+        <span className="gallery-item__gold-bracket" aria-hidden="true" />
+      )}
+
+      <div className="gallery-item__media">
+        {inView && (
+          <img
+            src={image.url}
+            alt={image.alt}
+            className={`gallery-item__img ${loaded ? 'gallery-item__img--loaded' : ''}`}
+            onLoad={() => setLoaded(true)}
+            loading="lazy"
+            decoding="async"
+          />
+        )}
+        {!loaded && <div className="gallery-item__skeleton" />}
+        <div className="gallery-item__overlay" aria-hidden="true" />
+      </div>
+
+      {/* Theme-Specific Caption / Plaque */}
+      {activeTheme !== 'default' && (title || caption) && (
+        <div className="gallery-item__caption-bar">
+          {title && <strong className="gallery-item__caption-title font-serif">{title}</strong>}
+          {caption && <span className="gallery-item__caption-sub">{caption}</span>}
+        </div>
+      )}
     </motion.div>
   );
 };
@@ -66,7 +100,6 @@ const Lightbox = ({ images, activeIndex, onClose, onPrev, onNext }) => {
   const { t } = useTranslation();
   const image = images[activeIndex];
 
-  // Keyboard navigation
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'Escape') onClose();
@@ -77,7 +110,6 @@ const Lightbox = ({ images, activeIndex, onClose, onPrev, onNext }) => {
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose, onPrev, onNext]);
 
-  // Touch swipe
   const touchStartX = useRef(null);
   const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
   const handleTouchEnd = (e) => {
@@ -107,15 +139,12 @@ const Lightbox = ({ images, activeIndex, onClose, onPrev, onNext }) => {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        {/* Backdrop */}
         <div className="lightbox__backdrop" onClick={onClose} />
 
-        {/* Close */}
         <button className="lightbox__close" onClick={onClose} aria-label={t('gallery.close')} id="btn-lightbox-close">
           <X size={24} />
         </button>
 
-        {/* Navigation */}
         <button className="lightbox__nav lightbox__nav--prev" onClick={onPrev} aria-label={t('gallery.prev')} id="btn-lightbox-prev">
           <ChevronLeft size={28} />
         </button>
@@ -123,7 +152,6 @@ const Lightbox = ({ images, activeIndex, onClose, onPrev, onNext }) => {
           <ChevronRight size={28} />
         </button>
 
-        {/* Image */}
         <AnimatePresence mode="wait">
           <motion.div
             key={activeIndex}
@@ -141,7 +169,6 @@ const Lightbox = ({ images, activeIndex, onClose, onPrev, onNext }) => {
           </motion.div>
         </AnimatePresence>
 
-        {/* Counter */}
         <div className="lightbox__counter" aria-live="polite">
           {activeIndex + 1} / {images.length}
         </div>
@@ -151,34 +178,41 @@ const Lightbox = ({ images, activeIndex, onClose, onPrev, onNext }) => {
 };
 
 const Gallery = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isAr = i18n.language === 'ar';
   const { track } = useAnalytics();
-  const weddingConfig = useWeddingConfig();
-  const [images, setImages] = useState([]);
+  const liveConfig = useWeddingConfig() || weddingConfig;
+  const activeTheme = liveConfig?.theme || 'default';
+  const themeObj = getThemeById(activeTheme);
+
+  const [rawImages, setRawImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
+  const isGalleryEnabled =
+    liveConfig.gallery?.enabled !== false && liveConfig.sections?.gallery?.enabled !== false;
+
   const loadImages = useCallback(() => {
-    if (weddingConfig.gallery && weddingConfig.gallery.enabled === false) { setLoading(false); return; }
+    if (!isGalleryEnabled) { setLoading(false); return; }
     getGalleryImages()
       .then((data) => {
         if (data && data.length > 0) {
-          setImages(data.map(img => ({ ...img, url: transformDriveUrl(img.url) })));
+          setRawImages(data.map((img) => ({ ...img, url: transformDriveUrl(img.url) })));
         } else {
-          const fallback = (weddingConfig.gallery?.mockImages || [])
-            .filter(img => img.url)
-            .map(img => ({ ...img, url: transformDriveUrl(img.url) }));
-          setImages(fallback);
+          const fallback = (liveConfig.gallery?.mockImages || [])
+            .filter((img) => img.url)
+            .map((img) => ({ ...img, url: transformDriveUrl(img.url) }));
+          setRawImages(fallback);
         }
       })
       .catch(() => {
-        const fallback = (weddingConfig.gallery?.mockImages || [])
-          .filter(img => img.url)
-          .map(img => ({ ...img, url: transformDriveUrl(img.url) }));
-        setImages(fallback);
+        const fallback = (liveConfig.gallery?.mockImages || [])
+          .filter((img) => img.url)
+          .map((img) => ({ ...img, url: transformDriveUrl(img.url) }));
+        setRawImages(fallback);
       })
       .finally(() => setLoading(false));
-  }, [weddingConfig.gallery]);
+  }, [isGalleryEnabled, liveConfig.gallery]);
 
   useEffect(() => {
     loadImages();
@@ -186,34 +220,61 @@ const Gallery = () => {
     return () => window.removeEventListener('gallery_updated', loadImages);
   }, [loadImages]);
 
-  const openLightbox = (idx) => {
-    track(EVENTS.GALLERY_OPENED, { imageIndex: idx });
-    setLightboxIndex(idx);
-  };
+  // Determine whether rawImages is just the untouched default Unsplash mock set
+  const isUntouchedMockSet =
+    rawImages.length === 0 ||
+    rawImages.every(
+      (img) =>
+        ['1', '2', '3', '4', '5', '6'].includes(String(img.id)) &&
+        typeof img.url === 'string' &&
+        img.url.includes('images.unsplash.com')
+    );
 
-  const closeLightbox = () => setLightboxIndex(null);
+  // For the 4 new themes, if the user hasn't uploaded custom photos yet, showcase the theme's curated local artwork collection
+  const themedCuratedSet = (themeObj?.assets?.galleryImages || []).map((img) => ({
+    ...img,
+    url: getAssetUrl(img.url),
+  }));
+
+  const images =
+    activeTheme !== 'default' && isUntouchedMockSet && themedCuratedSet.length > 0
+      ? themedCuratedSet
+      : rawImages;
+
+  useEffect(() => {
+    if (lightboxIndex !== null) {
+      document.body.classList.add('no-scroll');
+      track(EVENTS.GALLERY_OPENED, { imageIndex: lightboxIndex });
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+    return () => document.body.classList.remove('no-scroll');
+  }, [lightboxIndex, track]);
+
+  const openLightbox = useCallback((idx) => setLightboxIndex(idx), []);
+  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
   const prevImage = useCallback(() =>
     setLightboxIndex((i) => (i - 1 + images.length) % images.length), [images.length]);
   const nextImage = useCallback(() =>
     setLightboxIndex((i) => (i + 1) % images.length), [images.length]);
 
-  if (weddingConfig.gallery && weddingConfig.gallery.enabled === false) return null;
+  if (!isGalleryEnabled) return null;
 
-  // Lock scroll when lightbox open
-  useEffect(() => {
-    if (lightboxIndex !== null) {
-      document.body.classList.add('no-scroll');
-    } else {
-      document.body.classList.remove('no-scroll');
-    }
-    return () => document.body.classList.remove('no-scroll');
-  }, [lightboxIndex]);
+  const layoutVariant = themeObj?.assets?.galleryLayout || 'masonry-classic';
+  const secCfg = liveConfig.sections?.gallery || {};
+  const sectionTitle = isAr
+    ? (secCfg.titleAr || t('gallery.title'))
+    : (secCfg.titleEn || t('gallery.title'));
+  const sectionSubtitle = isAr
+    ? (secCfg.subtitleAr || t('gallery.subtitle'))
+    : (secCfg.subtitleEn || t('gallery.subtitle'));
 
   return (
     <SectionWrapper id="gallery" alt>
       <div className="section__header">
-        <h2 className="section__title font-serif">{t('gallery.title')}</h2>
-        <p className="section__subtitle">{t('gallery.subtitle')}</p>
+        <ThemeHeaderCrest sectionIndex="06" />
+        <h2 className="section__title font-serif">{sectionTitle}</h2>
+        <p className="section__subtitle">{sectionSubtitle}</p>
         <OrnamentDivider symbol="✦" />
       </div>
 
@@ -229,13 +290,15 @@ const Gallery = () => {
           <p className="gallery-empty__text font-serif">{t('gallery.comingSoon')}</p>
         </div>
       ) : (
-        <div className="gallery-grid">
+        <div className={`gallery-grid gallery-grid--${layoutVariant}`}>
           {images.map((image, idx) => (
             <GalleryImage
-              key={image.id}
+              key={`${activeTheme}-${image.id || idx}`}
               image={image}
               index={idx}
               onClick={openLightbox}
+              activeTheme={activeTheme}
+              isAr={isAr}
             />
           ))}
         </div>

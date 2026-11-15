@@ -30,13 +30,36 @@ const bride = {
   showMother: false, // Toggle to false to hide mother's name
 };
 
-// ─── 2. MAIN CONFIGURATION OBJECT ────────────────────────────
+// ─── 2. DEFAULT SECTION ORDER ────────────────────────────────
+export const DEFAULT_SECTION_ORDER = [
+  "hero",
+  "details",
+  "countdown",
+  "families",
+  "venue",
+  "gallery",
+  "dressCode",
+  "wishlist",
+  "rsvp",
+  "wishes",
+  "share",
+];
+
+// ─── 3. MAIN CONFIGURATION OBJECT ────────────────────────────
 const weddingConfig = {
   /**
    * ─── LANGUAGE ─────────────────────────────────────────────
    * Default language for the invitation: 'ar' (Arabic) or 'en' (English)
    */
   defaultLanguage: "en",
+
+  /**
+   * ─── THEME ────────────────────────────────────────────────
+   * Active visual theme ID:
+   * 'default' | 'elegant-luxury' | 'minimalist-modern' | 'romantic-floral' | 'royal-classic'
+   * Defaults to 'default' to preserve the original wedding invitation design.
+   */
+  theme: "default",
 
   /**
    * ─── COUPLE ──────────────────────────────────────────────
@@ -123,6 +146,22 @@ const weddingConfig = {
    */
   dressCode: {
     enabled: true,
+    titleAr: "",
+    titleEn: "",
+    subtitleAr: "",
+    subtitleEn: "",
+    gentlemenTitleAr: "",
+    gentlemenTitleEn: "",
+    gentlemenDescAr: "",
+    gentlemenDescEn: "",
+    ladiesTitleAr: "",
+    ladiesTitleEn: "",
+    ladiesDescAr: "",
+    ladiesDescEn: "",
+    noteTitleAr: "",
+    noteTitleEn: "",
+    noteDescAr: "",
+    noteDescEn: "",
   },
 
   /**
@@ -149,6 +188,49 @@ const weddingConfig = {
     // Optional: unique ID for this invitation instance
     invitationId: "wedding-2026",
   },
+
+  /**
+   * ─── DYNAMIC SECTION STRUCTURE & TEXT OVERRIDES ───────────
+   * Controls section ordering, visibility, custom headings/paragraphs,
+   * and user-created custom sections across all themes.
+   */
+  sectionOrder: [...DEFAULT_SECTION_ORDER],
+
+  sections: {
+    hero: { enabled: true, titleAr: "", titleEn: "", subtitleAr: "", subtitleEn: "" },
+    details: { enabled: true, titleAr: "", titleEn: "", subtitleAr: "", subtitleEn: "" },
+    countdown: { enabled: true, titleAr: "", titleEn: "", subtitleAr: "", subtitleEn: "" },
+    families: { enabled: true, titleAr: "", titleEn: "", subtitleAr: "", subtitleEn: "" },
+    venue: { enabled: true, titleAr: "", titleEn: "", subtitleAr: "", subtitleEn: "" },
+    gallery: { enabled: true, titleAr: "", titleEn: "", subtitleAr: "", subtitleEn: "" },
+    dressCode: { enabled: true, titleAr: "", titleEn: "", subtitleAr: "", subtitleEn: "" },
+    wishlist: { enabled: false, titleAr: "", titleEn: "", subtitleAr: "", subtitleEn: "" },
+    rsvp: { enabled: true, titleAr: "", titleEn: "", subtitleAr: "", subtitleEn: "" },
+    wishes: { enabled: true, titleAr: "", titleEn: "", subtitleAr: "", subtitleEn: "" },
+    share: { enabled: true, titleAr: "", titleEn: "", subtitleAr: "", subtitleEn: "" },
+  },
+
+  /**
+   * ─── CUSTOM SECTIONS (Dynamic User-Added Sections) ────────
+   * Each item: {
+   *   id: string,
+   *   enabled: boolean,
+   *   titleAr: string,
+   *   titleEn: string,
+   *   subtitleAr: string,
+   *   subtitleEn: string,
+   *   contentAr: string,
+   *   contentEn: string,
+   *   badgeAr?: string,
+   *   badgeEn?: string,
+   *   imageUrl?: string,
+   *   ctaTextAr?: string,
+   *   ctaTextEn?: string,
+   *   ctaUrl?: string,
+   *   alt?: boolean
+   * }
+   */
+  customSections: [],
 
   /**
    * ─── SHARING ──────────────────────────────────────────────

@@ -5,6 +5,7 @@ import { ExternalLink, Check, Copy, Gift, Smartphone, Landmark } from 'lucide-re
 import { getWishlistItems, reserveWishlistItem } from '../../services/index.js';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
+import { ThemeHeaderCrest } from '../ui/ThemeVisuals';
 import useAnalytics, { EVENTS } from '../../hooks/useAnalytics';
 import useWeddingConfig from '../../hooks/useWeddingConfig';
 import './Wishlist.css';
@@ -112,9 +113,12 @@ const Wishlist = () => {
   const [copiedKey, setCopiedKey] = useState(null);
 
   const wishlistConfig = weddingConfig.wishlist || {};
+  const secCfg = weddingConfig.sections?.wishlist || {};
+  const isWishlistEnabled =
+    wishlistConfig.enabled === true || secCfg.enabled === true;
 
   useEffect(() => {
-    if (wishlistConfig.enabled === false) {
+    if (!isWishlistEnabled) {
       setLoading(false);
       return;
     }
@@ -139,7 +143,7 @@ const Wishlist = () => {
         setItems(wishlistConfig.items || []);
       })
       .finally(() => setLoading(false));
-  }, [wishlistConfig.enabled, wishlistConfig.items]);
+  }, [isWishlistEnabled, wishlistConfig.items, track]);
 
   const handleReserve = async (itemId) => {
     const guestName = window.prompt(t('rsvp.name') + ':');
@@ -174,21 +178,22 @@ const Wishlist = () => {
     setTimeout(() => setCopiedKey(null), 2500);
   };
 
-  if (wishlistConfig.enabled === false) return null;
+  if (!isWishlistEnabled) return null;
 
   const sectionTitle = isAr
-    ? (wishlistConfig.titleAr || t('wishlist.title'))
-    : (wishlistConfig.titleEn || t('wishlist.title'));
+    ? (secCfg.titleAr || wishlistConfig.titleAr || t('wishlist.title'))
+    : (secCfg.titleEn || wishlistConfig.titleEn || t('wishlist.title'));
 
   const sectionSubtitle = isAr
-    ? (wishlistConfig.subtitleAr || t('wishlist.subtitle'))
-    : (wishlistConfig.subtitleEn || t('wishlist.subtitle'));
+    ? (secCfg.subtitleAr || wishlistConfig.subtitleAr || t('wishlist.subtitle'))
+    : (secCfg.subtitleEn || wishlistConfig.subtitleEn || t('wishlist.subtitle'));
 
   const hasDigitalCash = Boolean(wishlistConfig.instapay || wishlistConfig.bankAccount || wishlistConfig.registryUrl);
 
   return (
     <SectionWrapper id="wishlist" alt>
       <div className="section__header">
+        <ThemeHeaderCrest sectionIndex="08" />
         <h2 className="section__title font-serif">{sectionTitle}</h2>
         {sectionSubtitle && <p className="section__subtitle">{sectionSubtitle}</p>}
         <OrnamentDivider symbol="✦" />

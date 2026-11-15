@@ -4,32 +4,65 @@ import { Menu, X, Heart } from 'lucide-react';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import { useScrollDirection } from '../../hooks/useScrollDirection';
 import useWeddingConfig from '../../hooks/useWeddingConfig';
+import { normalizeSectionOrder, isSectionEnabled } from '../../utils/configManager';
 import './Navigation.css';
 
-const NAV_ITEMS = [
-  { key: 'details',    section: 'details' },
-  { key: 'families',   section: 'families' },
-  { key: 'venue',      section: 'venue' },
-  { key: 'gallery',    section: 'gallery' },
-  { key: 'dressCode',  section: 'dress-code' },
-  { key: 'wishlist',   section: 'wishlist' },
-  { key: 'wishes',     section: 'wishes' },
-  { key: 'rsvp',       section: 'rsvp' },
-];
+const BUILTIN_NAV_MAP = {
+  details:   { key: 'details',   section: 'details' },
+  families:  { key: 'families',  section: 'families' },
+  venue:     { key: 'venue',     section: 'venue' },
+  gallery:   { key: 'gallery',   section: 'gallery' },
+  dressCode: { key: 'dressCode', section: 'dress-code' },
+  wishlist:  { key: 'wishlist',  section: 'wishlist' },
+  wishes:    { key: 'wishes',    section: 'wishes' },
+  rsvp:      { key: 'rsvp',      section: 'rsvp' },
+};
 
 const Navigation = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isAr = i18n.language === 'ar';
   const weddingConfig = useWeddingConfig();
   const [isOpen, setIsOpen] = useState(false);
   const { scrollDirection, scrolled } = useScrollDirection();
 
-  const navItems = NAV_ITEMS.filter((item) => {
-    if (item.key === 'dressCode' && weddingConfig.dressCode?.enabled === false) return false;
-    if (item.key === 'wishlist' && weddingConfig.wishlist?.enabled !== true) return false;
-    if (item.key === 'gallery' && weddingConfig.gallery?.enabled === false) return false;
-    if (item.key === 'rsvp' && weddingConfig.rsvp?.enabled === false) return false;
-    return true;
-  });
+  const orderedIds = normalizeSectionOrder(
+    weddingConfig.sectionOrder,
+    weddingConfig.customSections
+  );
+  const customSectionsMap = new Map(
+    (Array.isArray(weddingConfig.customSections) ? weddingConfig.customSections : [])
+      .filter((cs) => cs && cs.id)
+      .map((cs) => [cs.id, cs])
+  );
+
+  const navItems = [];
+  for (const id of orderedIds) {
+    if (customSectionsMap.has(id)) {
+      const cs = customSectionsMap.get(id);
+      if (cs.enabled !== false) {
+        const label = isAr
+          ? (cs.titleAr || cs.titleEn || cs.title || 'قسم إضافي')
+          : (cs.titleEn || cs.titleAr || cs.title || 'Custom Section');
+        navItems.push({
+          key: cs.id,
+          section: cs.id,
+          label,
+        });
+      }
+      continue;
+    }
+
+    const builtin = BUILTIN_NAV_MAP[id];
+    if (builtin && isSectionEnabled(weddingConfig, id)) {
+      const secOverride = weddingConfig.sections?.[id];
+      const customLabel = isAr ? secOverride?.titleAr : secOverride?.titleEn;
+      navItems.push({
+        key: builtin.key,
+        section: builtin.section,
+        label: customLabel || t(`nav.${builtin.key}`),
+      });
+    }
+  }
 
   const isHidden = scrolled && scrollDirection === 'down' && !isOpen;
 
@@ -84,7 +117,7 @@ const Navigation = () => {
                 role="menuitem"
                 id={`btn-nav-${item.key}`}
               >
-                {t(`nav.${item.key}`)}
+                {item.label}
               </button>
             ))}
           </div>

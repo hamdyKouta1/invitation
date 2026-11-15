@@ -3,17 +3,19 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { MessageCircleHeart, Quote } from 'lucide-react';
 import { getWishes } from '../../services/index.js';
+import weddingConfig from '../../config/weddingConfig';
 import useWeddingConfig from '../../hooks/useWeddingConfig';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
+import { ThemeHeaderCrest } from '../ui/ThemeVisuals';
 import './WishesWall.css';
 
 const WishesWall = forwardRef((props, ref) => {
   const { t, i18n } = useTranslation();
-  const weddingConfig = useWeddingConfig();
   const isAr = i18n.language === 'ar';
-  const groomName = isAr ? weddingConfig.groom?.name : weddingConfig.groom?.nameEn;
-  const brideName = isAr ? weddingConfig.bride?.name : weddingConfig.bride?.nameEn;
+  const liveConfig = useWeddingConfig() || weddingConfig;
+  const groomName = isAr ? liveConfig.groom?.name : liveConfig.groom?.nameEn;
+  const brideName = isAr ? liveConfig.bride?.name : liveConfig.bride?.nameEn;
   const [wishes, setWishes] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -37,11 +39,22 @@ const WishesWall = forwardRef((props, ref) => {
     refresh: fetchWishesList,
   }));
 
+  if (liveConfig.sections?.wishes?.enabled === false) return null;
+
+  const secCfg = liveConfig.sections?.wishes || {};
+  const sectionTitle = isAr
+    ? (secCfg.titleAr || t('wishes.title'))
+    : (secCfg.titleEn || t('wishes.title'));
+  const sectionSubtitle = isAr
+    ? (secCfg.subtitleAr || t('wishes.subtitle', { groom: groomName, bride: brideName }))
+    : (secCfg.subtitleEn || t('wishes.subtitle', { groom: groomName, bride: brideName }));
+
   return (
     <SectionWrapper id="wishes">
       <div className="section__header">
-        <h2 className="section__title font-serif">{t('wishes.title')}</h2>
-        <p className="section__subtitle">{t('wishes.subtitle', { groom: groomName, bride: brideName })}</p>
+        <ThemeHeaderCrest sectionIndex="10" />
+        <h2 className="section__title font-serif">{sectionTitle}</h2>
+        <p className="section__subtitle">{sectionSubtitle}</p>
         <OrnamentDivider symbol="✦" />
       </div>
 

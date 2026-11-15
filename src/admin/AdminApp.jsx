@@ -29,6 +29,7 @@ import {
   FileCode,
   ShieldCheck,
   Gift,
+  Palette,
 } from 'lucide-react';
 
 import {
@@ -51,6 +52,9 @@ import {
   downloadConfigFile,
   clone,
 } from '../utils/configManager';
+import { DEFAULT_THEME_ID, getThemeById } from '../config/themesConfig';
+import ThemeManager from '../components/Admin/ThemeManager';
+import DynamicSectionsEditor from '../components/Admin/DynamicSectionsEditor';
 
 const ADMIN_SESSION_KEY = 'wedding_admin_authenticated';
 const DEFAULT_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'wedding2026';
@@ -92,6 +96,7 @@ const AdminApp = () => {
 
   // ─── Config State ───
   const [configData, setConfigData] = useState(() => getActiveConfig());
+  const [activeThemeId, setActiveThemeId] = useState(() => getActiveConfig().theme || DEFAULT_THEME_ID);
   const [savingConfig, setSavingConfig] = useState(false);
 
   const showToast = (msg, type = 'success') => {
@@ -142,11 +147,17 @@ const AdminApp = () => {
         const cloudConfig = await getWeddingConfigFromDB();
         if (cloudConfig) {
           saveActiveConfig(cloudConfig);
-          setConfigData(getActiveConfig(cloudConfig));
+          const merged = getActiveConfig(cloudConfig);
+          setConfigData(merged);
+          setActiveThemeId(merged.theme || DEFAULT_THEME_ID);
         }
       } catch (err) {
         console.error(err);
       }
+    } else {
+      const localCfg = getActiveConfig();
+      setConfigData(localCfg);
+      setActiveThemeId(localCfg.theme || DEFAULT_THEME_ID);
     }
   };
 
@@ -379,6 +390,7 @@ const AdminApp = () => {
     try {
       // 1. Save to local storage
       saveActiveConfig(configData);
+      setActiveThemeId(configData.theme || DEFAULT_THEME_ID);
 
       // 2. Save to Firestore if enabled
       if (FIREBASE_ENABLED) {
@@ -398,11 +410,42 @@ const AdminApp = () => {
     }
   };
 
+  const handleApplyAndSaveTheme = async (themeId) => {
+    setSavingConfig(true);
+    try {
+      const nextConfig = {
+        ...clone(configData),
+        theme: themeId,
+      };
+      setConfigData(nextConfig);
+      saveActiveConfig(nextConfig);
+      setActiveThemeId(themeId);
+
+      if (FIREBASE_ENABLED) {
+        await saveWeddingConfigToDB(nextConfig);
+      }
+
+      const themeObj = getThemeById(themeId);
+      showToast(
+        FIREBASE_ENABLED
+          ? `تم تفعيل وحفظ التصميم "${themeObj.nameAr}" في Firestore ومحلياً!`
+          : `تم تفعيل وحفظ التصميم "${themeObj.nameAr}" بنجاح!`
+      );
+    } catch (err) {
+      console.error(err);
+      showToast('حدث خطأ أثناء تطبيق وحفظ التصميم', 'error');
+    } finally {
+      setSavingConfig(false);
+    }
+  };
+
   const handleResetConfig = () => {
     if (!window.confirm('هل تريد استعادة الإعدادات الأصلية؟')) return;
     resetActiveConfig();
-    setConfigData(getActiveConfig());
-    showToast('تمت استعادة الإعدادات الأصلية');
+    const fresh = getActiveConfig();
+    setConfigData(fresh);
+    setActiveThemeId(fresh.theme || DEFAULT_THEME_ID);
+    showToast('تمت استعادة الإعدادات الأصلية والتصميم الافتراضي');
   };
 
   // ─── Filtered Guests ───
@@ -563,6 +606,14 @@ const AdminApp = () => {
         >
           <ImageIcon size={18} />
           <span>معرض الصور ({galleryImages.length})</span>
+        </button>
+
+        <button
+          className={`admin-tab ${activeTab === 'themes' ? 'admin-tab--active' : ''}`}
+          onClick={() => setActiveTab('themes')}
+        >
+          <Palette size={18} />
+          <span>تصاميم الدعوة (Themes)</span>
         </button>
 
         <button
@@ -961,6 +1012,31 @@ const AdminApp = () => {
         )}
 
         {/* ────────────────────────────────────────────────────────── */}
+        {/* TAB: THEMES MANAGER */}
+        {/* ────────────────────────────────────────────────────────── */}
+        {activeTab === 'themes' && (
+          <div className="admin-section">
+            <div className="admin-config-header">
+              <div>
+                <h2 className="admin-section-title font-serif">قوالب وتصاميم دعوة الزفاف (5 تصاميم جاهزة)</h2>
+                <p className="admin-section-desc">
+                  اختر من بين 5 تصاميم احترافية متكاملة (التصميم الأصلي الافتراضي + 4 تصاميم جديدة). يمكنك معاينة أي تصميم وتطبيقه وحفظه ليظهر لجميع زوار الموقع.
+                </p>
+              </div>
+            </div>
+
+            <ThemeManager
+              activeThemeId={activeThemeId}
+              selectedThemeId={configData.theme || DEFAULT_THEME_ID}
+              configData={configData}
+              saving={savingConfig}
+              onSelectTheme={(id) => handleConfigChange(null, 'theme', id)}
+              onApplyAndSaveTheme={handleApplyAndSaveTheme}
+            />
+          </div>
+        )}
+
+        {/* ────────────────────────────────────────────────────────── */}
         {/* TAB 4: WEDDING CONFIG EDITOR */}
         {/* ────────────────────────────────────────────────────────── */}
         {activeTab === 'config' && (
@@ -996,6 +1072,22 @@ const AdminApp = () => {
             </div>
 
             <div className="admin-config-grid">
+              {/* Themes Selector Card inside Config Tab */}
+              <div className="admin-card">
+                <h3 className="admin-card-title">
+                  <Palette size={20} />
+                  تصميم وقالب بطاقة الدعوة (Wedding Invitation Theme)
+                </h3>
+                <ThemeManager
+                  activeThemeId={activeThemeId}
+                  selectedThemeId={configData.theme || DEFAULT_THEME_ID}
+                  configData={configData}
+                  saving={savingConfig}
+                  onSelectTheme={(id) => handleConfigChange(null, 'theme', id)}
+                  onApplyAndSaveTheme={handleApplyAndSaveTheme}
+                />
+              </div>
+
               {/* Couple & Families Section */}
               <div className="admin-card">
                 <h3 className="admin-card-title">
@@ -1643,6 +1735,13 @@ const AdminApp = () => {
                   </label>
                 </div>
               </div>
+
+              {/* Dynamic Sections & Content Manager */}
+              <DynamicSectionsEditor
+                configData={configData}
+                setConfigData={setConfigData}
+                showToast={showToast}
+              />
             </div>
           </div>
         )}

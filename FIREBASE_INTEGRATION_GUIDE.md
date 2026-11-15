@@ -56,6 +56,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
     
     // 1. قواعد إعدادات الزفاف الحية (Config) — القراءة للجميع والكتابة للوحة الإدارة
+    // (يشمل الثيم النشط theme، ترتيب الأقسام sectionOrder، الأقسام المخصصة customSections، والهدايا wishlist)
     match /config/{document} {
       allow read: if true;
       allow write: if true;

@@ -1,0 +1,109 @@
+.custom-section__badge {
+  display: inline-block;
+  font-size: var(--text-xs);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.9rem;
+  border-radius: var(--radius-full);
+  background: rgba(201, 169, 110, 0.12);
+  border: 1px solid rgba(201, 169, 110, 0.35);
+  color: var(--gold-500, #b08d4b);
+  margin-bottom: var(--space-3);
+}
+
+.custom-section-card {
+  position: relative;
+  max-width: 780px;
+  margin: 0 auto;
+  background: var(--cream-50);
+  border: 1px solid rgba(201, 169, 110, 0.28);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8) var(--space-6);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.custom-section-card__corner {
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.custom-section-card__corner--tl {
+  top: 10px;
+  left: 10px;
+}
+
+.custom-section-card__corner--br {
+  bottom: 10px;
+  right: 10px;
+  transform: rotate(180deg);
+}
+
+.custom-section-card__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-5);
+}
+
+.custom-section__image-wrap {
+  width: 100%;
+  max-width: 520px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid rgba(201, 169, 110, 0.3);
+  box-shadow: var(--shadow-sm);
+}
+
+.custom-section__image {
+  width: 100%;
+  height: auto;
+  max-height: 380px;
+  object-fit: cover;
+  display: block;
+}
+
+.custom-section__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 640px;
+}
+
+.custom-section__paragraph {
+  font-size: var(--text-lg);
+  line-height: 1.85;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.custom-section__actions {
+  margin-top: var(--space-2);
+}
+
+.custom-section__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0.7rem 1.6rem;
+  border-radius: var(--radius-full);
+  background: var(--gold-300, #c9a96e);
+  color: var(--cream-50, #fdfaf6);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  transition: all var(--transition-base);
+}
+
+.custom-section__cta:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}

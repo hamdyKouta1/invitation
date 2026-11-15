@@ -1,0 +1,2203 @@
+/* ============================================================
+   WEDDING INVITATION THEMES — Isolated Multi-Theme Architecture
+   ============================================================
+   IMPORTANT:
+   - `html[data-theme="default"]` has NO overrides here so the
+     original "Warm Ivory & Gold" theme remains 100% untouched.
+   - All rules below are strictly scoped to the 4 additional themes:
+     1. html[data-theme="elegant-luxury"]
+     2. html[data-theme="minimalist-modern"]
+     3. html[data-theme="romantic-floral"]
+     4. html[data-theme="royal-classic"]
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Amiri:ital,wght@0,400;0,700;1,400&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;1,6..96,400&family=Cairo:wght@300;400;500;600;700&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Quicksand:wght@400;500;600&family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap');
+
+
+/* ============================================================
+   THEME 1: ELEGANT LUXURY (Noir Obsidian & 24k Champagne Gold)
+   ============================================================ */
+html[data-theme="elegant-luxury"] {
+  --cream-50:  #1B1713;
+  --cream-100: #0F0D0B;
+  --cream-200: #15120F;
+  --cream-300: #221D17;
+  --cream-400: #332B22;
+
+  --blush-100: #3D2E29;
+  --blush-200: #C5A059;
+  --blush-300: #D4AF37;
+  --blush-400: #F3E5AB;
+
+  --sage-100:  #2B3028;
+  --sage-200:  #8B9E7A;
+  --sage-300:  #A89A78;
+  --sage-400:  #D4AF37;
+  --sage-500:  #F3E5AB;
+
+  --brown-100: #9E907E;
+  --brown-200: #C2B39E;
+  --brown-300: #DECFA6;
+  --brown-400: #F3E5AB;
+  --brown-500: #FAF6F0;
+
+  --gold-100:  #FFF3C4;
+  --gold-200:  #F3E5AB;
+  --gold-300:  #D4AF37;
+  --gold-400:  #E5C158;
+  --gold-shimmer: linear-gradient(135deg, #BF953F 0%, #FCF6BA 35%, #B38728 65%, #FBF5B7 100%);
+
+  --text-primary:   #FAF6F0;
+  --text-secondary: #D8CEBE;
+  --text-muted:     #A69780;
+  --text-light:     #7A6D5B;
+
+  --shadow-sm:  0 2px 8px rgba(0, 0, 0, 0.45);
+  --shadow-md:  0 8px 24px rgba(0, 0, 0, 0.55), 0 0 15px rgba(212, 175, 55, 0.08);
+  --shadow-lg:  0 16px 40px rgba(0, 0, 0, 0.65), 0 0 25px rgba(212, 175, 55, 0.12);
+  --shadow-xl:  0 25px 65px rgba(0, 0, 0, 0.75), 0 0 35px rgba(212, 175, 55, 0.16);
+  --shadow-gold: 0 6px 28px rgba(212, 175, 55, 0.4);
+}
+
+html[data-theme="elegant-luxury"] body {
+  background-color: #0F0D0B;
+  color: var(--text-primary);
+  font-family: 'Montserrat', 'Alexandria', sans-serif;
+  background-image:
+    radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.09) 0%, transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 2 L58 30 L30 58 L2 30 Z' fill='none' stroke='%23D4AF37' stroke-width='0.4' stroke-opacity='0.08'/%3E%3C/svg%3E");
+}
+
+html[data-theme="elegant-luxury"][dir="rtl"] body {
+  font-family: 'Alexandria', sans-serif;
+}
+
+/* Typography */
+html[data-theme="elegant-luxury"] .font-script,
+html[data-theme="elegant-luxury"] .hero__groom-name,
+html[data-theme="elegant-luxury"] .hero__bride-name,
+html[data-theme="elegant-luxury"] .family-card__name,
+html[data-theme="elegant-luxury"] .venue-card__name,
+html[data-theme="elegant-luxury"] .footer__names,
+html[data-theme="elegant-luxury"] .wedding-details__day {
+  font-family: 'Cinzel Decorative', 'Playfair Display', serif;
+  letter-spacing: 0.04em;
+  background: var(--gold-shimmer);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+html[data-theme="elegant-luxury"][dir="rtl"] .font-script,
+html[data-theme="elegant-luxury"][dir="rtl"] .hero__groom-name,
+html[data-theme="elegant-luxury"][dir="rtl"] .hero__bride-name,
+html[data-theme="elegant-luxury"][dir="rtl"] .family-card__name,
+html[data-theme="elegant-luxury"][dir="rtl"] .venue-card__name,
+html[data-theme="elegant-luxury"][dir="rtl"] .footer__names {
+  font-family: 'Aref Ruqaa', serif !important;
+  letter-spacing: 0;
+  background: var(--gold-shimmer);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+html[data-theme="elegant-luxury"] .font-serif,
+html[data-theme="elegant-luxury"] .section__title {
+  font-family: 'Playfair Display', 'Amiri', serif;
+}
+
+html[data-theme="elegant-luxury"] .section__title {
+  color: #F3E5AB;
+  letter-spacing: 0.06em;
+}
+
+/* Envelope */
+html[data-theme="elegant-luxury"] .envelope-screen {
+  background: radial-gradient(circle at 50% 35%, #211C16 0%, #0B0908 85%);
+}
+
+html[data-theme="elegant-luxury"] .wc {
+  mix-blend-mode: screen;
+  filter: sepia(1) saturate(2) brightness(0.55);
+  opacity: 0.16;
+}
+
+html[data-theme="elegant-luxury"] .envelope-box {
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.75), 0 0 35px rgba(212, 175, 55, 0.18);
+}
+
+html[data-theme="elegant-luxury"] .envelope__back rect {
+  fill: #181410;
+  stroke: #D4AF37;
+}
+
+html[data-theme="elegant-luxury"] .envelope__top-flap polygon:first-child {
+  fill: #241F19;
+  stroke: #D4AF37;
+}
+
+html[data-theme="elegant-luxury"] .envelope__top-flap polygon:last-child {
+  fill: #1E1914;
+}
+
+html[data-theme="elegant-luxury"] .envelope__front polygon:nth-child(1) {
+  fill: #1A1612;
+}
+
+html[data-theme="elegant-luxury"] .envelope__front polygon:nth-child(2) {
+  fill: #15120E;
+}
+
+html[data-theme="elegant-luxury"] .envelope__front polygon:nth-child(3) {
+  fill: #211C17;
+}
+
+html[data-theme="elegant-luxury"] .envelope__front rect {
+  stroke: #F3E5AB;
+  opacity: 0.65;
+}
+
+html[data-theme="elegant-luxury"] .envelope__card {
+  background: #1C1814;
+  border: 1px solid #D4AF37;
+}
+
+html[data-theme="elegant-luxury"] .envelope__card-frame {
+  background: #14110E;
+}
+
+html[data-theme="elegant-luxury"] .envelope__seal {
+  background: radial-gradient(circle at 35% 35%, #FFF3C4 0%, #D4AF37 55%, #8A6615 100%);
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.55), inset 0 2px 4px rgba(255, 255, 255, 0.6);
+}
+
+html[data-theme="elegant-luxury"] .envelope__seal svg path {
+  fill: #14110E;
+  stroke: #D4AF37;
+}
+
+html[data-theme="elegant-luxury"] .envelope__cta-text {
+  color: #F3E5AB;
+  font-family: 'Playfair Display', 'Amiri', serif;
+}
+
+/* Hero */
+html[data-theme="elegant-luxury"] .hero-section {
+  background:
+    radial-gradient(circle at 50% 20%, rgba(212, 175, 55, 0.14) 0%, transparent 55%),
+    linear-gradient(180deg, #0F0D0B 0%, #171410 100%);
+}
+
+html[data-theme="elegant-luxury"] .hero__floral,
+html[data-theme="elegant-luxury"] .footer__floral {
+  filter: sepia(1) saturate(2.2) hue-rotate(5deg) brightness(0.95);
+  opacity: 0.35;
+}
+
+html[data-theme="elegant-luxury"] .hero__arch-card {
+  background: linear-gradient(180deg, rgba(28, 24, 19, 0.92) 0%, rgba(16, 14, 11, 0.95) 100%);
+  border: 1.5px solid rgba(212, 175, 55, 0.7);
+  border-radius: 140px 140px 12px 12px;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.75),
+    0 0 35px rgba(212, 175, 55, 0.14),
+    inset 0 0 0 6px rgba(212, 175, 55, 0.08);
+}
+
+html[data-theme="elegant-luxury"] .hero__arch-card::before {
+  border: 1px solid rgba(243, 229, 171, 0.35);
+  border-radius: 134px 134px 8px 8px;
+}
+
+html[data-theme="elegant-luxury"] .hero__arch-finial {
+  background: #14110E;
+  border: 1px solid #D4AF37;
+  color: #F3E5AB;
+}
+
+html[data-theme="elegant-luxury"] .hero__groom-name,
+html[data-theme="elegant-luxury"] .hero__bride-name {
+  font-size: clamp(2.2rem, 6.5vw, 3.3rem);
+}
+
+html[data-theme="elegant-luxury"] .hero__illustration {
+  mix-blend-mode: normal;
+  background: #FAF6F0;
+  border-radius: 999px;
+  padding: 8px;
+  border: 2px solid #D4AF37;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 0 22px rgba(212, 175, 55, 0.25);
+}
+
+/* Cards & Sections */
+html[data-theme="elegant-luxury"] .section--alt {
+  background-color: #15120F;
+  border-top: 1px solid rgba(212, 175, 55, 0.14);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.14);
+}
+
+html[data-theme="elegant-luxury"] .family-card__inner,
+html[data-theme="elegant-luxury"] .venue-card__content,
+html[data-theme="elegant-luxury"] .dress-card__inner,
+html[data-theme="elegant-luxury"] .rsvp-card,
+html[data-theme="elegant-luxury"] .wish-card__inner,
+html[data-theme="elegant-luxury"] .wishlist-card {
+  background: linear-gradient(165deg, #1D1914 0%, #13100D 100%);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.06);
+}
+
+html[data-theme="elegant-luxury"] .countdown-unit__value {
+  background: linear-gradient(180deg, #1F1A15 0%, #120F0C 100%);
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  color: #F3E5AB;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(212, 175, 55, 0.08);
+  border-radius: 6px;
+}
+
+html[data-theme="elegant-luxury"] .dress-code-note {
+  background: rgba(28, 24, 19, 0.9);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+}
+
+html[data-theme="elegant-luxury"] .form-input {
+  background: #120F0C;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  color: #FAF6F0;
+  border-radius: 6px;
+}
+
+html[data-theme="elegant-luxury"] .rsvp-radio {
+  background: #120F0C;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 8px;
+}
+
+html[data-theme="elegant-luxury"] .rsvp-radio--selected {
+  background: rgba(212, 175, 55, 0.16);
+  border-color: #F3E5AB;
+}
+
+html[data-theme="elegant-luxury"] .rsvp-submit-btn,
+html[data-theme="elegant-luxury"] .share-btn--native {
+  background: var(--gold-shimmer);
+  color: #0F0D0B;
+  font-weight: 700;
+  border-radius: 6px;
+  box-shadow: 0 6px 28px rgba(212, 175, 55, 0.38);
+}
+
+html[data-theme="elegant-luxury"] .venue-card__cta,
+html[data-theme="elegant-luxury"] .footer__back-to-top,
+html[data-theme="elegant-luxury"] .share-btn--copy {
+  background: rgba(28, 24, 19, 0.9);
+  border: 1px solid #D4AF37;
+  color: #F3E5AB;
+  border-radius: 6px;
+}
+
+html[data-theme="elegant-luxury"] .venue-card__cta:hover,
+html[data-theme="elegant-luxury"] .footer__back-to-top:hover {
+  background: var(--gold-shimmer);
+  color: #0F0D0B;
+}
+
+html[data-theme="elegant-luxury"] .floating-nav__inner,
+html[data-theme="elegant-luxury"] .floating-nav__dropdown,
+html[data-theme="elegant-luxury"] .music-control__btn {
+  background: rgba(20, 17, 14, 0.92);
+  border-color: rgba(212, 175, 55, 0.55);
+  color: #FAF6F0;
+}
+
+html[data-theme="elegant-luxury"] .footer {
+  background: #0A0907;
+  border-top: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+
+/* ============================================================
+   THEME 2: MINIMALIST MODERN (Editorial Alabaster, Ink & Olive)
+   ============================================================ */
+html[data-theme="minimalist-modern"] {
+  --cream-50:  #FFFFFF;
+  --cream-100: #F6F5F0;
+  --cream-200: #ECEAE2;
+  --cream-300: #E2DFD5;
+  --cream-400: #CFCBC0;
+
+  --blush-100: #E4E7E0;
+  --blush-200: #9CA694;
+  --blush-300: #55604E;
+  --blush-400: #3A4235;
+
+  --sage-100:  #E4E7E0;
+  --sage-200:  #B5BFB0;
+  --sage-300:  #6C7865;
+  --sage-400:  #55604E;
+  --sage-500:  #2F362B;
+
+  --brown-100: #9E9A92;
+  --brown-200: #6E6B64;
+  --brown-300: #3D3B38;
+  --brown-400: #181818;
+  --brown-500: #0A0A0A;
+
+  --gold-100:  #D8D5CC;
+  --gold-200:  #55604E;
+  --gold-300:  #181818;
+  --gold-400:  #55604E;
+  --gold-shimmer: linear-gradient(135deg, #181818 0%, #55604E 100%);
+
+  --text-primary:   #181818;
+  --text-secondary: #4A4844;
+  --text-muted:     #78746E;
+  --text-light:     #A39E95;
+
+  --radius-sm:  0px;
+  --radius-md:  2px;
+  --radius-lg:  2px;
+  --radius-xl:  2px;
+
+  --shadow-sm:  4px 4px 0px rgba(24, 24, 24, 0.05);
+  --shadow-md:  8px 8px 0px rgba(24, 24, 24, 0.06);
+  --shadow-lg:  12px 12px 0px rgba(24, 24, 24, 0.07);
+  --shadow-xl:  16px 16px 0px rgba(24, 24, 24, 0.09);
+  --shadow-gold: 6px 6px 0px rgba(85, 96, 78, 0.25);
+}
+
+html[data-theme="minimalist-modern"] body {
+  background-color: #F6F5F0;
+  color: #181818;
+  font-family: 'Plus Jakarta Sans', 'Cairo', sans-serif;
+  background-image: none;
+}
+
+html[data-theme="minimalist-modern"][dir="rtl"] body {
+  font-family: 'Cairo', sans-serif;
+}
+
+/* Typography */
+html[data-theme="minimalist-modern"] .font-script,
+html[data-theme="minimalist-modern"] .hero__groom-name,
+html[data-theme="minimalist-modern"] .hero__bride-name,
+html[data-theme="minimalist-modern"] .family-card__name,
+html[data-theme="minimalist-modern"] .venue-card__name,
+html[data-theme="minimalist-modern"] .footer__names,
+html[data-theme="minimalist-modern"] .wedding-details__day {
+  font-family: 'Bodoni Moda', 'Cairo', serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #181818;
+}
+
+html[data-theme="minimalist-modern"][dir="rtl"] .font-script,
+html[data-theme="minimalist-modern"][dir="rtl"] .hero__groom-name,
+html[data-theme="minimalist-modern"][dir="rtl"] .hero__bride-name,
+html[data-theme="minimalist-modern"][dir="rtl"] .family-card__name,
+html[data-theme="minimalist-modern"][dir="rtl"] .venue-card__name,
+html[data-theme="minimalist-modern"][dir="rtl"] .footer__names {
+  font-family: 'Cairo', sans-serif !important;
+  font-weight: 700 !important;
+  font-style: normal !important;
+  letter-spacing: -0.01em;
+  color: #181818;
+}
+
+html[data-theme="minimalist-modern"] .font-serif,
+html[data-theme="minimalist-modern"] .section__title {
+  font-family: 'Bodoni Moda', 'Cairo', serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+html[data-theme="minimalist-modern"][dir="rtl"] .section__title {
+  font-family: 'Cairo', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+/* Envelope */
+html[data-theme="minimalist-modern"] .envelope-screen {
+  background: #F6F5F0;
+}
+
+html[data-theme="minimalist-modern"] .wc {
+  filter: grayscale(100%) contrast(1.1);
+  opacity: 0.08;
+}
+
+html[data-theme="minimalist-modern"] .envelope-box {
+  border-radius: 2px;
+  box-shadow: 16px 16px 0px rgba(24, 24, 24, 0.08);
+}
+
+html[data-theme="minimalist-modern"] .envelope__back rect {
+  fill: #ECEAE2;
+  stroke: #181818;
+  rx: 2px;
+}
+
+html[data-theme="minimalist-modern"] .envelope__top-flap polygon:first-child {
+  fill: #FFFFFF;
+  stroke: #181818;
+}
+
+html[data-theme="minimalist-modern"] .envelope__top-flap polygon:last-child {
+  fill: #F9F8F5;
+}
+
+html[data-theme="minimalist-modern"] .envelope__front polygon:nth-child(1) {
+  fill: #E6E3DA;
+}
+
+html[data-theme="minimalist-modern"] .envelope__front polygon:nth-child(2) {
+  fill: #DFDCD2;
+}
+
+html[data-theme="minimalist-modern"] .envelope__front polygon:nth-child(3) {
+  fill: #F2F0E8;
+}
+
+html[data-theme="minimalist-modern"] .envelope__front rect {
+  stroke: #181818;
+  rx: 0px;
+  opacity: 0.25;
+}
+
+html[data-theme="minimalist-modern"] .envelope__seal {
+  background: #181818;
+  box-shadow: 0 6px 20px rgba(24, 24, 24, 0.25);
+}
+
+html[data-theme="minimalist-modern"] .envelope__pulse-ring {
+  border-color: rgba(24, 24, 24, 0.35);
+}
+
+/* Hero — Architectural Rectangular Editorial Frame */
+html[data-theme="minimalist-modern"] .hero-section {
+  background: #F6F5F0;
+}
+
+html[data-theme="minimalist-modern"] .hero__floral,
+html[data-theme="minimalist-modern"] .footer__floral {
+  filter: grayscale(100%);
+  opacity: 0.14;
+}
+
+html[data-theme="minimalist-modern"] .hero__arch-card {
+  background: #FFFFFF;
+  border: 1px solid #181818;
+  border-radius: 2px;
+  box-shadow: 14px 14px 0px rgba(24, 24, 24, 0.06);
+}
+
+html[data-theme="minimalist-modern"] .hero__arch-card::before {
+  border: 1px solid #E2DFD5;
+  border-radius: 0px;
+  inset: 10px;
+}
+
+html[data-theme="minimalist-modern"] .hero__arch-finial {
+  background: #181818;
+  color: #FFFFFF;
+  border-radius: 2px;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+}
+
+html[data-theme="minimalist-modern"] .hero__illustration {
+  filter: grayscale(100%) contrast(1.08);
+}
+
+/* Cards & Inputs */
+html[data-theme="minimalist-modern"] .family-card__inner,
+html[data-theme="minimalist-modern"] .venue-card__content,
+html[data-theme="minimalist-modern"] .dress-card__inner,
+html[data-theme="minimalist-modern"] .rsvp-card,
+html[data-theme="minimalist-modern"] .wish-card__inner,
+html[data-theme="minimalist-modern"] .wishlist-card {
+  background: #FFFFFF;
+  border: 1px solid #181818;
+  border-radius: 2px;
+  box-shadow: 10px 10px 0px rgba(24, 24, 24, 0.05);
+}
+
+html[data-theme="minimalist-modern"] .venue-card__content::before {
+  border: 1px solid #E2DFD5;
+  border-radius: 0px;
+}
+
+html[data-theme="minimalist-modern"] .family-card__inner::before,
+html[data-theme="minimalist-modern"] .dress-card__inner::before,
+html[data-theme="minimalist-modern"] .rsvp-card::before {
+  background: #181818;
+  height: 3px;
+}
+
+html[data-theme="minimalist-modern"] .countdown-unit__value {
+  background: #FFFFFF;
+  border: 1px solid #181818;
+  border-radius: 2px;
+  color: #181818;
+  box-shadow: 6px 6px 0px rgba(24, 24, 24, 0.06);
+}
+
+html[data-theme="minimalist-modern"] .rsvp-submit-btn,
+html[data-theme="minimalist-modern"] .share-btn--native {
+  background: #181818;
+  color: #FFFFFF;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.9rem;
+  box-shadow: 6px 6px 0px rgba(85, 96, 78, 0.3);
+}
+
+html[data-theme="minimalist-modern"] .rsvp-submit-btn:hover:not(:disabled) {
+  background: #55604E;
+  box-shadow: 8px 8px 0px rgba(24, 24, 24, 0.2);
+}
+
+html[data-theme="minimalist-modern"] .venue-card__cta,
+html[data-theme="minimalist-modern"] .footer__back-to-top,
+html[data-theme="minimalist-modern"] .share-btn--copy,
+html[data-theme="minimalist-modern"] .share-btn--whatsapp {
+  border-radius: 2px;
+  border: 1px solid #181818;
+}
+
+html[data-theme="minimalist-modern"] .venue-card__cta:hover,
+html[data-theme="minimalist-modern"] .footer__back-to-top:hover {
+  background: #181818;
+  color: #FFFFFF;
+}
+
+html[data-theme="minimalist-modern"] .floating-nav__inner,
+html[data-theme="minimalist-modern"] .music-control__btn {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #181818;
+  border-radius: 2px;
+}
+
+
+/* ============================================================
+   THEME 3: ROMANTIC FLORAL (English Rose Garden & Pastel Blush)
+   ============================================================ */
+html[data-theme="romantic-floral"] {
+  --cream-50:  #FFFBFD;
+  --cream-100: #FFF5F7;
+  --cream-200: #FCE8EE;
+  --cream-300: #F8D7E0;
+  --cream-400: #EBBCC9;
+
+  --blush-100: #FADCE4;
+  --blush-200: #E899A8;
+  --blush-300: #C86D7E;
+  --blush-400: #A3485A;
+
+  --sage-100:  #DCE8DF;
+  --sage-200:  #A8C6B0;
+  --sage-300:  #7D9B84;
+  --sage-400:  #5A7A62;
+  --sage-500:  #3D5743;
+
+  --brown-100: #C99AA5;
+  --brown-200: #9E6875;
+  --brown-300: #7A4052;
+  --brown-400: #5A2838;
+  --brown-500: #3D1622;
+
+  --gold-100:  #F9E0E5;
+  --gold-200:  #E09AA8;
+  --gold-300:  #C86D7E;
+  --gold-400:  #B05265;
+  --gold-shimmer: linear-gradient(135deg, #D98A98 0%, #F4C4CE 45%, #B85D6F 100%);
+
+  --text-primary:   #4A202D;
+  --text-secondary: #6E3848;
+  --text-muted:     #9E6875;
+  --text-light:     #C495A1;
+
+  --shadow-sm:  0 3px 10px rgba(184, 93, 111, 0.08);
+  --shadow-md:  0 8px 24px rgba(184, 93, 111, 0.12);
+  --shadow-lg:  0 16px 40px rgba(184, 93, 111, 0.16);
+  --shadow-xl:  0 24px 60px rgba(184, 93, 111, 0.22);
+  --shadow-gold: 0 8px 26px rgba(200, 109, 126, 0.35);
+}
+
+html[data-theme="romantic-floral"] body {
+  background-color: #FFF5F7;
+  color: #4A202D;
+  font-family: 'Quicksand', 'Tajawal', sans-serif;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(248, 215, 224, 0.55) 0%, transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(220, 232, 223, 0.5) 0%, transparent 45%);
+}
+
+html[data-theme="romantic-floral"][dir="rtl"] body {
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* Typography */
+html[data-theme="romantic-floral"] .font-script,
+html[data-theme="romantic-floral"] .hero__groom-name,
+html[data-theme="romantic-floral"] .hero__bride-name,
+html[data-theme="romantic-floral"] .family-card__name,
+html[data-theme="romantic-floral"] .venue-card__name,
+html[data-theme="romantic-floral"] .footer__names,
+html[data-theme="romantic-floral"] .wedding-details__day {
+  font-family: 'Alex Brush', cursive;
+  color: #6E2D40;
+}
+
+html[data-theme="romantic-floral"][dir="rtl"] .font-script,
+html[data-theme="romantic-floral"][dir="rtl"] .hero__groom-name,
+html[data-theme="romantic-floral"][dir="rtl"] .hero__bride-name,
+html[data-theme="romantic-floral"][dir="rtl"] .family-card__name,
+html[data-theme="romantic-floral"][dir="rtl"] .venue-card__name,
+html[data-theme="romantic-floral"][dir="rtl"] .footer__names {
+  font-family: 'Aref Ruqaa', serif !important;
+  color: #6E2D40;
+}
+
+html[data-theme="romantic-floral"] .font-serif,
+html[data-theme="romantic-floral"] .section__title {
+  font-family: 'Lora', 'Tajawal', serif;
+}
+
+/* Envelope */
+html[data-theme="romantic-floral"] .envelope-screen {
+  background: linear-gradient(160deg, #FFF9FB 0%, #FCE4EC 60%, #F7D4DF 100%);
+}
+
+html[data-theme="romantic-floral"] .wc {
+  opacity: 0.55;
+  filter: saturate(1.3) hue-rotate(-8deg);
+}
+
+html[data-theme="romantic-floral"] .envelope__back rect {
+  fill: #FADCE4;
+  stroke: #D48C9A;
+}
+
+html[data-theme="romantic-floral"] .envelope__top-flap polygon:first-child {
+  fill: #FFF0F4;
+  stroke: #D48C9A;
+}
+
+html[data-theme="romantic-floral"] .envelope__top-flap polygon:last-child {
+  fill: #FFF6F8;
+}
+
+html[data-theme="romantic-floral"] .envelope__front polygon:nth-child(1) {
+  fill: #F9D5DF;
+}
+
+html[data-theme="romantic-floral"] .envelope__front polygon:nth-child(2) {
+  fill: #F5C8D4;
+}
+
+html[data-theme="romantic-floral"] .envelope__front polygon:nth-child(3) {
+  fill: #FDE8EE;
+}
+
+html[data-theme="romantic-floral"] .envelope__seal {
+  background: radial-gradient(circle at 35% 35%, #F5B0BD 0%, #C86D7E 65%, #9B4354 100%);
+  box-shadow: 0 8px 24px rgba(200, 109, 126, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.5);
+}
+
+html[data-theme="romantic-floral"] .envelope__pulse-ring {
+  border-color: rgba(200, 109, 126, 0.6);
+}
+
+/* Hero */
+html[data-theme="romantic-floral"] .hero-section {
+  background: linear-gradient(180deg, #FFF9FB 0%, #FCE4EC 100%);
+}
+
+html[data-theme="romantic-floral"] .hero__floral,
+html[data-theme="romantic-floral"] .footer__floral {
+  opacity: 0.72;
+  filter: saturate(1.35) hue-rotate(-6deg);
+}
+
+html[data-theme="romantic-floral"] .hero__arch-card {
+  background: rgba(255, 252, 253, 0.86);
+  border: 1.5px solid rgba(200, 109, 126, 0.45);
+  border-radius: 200px 200px 36px 36px;
+  box-shadow:
+    0 20px 50px rgba(200, 109, 126, 0.15),
+    inset 0 0 0 8px rgba(248, 215, 224, 0.35);
+}
+
+html[data-theme="romantic-floral"] .hero__arch-card::before {
+  border: 1px dashed rgba(200, 109, 126, 0.38);
+  border-radius: 192px 192px 28px 28px;
+}
+
+html[data-theme="romantic-floral"] .hero__arch-finial {
+  background: #FFF5F7;
+  color: #C86D7E;
+  border: 1px solid rgba(200, 109, 126, 0.35);
+}
+
+html[data-theme="romantic-floral"] .hero__illustration {
+  filter: saturate(1.2) contrast(1.02);
+}
+
+/* Cards & Buttons */
+html[data-theme="romantic-floral"] .family-card__inner,
+html[data-theme="romantic-floral"] .venue-card__content,
+html[data-theme="romantic-floral"] .dress-card__inner,
+html[data-theme="romantic-floral"] .rsvp-card,
+html[data-theme="romantic-floral"] .wish-card__inner,
+html[data-theme="romantic-floral"] .wishlist-card {
+  background: rgba(255, 252, 253, 0.94);
+  border: 1px solid rgba(200, 109, 126, 0.35);
+  border-radius: 28px;
+  box-shadow: 0 12px 34px rgba(184, 93, 111, 0.11);
+}
+
+html[data-theme="romantic-floral"] .venue-card__content {
+  border-radius: 150px 150px 32px 32px;
+}
+
+html[data-theme="romantic-floral"] .countdown-unit__value {
+  background: linear-gradient(180deg, #FFFFFF 0%, #FCE8EE 100%);
+  border: 1.5px solid rgba(200, 109, 126, 0.4);
+  border-radius: 22px;
+  color: #6E2D40;
+}
+
+html[data-theme="romantic-floral"] .rsvp-submit-btn,
+html[data-theme="romantic-floral"] .share-btn--native {
+  background: linear-gradient(135deg, #D98A98 0%, #B85D6F 100%);
+  color: #FFFFFF;
+  box-shadow: 0 8px 26px rgba(200, 109, 126, 0.4);
+}
+
+html[data-theme="romantic-floral"] .rsvp-submit-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #C86D7E 0%, #A3485A 100%);
+}
+
+
+/* ============================================================
+   THEME 4: ROYAL CLASSIC (Imperial Emerald, Palace Ivory & Gold)
+   ============================================================ */
+html[data-theme="royal-classic"] {
+  --cream-50:  #113327;
+  --cream-100: #0A221A;
+  --cream-200: #0E2B21;
+  --cream-300: #164031;
+  --cream-400: #215744;
+
+  --blush-100: #4A1924;
+  --blush-200: #B83348;
+  --blush-300: #D94B61;
+  --blush-400: #F28A9A;
+
+  --sage-100:  #1B4A39;
+  --sage-200:  #4E8774;
+  --sage-300:  #78B09D;
+  --sage-400:  #E5C158;
+  --sage-500:  #FDFBF7;
+
+  --brown-100: #A9C2B5;
+  --brown-200: #C8DACF;
+  --brown-300: #E5C158;
+  --brown-400: #F5D77F;
+  --brown-500: #FDFBF7;
+
+  --gold-100:  #FFF4CC;
+  --gold-200:  #F5D77F;
+  --gold-300:  #E5C158;
+  --gold-400:  #D4AF37;
+  --gold-shimmer: linear-gradient(135deg, #C59B27 0%, #FFF1B8 45%, #B38728 70%, #F5D77F 100%);
+
+  --text-primary:   #FDFBF7;
+  --text-secondary: #E6DEC8;
+  --text-muted:     #A9C2B5;
+  --text-light:     #6E9685;
+
+  --shadow-sm:  0 2px 10px rgba(3, 15, 11, 0.5);
+  --shadow-md:  0 8px 26px rgba(3, 15, 11, 0.6), 0 0 16px rgba(229, 193, 88, 0.1);
+  --shadow-lg:  0 18px 45px rgba(3, 15, 11, 0.7), 0 0 28px rgba(229, 193, 88, 0.14);
+  --shadow-xl:  0 26px 68px rgba(3, 15, 11, 0.8), 0 0 38px rgba(229, 193, 88, 0.18);
+  --shadow-gold: 0 8px 30px rgba(229, 193, 88, 0.42);
+}
+
+html[data-theme="royal-classic"] body {
+  background-color: #0A221A;
+  color: #FDFBF7;
+  font-family: 'EB Garamond', 'Amiri', serif;
+  background-image:
+    radial-gradient(circle at 50% 10%, rgba(229, 193, 88, 0.12) 0%, transparent 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23E5C158' stroke-width='0.5' stroke-opacity='0.1'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40 Z'/%3E%3Ccircle cx='40' cy='40' r='18'/%3E%3Ccircle cx='40' cy='40' r='6'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+html[data-theme="royal-classic"][dir="rtl"] body {
+  font-family: 'Amiri', serif;
+}
+
+/* Typography */
+html[data-theme="royal-classic"] .font-script,
+html[data-theme="royal-classic"] .hero__groom-name,
+html[data-theme="royal-classic"] .hero__bride-name,
+html[data-theme="royal-classic"] .family-card__name,
+html[data-theme="royal-classic"] .venue-card__name,
+html[data-theme="royal-classic"] .footer__names,
+html[data-theme="royal-classic"] .wedding-details__day {
+  font-family: 'Pinyon Script', cursive;
+  color: #F5D77F;
+  text-shadow: 0 2px 14px rgba(229, 193, 88, 0.28);
+}
+
+html[data-theme="royal-classic"][dir="rtl"] .font-script,
+html[data-theme="royal-classic"][dir="rtl"] .hero__groom-name,
+html[data-theme="royal-classic"][dir="rtl"] .hero__bride-name,
+html[data-theme="royal-classic"][dir="rtl"] .family-card__name,
+html[data-theme="royal-classic"][dir="rtl"] .venue-card__name,
+html[data-theme="royal-classic"][dir="rtl"] .footer__names {
+  font-family: 'Reem Kufi', 'Aref Ruqaa', serif !important;
+  color: #F5D77F;
+  text-shadow: 0 2px 14px rgba(229, 193, 88, 0.28);
+}
+
+html[data-theme="royal-classic"] .section__title {
+  font-family: 'Cinzel', 'Amiri', serif;
+  color: #F5D77F;
+  letter-spacing: 0.08em;
+}
+
+/* Envelope */
+html[data-theme="royal-classic"] .envelope-screen {
+  background: radial-gradient(circle at 50% 35%, #154031 0%, #071913 88%);
+}
+
+html[data-theme="royal-classic"] .wc {
+  mix-blend-mode: screen;
+  filter: sepia(1) hue-rotate(85deg) saturate(1.8) brightness(0.65);
+  opacity: 0.18;
+}
+
+html[data-theme="royal-classic"] .envelope-box {
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.7), 0 0 36px rgba(229, 193, 88, 0.22);
+}
+
+html[data-theme="royal-classic"] .envelope__back rect {
+  fill: #0E2D22;
+  stroke: #E5C158;
+  stroke-width: 2;
+}
+
+html[data-theme="royal-classic"] .envelope__top-flap polygon:first-child {
+  fill: #174434;
+  stroke: #E5C158;
+  stroke-width: 2;
+}
+
+html[data-theme="royal-classic"] .envelope__top-flap polygon:last-child {
+  fill: #12382B;
+}
+
+html[data-theme="royal-classic"] .envelope__front polygon:nth-child(1) {
+  fill: #103327;
+}
+
+html[data-theme="royal-classic"] .envelope__front polygon:nth-child(2) {
+  fill: #0C291F;
+}
+
+html[data-theme="royal-classic"] .envelope__front polygon:nth-child(3) {
+  fill: #153E30;
+}
+
+html[data-theme="royal-classic"] .envelope__front rect {
+  stroke: #F5D77F;
+  opacity: 0.75;
+}
+
+html[data-theme="royal-classic"] .envelope__card {
+  background: #0F2E23;
+  border: 1.5px solid #E5C158;
+}
+
+html[data-theme="royal-classic"] .envelope__card-frame {
+  background: #0A221A;
+}
+
+/* Royal Ruby & Gold Wax Seal */
+html[data-theme="royal-classic"] .envelope__seal {
+  background: radial-gradient(circle at 35% 35%, #E03E52 0%, #9B1B30 65%, #5E0C1A 100%);
+  border: 2px solid #E5C158;
+  box-shadow: 0 8px 28px rgba(155, 27, 48, 0.65), 0 0 16px rgba(229, 193, 88, 0.4);
+}
+
+html[data-theme="royal-classic"] .envelope__cta-text {
+  color: #F5D77F;
+}
+
+/* Hero */
+html[data-theme="royal-classic"] .hero-section {
+  background:
+    radial-gradient(circle at 50% 25%, rgba(229, 193, 88, 0.15) 0%, transparent 60%),
+    linear-gradient(180deg, #0A221A 0%, #0E2D22 100%);
+}
+
+html[data-theme="royal-classic"] .hero__floral,
+html[data-theme="royal-classic"] .footer__floral {
+  filter: sepia(1) saturate(2.5) hue-rotate(8deg) brightness(0.95);
+  opacity: 0.42;
+}
+
+html[data-theme="royal-classic"] .hero__arch-card {
+  background: linear-gradient(180deg, rgba(19, 56, 43, 0.94) 0%, rgba(10, 34, 26, 0.97) 100%);
+  border: 2px solid #E5C158;
+  border-radius: 170px 170px 16px 16px;
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.7),
+    0 0 40px rgba(229, 193, 88, 0.16),
+    inset 0 0 0 6px rgba(229, 193, 88, 0.12);
+}
+
+html[data-theme="royal-classic"] .hero__arch-card::before {
+  border: 1px solid rgba(245, 215, 127, 0.5);
+  border-radius: 162px 162px 10px 10px;
+}
+
+html[data-theme="royal-classic"] .hero__arch-finial {
+  background: #9B1B30;
+  color: #F5D77F;
+  border: 1.5px solid #E5C158;
+}
+
+html[data-theme="royal-classic"] .hero__illustration {
+  mix-blend-mode: normal;
+  background: #FDFBF7;
+  border-radius: 999px;
+  padding: 8px;
+  border: 2.5px solid #E5C158;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.55), 0 0 0 4px rgba(155, 27, 48, 0.45);
+}
+
+/* Cards & Sections */
+html[data-theme="royal-classic"] .section--alt {
+  background-color: #0E2B21;
+  border-top: 1px solid rgba(229, 193, 88, 0.2);
+  border-bottom: 1px solid rgba(229, 193, 88, 0.2);
+}
+
+html[data-theme="royal-classic"] .family-card__inner,
+html[data-theme="royal-classic"] .venue-card__content,
+html[data-theme="royal-classic"] .dress-card__inner,
+html[data-theme="royal-classic"] .rsvp-card,
+html[data-theme="royal-classic"] .wish-card__inner,
+html[data-theme="royal-classic"] .wishlist-card {
+  background: linear-gradient(165deg, #133A2C 0%, #0B251C 100%);
+  border: 1.5px solid rgba(229, 193, 88, 0.55);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55), inset 0 0 0 4px rgba(229, 193, 88, 0.07);
+}
+
+html[data-theme="royal-classic"] .countdown-unit__value {
+  background: linear-gradient(180deg, #164333 0%, #0C281E 100%);
+  border: 1.5px solid #E5C158;
+  color: #F5D77F;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5);
+}
+
+html[data-theme="royal-classic"] .dress-code-note {
+  background: rgba(17, 51, 39, 0.92);
+  border: 1px solid rgba(229, 193, 88, 0.45);
+}
+
+html[data-theme="royal-classic"] .form-input {
+  background: #091E17;
+  border: 1px solid rgba(229, 193, 88, 0.45);
+  color: #FDFBF7;
+}
+
+html[data-theme="royal-classic"] .rsvp-radio {
+  background: #091E17;
+  border: 1px solid rgba(229, 193, 88, 0.4);
+}
+
+html[data-theme="royal-classic"] .rsvp-radio--selected {
+  background: rgba(229, 193, 88, 0.18);
+  border-color: #F5D77F;
+}
+
+html[data-theme="royal-classic"] .rsvp-submit-btn,
+html[data-theme="royal-classic"] .share-btn--native {
+  background: linear-gradient(135deg, #E5C158 0%, #FFF1B8 50%, #B38728 100%);
+  color: #071913;
+  font-weight: 700;
+  border: 1px solid #FFF4CC;
+  box-shadow: 0 8px 30px rgba(229, 193, 88, 0.4);
+}
+
+html[data-theme="royal-classic"] .venue-card__cta,
+html[data-theme="royal-classic"] .footer__back-to-top,
+html[data-theme="royal-classic"] .share-btn--copy {
+  background: rgba(17, 51, 39, 0.92);
+  border: 1.5px solid #E5C158;
+  color: #F5D77F;
+}
+
+html[data-theme="royal-classic"] .venue-card__cta:hover,
+html[data-theme="royal-classic"] .footer__back-to-top:hover {
+  background: var(--gold-shimmer);
+  color: #071913;
+}
+
+html[data-theme="royal-classic"] .floating-nav__inner,
+html[data-theme="royal-classic"] .floating-nav__dropdown,
+html[data-theme="royal-classic"] .music-control__btn {
+  background: rgba(12, 38, 29, 0.94);
+  border-color: rgba(229, 193, 88, 0.6);
+  color: #FDFBF7;
+}
+
+html[data-theme="royal-classic"] .footer {
+  background: #071913;
+  border-top: 1.5px solid rgba(229, 193, 88, 0.35);
+}
+
+
+/* ============================================================
+   COMPLETE VISUAL THEME SYSTEM — LAYOUTS, FRAMES, GALLERIES,
+   ICONS, AMBIENT ANIMATIONS & LIVE PREVIEW BANNER
+   ============================================================ */
+
+/* 1. Smooth Theme Switching Transition */
+html.theme-transitioning,
+html.theme-transitioning body,
+html.theme-transitioning .section,
+html.theme-transitioning .hero__arch-card,
+html.theme-transitioning .envelope-screen {
+  transition: background-color 0.5s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.5s ease !important;
+}
+
+/* 2. Envelope Theme Corner Ornaments */
+.envelope-screen__theme-ornaments {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.env-theme-corner {
+  position: absolute;
+  width: clamp(130px, 22vw, 230px);
+  height: clamp(130px, 22vw, 230px);
+  opacity: 0.85;
+}
+
+.env-theme-corner--tl { top: 14px; left: 14px; transform: scale(1, -1); }
+.env-theme-corner--tr { top: 14px; right: 14px; transform: scale(-1, -1); }
+.env-theme-corner--bl { bottom: 14px; left: 14px; }
+.env-theme-corner--br { bottom: 14px; right: 14px; transform: scale(-1, 1); }
+
+/* 3. Theme Header Crests & Ornament Dividers */
+.theme-crest {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.65rem;
+}
+
+.theme-crest--minimalist-modern {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.theme-crest__editorial-num {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  color: #6B705C;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid #181818;
+  background: #FAF9F6;
+}
+
+.theme-crest__editorial-rule {
+  width: 38px;
+  height: 1.5px;
+  background: #181818;
+}
+
+.ornament-divider__svg {
+  flex-shrink: 0;
+  display: block;
+}
+
+/* 4. Hero Custom Image Frames & Masks per Theme */
+html[data-theme="elegant-luxury"] .hero__illustration-wrap.hero__frame--gilded-octagonal {
+  position: relative;
+  width: clamp(230px, 52vw, 310px);
+  height: clamp(230px, 52vw, 310px);
+  margin: 0.75rem auto 1.25rem;
+  padding: 10px;
+  background: linear-gradient(135deg, #2A2117 0%, #0F0D0B 100%);
+  border: 2px solid #D4AF37;
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.85), 0 0 38px rgba(212, 175, 55, 0.28), inset 0 0 0 4px rgba(212, 175, 55, 0.2);
+  clip-path: polygon(12% 0%, 88% 0%, 100% 12%, 100% 88%, 88% 100%, 12% 100%, 0% 88%, 0% 12%);
+}
+
+html[data-theme="elegant-luxury"] .hero__frame--gilded-octagonal .hero__illustration {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+  padding: 0;
+  border: 1px solid rgba(243, 229, 171, 0.45);
+  clip-path: polygon(11% 0%, 89% 0%, 100% 11%, 100% 89%, 89% 100%, 11% 100%, 0% 89%, 0% 11%);
+  mix-blend-mode: normal;
+}
+
+html[data-theme="elegant-luxury"] .hero__date-banner {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1.85rem;
+  background: linear-gradient(90deg, rgba(212,175,55,0.05) 0%, rgba(212,175,55,0.22) 50%, rgba(212,175,55,0.05) 100%);
+  border-top: 1px solid rgba(212, 175, 55, 0.55);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.55);
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+html[data-theme="elegant-luxury"] .hero__venue-teaser {
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  color: #F3E5AB;
+  opacity: 0.88;
+}
+
+/* Minimalist Modern: Editorial Split Magazine Poster Hero */
+html[data-theme="minimalist-modern"] .hero__arch-card--editorial-split {
+  max-width: 960px !important;
+  width: 94%;
+  padding: 0 !important;
+  border: 2px solid #181818 !important;
+  background: #FFFFFF !important;
+  box-shadow: 16px 16px 0px #E5E0D5 !important;
+}
+
+.hero-editorial__masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1.5px solid #181818;
+  background: #F4F2ED;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  color: #181818;
+  text-transform: uppercase;
+}
+
+.hero-editorial__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 820px) {
+  .hero-editorial__grid {
+    grid-template-columns: 1.02fr 1.18fr;
+    align-items: stretch;
+  }
+}
+
+.hero-editorial__visual-col {
+  padding: 2rem 1.75rem;
+  background: #FAF9F6;
+  border-bottom: 1.5px solid #181818;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 820px) {
+  html[dir="rtl"] .hero-editorial__visual-col {
+    border-bottom: none;
+    border-left: 1.5px solid #181818;
+  }
+  html[dir="ltr"] .hero-editorial__visual-col {
+    border-bottom: none;
+    border-right: 1.5px solid #181818;
+  }
+}
+
+.hero__frame--editorial-polaroid {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  background: #FFFFFF;
+  border: 1.5px solid #181818;
+  padding: 12px 12px 0;
+  box-shadow: 10px 10px 0px #6B705C;
+}
+
+.hero__frame--editorial-polaroid .hero__illustration {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  border: 1px solid #181818 !important;
+  padding: 0 !important;
+  mix-blend-mode: normal !important;
+}
+
+.hero-editorial__caption-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.55rem 0.25rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  color: #52524E;
+}
+
+.hero-editorial__text-col {
+  padding: 2.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-editorial__meta-strip {
+  margin-top: 1.35rem;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1.5px solid #181818;
+  background: #FAF9F6;
+}
+
+.hero-editorial__meta-cell {
+  padding: 0.7rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  border-inline-end: 1px solid #181818;
+}
+
+.hero-editorial__meta-cell:last-child {
+  border-inline-end: none;
+}
+
+.hero-editorial__meta-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: #6B705C;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.hero-editorial__meta-val {
+  font-size: 0.85rem;
+  color: #181818;
+  font-weight: 600;
+}
+
+/* Romantic Floral: Botanical Oval Wreath Frame */
+html[data-theme="romantic-floral"] .hero__illustration-wrap.hero__frame--botanical-wreath {
+  position: relative;
+  width: clamp(235px, 54vw, 315px);
+  height: clamp(255px, 58vw, 340px);
+  margin: 0.65rem auto 1.15rem;
+  padding: 10px;
+  border-radius: 50% 50% 46% 46% / 55% 55% 45% 45%;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FCEEF1 100%);
+  border: 2px solid #E4B4BE;
+  box-shadow: 0 18px 45px rgba(200, 109, 126, 0.22), 0 0 0 6px rgba(244, 220, 224, 0.55);
+}
+
+html[data-theme="romantic-floral"] .hero__frame--botanical-wreath .hero__illustration {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50% 50% 45% 45% / 55% 55% 45% 45%;
+  border: 1.5px dashed #C86D7E;
+  padding: 0;
+  mix-blend-mode: normal;
+}
+
+html[data-theme="romantic-floral"] .hero__date-banner {
+  margin-top: 0.6rem;
+  padding: 0.65rem 1.75rem;
+  border-radius: 999px;
+  background: rgba(244, 220, 224, 0.55);
+  border: 1px solid rgba(200, 109, 126, 0.35);
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+html[data-theme="romantic-floral"] .hero__venue-teaser {
+  font-size: 0.82rem;
+  color: #7A9A8B;
+  font-weight: 600;
+}
+
+/* Royal Classic: Imperial Cathedral Portrait Frame & Scroll Banner */
+html[data-theme="royal-classic"] .hero__illustration-wrap.hero__frame--royal-cathedral {
+  position: relative;
+  width: clamp(240px, 54vw, 320px);
+  height: clamp(260px, 58vw, 345px);
+  margin: 0.75rem auto 1.25rem;
+  padding: 10px;
+  border-radius: 160px 160px 16px 16px;
+  background: linear-gradient(180deg, #164333 0%, #071913 100%);
+  border: 3px double #D4AF37;
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.65), 0 0 0 3px #721121, 0 0 30px rgba(212, 175, 55, 0.3);
+}
+
+html[data-theme="royal-classic"] .hero__frame--royal-cathedral .hero__illustration {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 150px 150px 10px 10px;
+  border: 1.5px solid #D4AF37;
+  padding: 0;
+  mix-blend-mode: normal;
+}
+
+html[data-theme="royal-classic"] .hero__date-banner {
+  margin-top: 0.85rem;
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, #721121 0%, #4A0813 100%);
+  border: 2px solid #D4AF37;
+  border-radius: 8px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+html[data-theme="royal-classic"] .hero__date-banner .hero__date-teaser {
+  color: #FFF0B8 !important;
+}
+
+html[data-theme="royal-classic"] .hero__venue-teaser {
+  font-size: 0.82rem;
+  color: #E5C158;
+  letter-spacing: 0.1em;
+}
+
+/* 5. Countdown Layout Variants */
+.countdown-unit__index,
+.countdown-unit__gem,
+.countdown-unit__petal-badge,
+.countdown-unit__crown-badge {
+  display: block;
+  font-size: 0.72rem;
+  margin-bottom: 0.25rem;
+  opacity: 0.85;
+}
+
+/* Elegant Luxury: Octagonal Faceted Timepiece */
+html[data-theme="elegant-luxury"] .countdown-grid--octagonal-timepiece .countdown-unit {
+  position: relative;
+  padding: 0.9rem 1.1rem;
+  background: rgba(24, 20, 16, 0.92);
+  border: 1.5px solid rgba(212, 175, 55, 0.65);
+  clip-path: polygon(14% 0%, 86% 0%, 100% 14%, 100% 86%, 86% 100%, 14% 100%, 0% 86%, 0% 14%);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
+}
+
+html[data-theme="elegant-luxury"] .countdown-unit__gem {
+  color: #D4AF37;
+}
+
+/* Minimalist Modern: Architectural Connected Ticker Strip */
+html[data-theme="minimalist-modern"] .countdown-grid--editorial-ticker {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0 !important;
+  border: 2px solid #181818;
+  background: #FFFFFF;
+  box-shadow: 10px 10px 0px #E5E0D5;
+  padding: 0;
+}
+
+html[data-theme="minimalist-modern"] .countdown-grid--editorial-ticker .countdown-sep {
+  display: none;
+}
+
+html[data-theme="minimalist-modern"] .countdown-grid--editorial-ticker .countdown-unit {
+  padding: 1.15rem 1.65rem;
+  border-inline-end: 1.5px solid #181818;
+  min-width: 110px;
+}
+
+html[data-theme="minimalist-modern"] .countdown-grid--editorial-ticker .countdown-unit:last-child {
+  border-inline-end: none;
+}
+
+html[data-theme="minimalist-modern"] .countdown-grid--editorial-ticker .countdown-unit__value {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  min-width: auto !important;
+}
+
+html[data-theme="minimalist-modern"] .countdown-unit__index {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  color: #6B705C;
+  font-weight: 700;
+}
+
+/* Romantic Floral: Circular Petal Wreath Medallions */
+html[data-theme="romantic-floral"] .countdown-grid--petal-medallions .countdown-unit {
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 2px solid #E4B4BE;
+  box-shadow: 0 12px 28px rgba(200, 109, 126, 0.16), 0 0 0 4px rgba(244, 220, 224, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+html[data-theme="romantic-floral"] .countdown-grid--petal-medallions .countdown-unit__value {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  font-size: 1.75rem !important;
+  min-width: auto !important;
+}
+
+html[data-theme="romantic-floral"] .countdown-unit__petal-badge {
+  color: #C86D7E;
+  font-size: 0.8rem;
+  margin-bottom: 0;
+}
+
+/* Royal Classic: Imperial Palace Pillar Shields */
+html[data-theme="royal-classic"] .countdown-grid--imperial-pillars .countdown-unit {
+  background: linear-gradient(180deg, #12382B 0%, #071A14 100%);
+  border: 2px solid #D4AF37;
+  border-radius: 14px 14px 28px 28px;
+  padding: 0.85rem 1.15rem;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.55), inset 0 0 0 3px rgba(114, 17, 33, 0.5);
+}
+
+html[data-theme="royal-classic"] .countdown-grid--imperial-pillars .countdown-unit__value {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0.1rem 0 !important;
+}
+
+html[data-theme="royal-classic"] .countdown-unit__crown-badge {
+  color: #F5D77F;
+  font-size: 0.9rem;
+}
+
+/* 6. Wedding Details Custom Icons & Variants */
+.wedding-details__theme-icon {
+  margin: 0 auto 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wedding-details__minimal-num {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  color: #6B705C;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid #181818;
+  background: #FAF9F6;
+}
+
+/* 7. Venue Custom Corner Ornaments */
+.venue-card {
+  position: relative;
+}
+
+.venue-card__corner {
+  position: absolute;
+  width: 95px;
+  height: 95px;
+  pointer-events: none;
+  opacity: 0.65;
+  z-index: 1;
+}
+
+.venue-card__corner--tl {
+  top: 10px;
+  left: 10px;
+  transform: scale(1, -1);
+}
+
+.venue-card__corner--br {
+  bottom: 10px;
+  right: 10px;
+  transform: scale(-1, 1);
+}
+
+/* 8. Gallery Layout Arrangements & Frames per Theme */
+.gallery-item__media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.gallery-item__caption-bar {
+  padding: 0.75rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  text-align: center;
+}
+
+.gallery-item__caption-title {
+  font-size: 1rem;
+  display: block;
+}
+
+.gallery-item__caption-sub {
+  font-size: 0.76rem;
+  opacity: 0.8;
+}
+
+/* Elegant Luxury: Cinema Spotlight Showcase Grid */
+html[data-theme="elegant-luxury"] .gallery-grid--cinema-spotlight {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  html[data-theme="elegant-luxury"] .gallery-grid--cinema-spotlight .gallery-item:first-child {
+    grid-column: span 2;
+  }
+}
+
+html[data-theme="elegant-luxury"] .gallery-item--theme-elegant-luxury {
+  display: flex;
+  flex-direction: column;
+  background: #14110D;
+  border: 1.5px solid #D4AF37 !important;
+  border-radius: 8px !important;
+  padding: 8px;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.75);
+}
+
+html[data-theme="elegant-luxury"] .gallery-item--theme-elegant-luxury .gallery-item__media {
+  aspect-ratio: 4 / 4.5;
+  border: 1px solid rgba(243, 229, 171, 0.3);
+}
+
+html[data-theme="elegant-luxury"] .gallery-item__caption-title {
+  color: #F3E5AB;
+}
+
+html[data-theme="elegant-luxury"] .gallery-item__caption-sub {
+  color: #C8B99E;
+}
+
+/* Minimalist Modern: Asymmetric Editorial Lookbook Grid */
+html[data-theme="minimalist-modern"] .gallery-grid--editorial-magazine {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.75rem;
+}
+
+html[data-theme="minimalist-modern"] .gallery-item--theme-minimalist-modern {
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+  border: 1.5px solid #181818 !important;
+  border-radius: 0 !important;
+  box-shadow: 8px 8px 0px #E5E0D5 !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+html[data-theme="minimalist-modern"] .gallery-item--theme-minimalist-modern:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 12px 12px 0px #6B705C !important;
+}
+
+.gallery-item__editorial-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.45rem 0.75rem;
+  border-bottom: 1px solid #181818;
+  background: #F4F2ED;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: #181818;
+}
+
+html[data-theme="minimalist-modern"] .gallery-item--theme-minimalist-modern .gallery-item__media {
+  aspect-ratio: 4 / 4.6;
+}
+
+html[data-theme="minimalist-modern"] .gallery-item__caption-bar {
+  border-top: 1px solid #181818;
+  text-align: start;
+  background: #FAF9F6;
+}
+
+html[data-theme="minimalist-modern"] .gallery-item__caption-title {
+  color: #181818;
+}
+
+html[data-theme="minimalist-modern"] .gallery-item__caption-sub {
+  color: #52524E;
+}
+
+/* Romantic Floral: Polaroid Keepsake Scrapbook Grid */
+html[data-theme="romantic-floral"] .gallery-grid--polaroid-scrapbook {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 2rem;
+  padding: 0.75rem;
+}
+
+html[data-theme="romantic-floral"] .gallery-item--theme-romantic-floral {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+  padding: 14px 14px 6px;
+  border-radius: 22px !important;
+  border: 1.5px solid #E4B4BE !important;
+  box-shadow: 0 16px 36px rgba(200, 109, 126, 0.16);
+  transition: transform 0.35s ease;
+}
+
+html[data-theme="romantic-floral"] .gallery-item--theme-romantic-floral:nth-child(odd) {
+  transform: rotate(-1.4deg);
+}
+
+html[data-theme="romantic-floral"] .gallery-item--theme-romantic-floral:nth-child(even) {
+  transform: rotate(1.4deg);
+}
+
+html[data-theme="romantic-floral"] .gallery-item--theme-romantic-floral:hover {
+  transform: rotate(0deg) translateY(-5px);
+}
+
+.gallery-item__floral-tape {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #F4DCE0;
+  border: 1px solid #C86D7E;
+  color: #C86D7E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  z-index: 3;
+  box-shadow: 0 4px 10px rgba(200, 109, 126, 0.2);
+}
+
+html[data-theme="romantic-floral"] .gallery-item--theme-romantic-floral .gallery-item__media {
+  aspect-ratio: 4 / 4.4;
+  border-radius: 14px;
+}
+
+html[data-theme="romantic-floral"] .gallery-item__caption-title {
+  color: #4A252C;
+}
+
+html[data-theme="romantic-floral"] .gallery-item__caption-sub {
+  color: #7D4E57;
+}
+
+/* Royal Classic: Grand Palace Portrait Hall Grid */
+html[data-theme="royal-classic"] .gallery-grid--palace-portraits {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.85rem;
+}
+
+html[data-theme="royal-classic"] .gallery-item--theme-royal-classic {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #11362A 0%, #071A14 100%);
+  padding: 12px;
+  border: 3px double #D4AF37 !important;
+  border-radius: 20px 20px 8px 8px !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65);
+}
+
+.gallery-item__royal-crest {
+  text-align: center;
+  color: #F5D77F;
+  font-size: 1.1rem;
+  margin-bottom: 0.35rem;
+}
+
+html[data-theme="royal-classic"] .gallery-item--theme-royal-classic .gallery-item__media {
+  aspect-ratio: 4 / 4.5;
+  border-radius: 14px 14px 4px 4px;
+  border: 1.5px solid #D4AF37;
+}
+
+html[data-theme="royal-classic"] .gallery-item__caption-bar {
+  margin-top: 0.5rem;
+  background: rgba(114, 17, 33, 0.45);
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  border-radius: 6px;
+}
+
+html[data-theme="royal-classic"] .gallery-item__caption-title {
+  color: #FFF0B8;
+}
+
+html[data-theme="royal-classic"] .gallery-item__caption-sub {
+  color: #E2D9C5;
+}
+
+/* 9. Live Ambient Theme Animations (Particles, Petals, Architectural Lines, Lanterns) */
+.theme-ambient {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+/* Elegant Luxury: Rising & Twinkling 24k Gold Stardust */
+.theme-ambient__stardust {
+  position: absolute;
+  bottom: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFF8DC 0%, #D4AF37 65%, transparent 100%);
+  box-shadow: 0 0 10px #D4AF37, 0 0 20px rgba(243, 229, 171, 0.6);
+  opacity: 0;
+  animation: stardustRise linear infinite;
+}
+
+@keyframes stardustRise {
+  0% {
+    transform: translateY(0) scale(0.6);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.75;
+  }
+  80% {
+    opacity: 0.65;
+  }
+  100% {
+    transform: translateY(-105vh) scale(1.25);
+    opacity: 0;
+  }
+}
+
+/* Minimalist Modern: Architectural Margin Grid Lines */
+.theme-ambient__arch-grid-line {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(24, 24, 24, 0.08);
+}
+
+.theme-ambient__arch-grid-line--left { left: 28px; }
+.theme-ambient__arch-grid-line--right { right: 28px; }
+
+.theme-ambient__editorial-side-text {
+  position: fixed;
+  bottom: 140px;
+  left: -95px;
+  transform: rotate(-90deg);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.32em;
+  color: rgba(24, 24, 24, 0.32);
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .theme-ambient--minimalist-modern {
+    display: none;
+  }
+}
+
+/* Romantic Floral: Drifting Blush Rose Petals & Sage Leaves */
+.theme-ambient__petal {
+  position: absolute;
+  top: -30px;
+  width: 14px;
+  height: 18px;
+  background: linear-gradient(135deg, #FADCE2 0%, #DF8E9D 100%);
+  border-radius: 80% 15% 80% 30%;
+  opacity: 0;
+  box-shadow: 0 2px 6px rgba(200, 109, 126, 0.18);
+  animation: petalDrift ease-in-out infinite;
+}
+
+.theme-ambient__petal--leaf {
+  background: linear-gradient(135deg, #9AB8A9 0%, #7A9A8B 100%);
+  border-radius: 90% 10% 90% 10%;
+  width: 12px;
+  height: 20px;
+}
+
+@keyframes petalDrift {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.65;
+  }
+  50% {
+    transform: translateY(50vh) translateX(35px) rotate(160deg);
+    opacity: 0.6;
+  }
+  85% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(105vh) translateX(-25px) rotate(340deg);
+    opacity: 0;
+  }
+}
+
+/* Royal Classic: Floating Palace Candlelight / Lantern Orbs */
+.theme-ambient__lantern-orb {
+  position: absolute;
+  bottom: -30px;
+  width: 10px;
+  height: 14px;
+  border-radius: 50% 50% 40% 40%;
+  background: radial-gradient(circle, #FFF5CC 0%, #E5C158 55%, rgba(114, 17, 33, 0) 100%);
+  box-shadow: 0 0 16px rgba(245, 215, 127, 0.75);
+  opacity: 0;
+  animation: lanternFloat ease-in-out infinite;
+}
+
+@keyframes lanternFloat {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.8);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.65;
+  }
+  75% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateY(-102vh) translateX(20px) scale(1.15);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-ambient {
+    display: none !important;
+  }
+}
+
+/* 10. Floating Live Theme Preview Control Banner */
+.theme-live-preview-banner {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99990;
+  width: min(96vw, 1080px);
+  background: rgba(18, 15, 12, 0.96);
+  border: 1.5px solid #D4AF37;
+  border-radius: 16px;
+  padding: 0.75rem 1.15rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 25px rgba(212, 175, 55, 0.25);
+  backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  color: #FAF6F0;
+}
+
+.theme-live-preview-banner__info {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.theme-live-preview-banner__badge {
+  background: rgba(212, 175, 55, 0.2);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  color: #F3E5AB;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+}
+
+.theme-live-preview-banner__name {
+  font-size: 0.92rem;
+  color: #FFFFFF;
+}
+
+.theme-live-preview-banner__switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.theme-live-preview-banner__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.32rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #D6CFC2;
+  font-size: 0.76rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-live-preview-banner__pill:hover {
+  border-color: rgba(212, 175, 55, 0.5);
+  color: #FFFFFF;
+}
+
+.theme-live-preview-banner__pill--active {
+  background: rgba(212, 175, 55, 0.22);
+  border-color: #D4AF37;
+  color: #FFF3C4;
+  font-weight: 700;
+}
+
+.theme-live-preview-banner__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.theme-live-preview-banner__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.theme-live-preview-banner__btn {
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.theme-live-preview-banner__btn--apply {
+  background: linear-gradient(135deg, #2ECC71 0%, #27AE60 100%);
+  color: #FFFFFF;
+}
+
+.theme-live-preview-banner__btn--admin {
+  background: rgba(212, 175, 55, 0.18);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  color: #F3E5AB;
+}
+
+.theme-live-preview-banner__btn--cancel {
+  background: rgba(231, 76, 60, 0.18);
+  border: 1px solid rgba(231, 76, 60, 0.45);
+  color: #FF8A80;
+}
+
+
+/* ==========================================================================
+   11. PROJECT B DYNAMIC CUSTOM SECTIONS & WISHLIST DIGITAL GIFTING CARDS
+   ========================================================================== */
+
+/* ── Elegant Luxury: Noir Obsidian & 24k Gold ── */
+html[data-theme="elegant-luxury"] .custom-section-card,
+html[data-theme="elegant-luxury"] .wishlist-cash-card {
+  background: linear-gradient(145deg, rgba(28, 23, 18, 0.96) 0%, rgba(16, 13, 10, 0.98) 100%);
+  border: 1.5px solid rgba(212, 175, 55, 0.55);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.72), inset 0 0 24px rgba(212, 175, 55, 0.08);
+  color: #F9F3E5;
+}
+
+html[data-theme="elegant-luxury"] .custom-section__badge {
+  background: rgba(212, 175, 55, 0.14);
+  border-color: rgba(212, 175, 55, 0.45);
+  color: #F3E5AB;
+}
+
+html[data-theme="elegant-luxury"] .custom-section__paragraph,
+html[data-theme="elegant-luxury"] .wishlist-cash-card__value,
+html[data-theme="elegant-luxury"] .wishlist-items-title {
+  color: #F9F3E5;
+}
+
+html[data-theme="elegant-luxury"] .wishlist-cash-card__label {
+  color: #C8B99E;
+}
+
+html[data-theme="elegant-luxury"] .wishlist-cash-card__icon {
+  background: rgba(212, 175, 55, 0.15);
+  color: #F3E5AB;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+}
+
+html[data-theme="elegant-luxury"] .custom-section__cta,
+html[data-theme="elegant-luxury"] .wishlist-cash-card__copy-btn {
+  background: linear-gradient(135deg, #D4AF37 0%, #AA820A 100%);
+  color: #0D0B09;
+  border: 1px solid #F3E5AB;
+  font-weight: 700;
+}
+
+/* ── Minimalist Modern: Architectural Editorial Alabaster & Carbon Ink ── */
+html[data-theme="minimalist-modern"] .custom-section-card,
+html[data-theme="minimalist-modern"] .wishlist-cash-card {
+  background: #FFFFFF;
+  border: 1.5px solid #181818;
+  border-radius: 0 !important;
+  box-shadow: 8px 8px 0px #E5E0D5;
+  color: #181818;
+}
+
+html[data-theme="minimalist-modern"] .custom-section__badge {
+  background: #181818;
+  color: #FAF9F6;
+  border-color: #181818;
+  border-radius: 0;
+}
+
+html[data-theme="minimalist-modern"] .custom-section__image-wrap {
+  border-radius: 0;
+  border: 1.5px solid #181818;
+}
+
+html[data-theme="minimalist-modern"] .wishlist-cash-card__icon {
+  border-radius: 0;
+  background: #F4F2ED;
+  color: #181818;
+  border: 1px solid #181818;
+}
+
+html[data-theme="minimalist-modern"] .custom-section__cta,
+html[data-theme="minimalist-modern"] .wishlist-cash-card__copy-btn {
+  background: #181818;
+  color: #FAF9F6;
+  border: 1.5px solid #181818;
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+html[data-theme="minimalist-modern"] .custom-section__cta:hover,
+html[data-theme="minimalist-modern"] .wishlist-cash-card__copy-btn:hover {
+  background: #6B705C;
+  border-color: #6B705C;
+  color: #FFFFFF;
+}
+
+/* ── Romantic Floral: English Rose Garden & Pastel Blush ── */
+html[data-theme="romantic-floral"] .custom-section-card,
+html[data-theme="romantic-floral"] .wishlist-cash-card {
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFF7F8 100%);
+  border: 1.5px solid rgba(200, 109, 126, 0.36);
+  border-radius: 28px;
+  box-shadow: 0 16px 38px rgba(180, 95, 112, 0.12);
+}
+
+html[data-theme="romantic-floral"] .custom-section__badge {
+  background: rgba(200, 109, 126, 0.12);
+  border-color: rgba(200, 109, 126, 0.35);
+  color: #A84A5C;
+}
+
+html[data-theme="romantic-floral"] .wishlist-cash-card__icon {
+  background: rgba(200, 109, 126, 0.14);
+  color: #B85668;
+}
+
+html[data-theme="romantic-floral"] .custom-section__cta,
+html[data-theme="romantic-floral"] .wishlist-cash-card__copy-btn {
+  background: linear-gradient(135deg, #C86D7E 0%, #A84A5C 100%);
+  color: #FFFFFF;
+  border: none;
+}
+
+/* ── Royal Classic: Imperial Emerald, Palace Parchment & Burnished Gold ── */
+html[data-theme="royal-classic"] .custom-section-card,
+html[data-theme="royal-classic"] .wishlist-cash-card {
+  background: linear-gradient(160deg, #FAF3E3 0%, #F2E5C8 100%);
+  border: 2px solid #C59B27;
+  outline: 1px solid rgba(10, 53, 40, 0.25);
+  outline-offset: -6px;
+  box-shadow: 0 18px 42px rgba(7, 42, 32, 0.18);
+  color: #072A20;
+}
+
+html[data-theme="royal-classic"] .custom-section__badge {
+  background: #072A20;
+  border-color: #D4AF37;
+  color: #F5E6B3;
+}
+
+html[data-theme="royal-classic"] .custom-section__paragraph,
+html[data-theme="royal-classic"] .wishlist-cash-card__value,
+html[data-theme="royal-classic"] .wishlist-items-title {
+  color: #072A20;
+}
+
+html[data-theme="royal-classic"] .wishlist-cash-card__icon {
+  background: #072A20;
+  color: #D4AF37;
+  border: 1.5px solid #D4AF37;
+}
+
+html[data-theme="royal-classic"] .custom-section__cta,
+html[data-theme="royal-classic"] .wishlist-cash-card__copy-btn {
+  background: linear-gradient(135deg, #0A3528 0%, #072A20 100%);
+  color: #F5E6B3;
+  border: 1.5px solid #D4AF37;
+}
+
+html[data-theme="royal-classic"] .custom-section__cta:hover,
+html[data-theme="royal-classic"] .wishlist-cash-card__copy-btn:hover {
+  background: linear-gradient(135deg, #721121 0%, #520A16 100%);
+  color: #FFF3C4;
+}

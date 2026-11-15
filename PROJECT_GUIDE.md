@@ -12,6 +12,10 @@
 5. [🖼️ طريقة تغيير الصور والأصوات والأصول (`public/`)](#5-طريقة-تغيير-الصور-والأصوات-والأصول)
 6. [🔥 ربط الفايربيس وإضافة صور المعرض والتهاني](#6-ربط-الفايربيس-وإضافة-صور-المعرض-والتهاني)
 7. [🎨 نظام التصميم والألوان والخطوط (Design System & Fonts)](#7-نظام-التصميم-والألوان-والخطوط)
+8. [🛡️ لوحة التحكم والإدارة السرية ونظام المصادقة الثنائية (Admin Portal & 2FA)](#8-لوحة-التحكم-والإدارة-السرية-ونظام-المصادقة-الثنائية)
+9. [🎭 نظام الثيمات البصرية المتكامل (Complete Visual Theme System)](#9-نظام-الثيمات-البصرية-المتكامل)
+10. [🧩 نظام الإعدادات الديناميكي والأقسام المخصصة (Dynamic Configuration System)](#10-نظام-الإعدادات-الديناميكي-والأقسام-المخصصة)
+11. [📐 إرشادات التطوير والهيكلة التقنية (Technical & Development Guidelines)](#11-إرشادات-التطوير-والهيكلة-التقنية)
 
 ---
 
@@ -229,10 +233,11 @@ const weddingConfig = {
    * **`aspectRatio`**: اختر بين (`portrait` طولي / `landscape` عرضي / `square` مربع).
    * **`order`**: رقم الترتيب (1, 2, 3...).
 
-📄 **لمزيد من التفاصيل والدلائل المخصصة، اراجع الملفات المرفقة للمشروع:**
-* [FIREBASE_INTEGRATION_GUIDE.md](file:///c:/Users/Hamdy/OneDrive/Documents/Projects/Invitations/FIREBASE_INTEGRATION_GUIDE.md)
-* [GITHUB_PUBLISHING_GUIDE.md](file:///c:/Users/Hamdy/OneDrive/Documents/Projects/Invitations/GITHUB_PUBLISHING_GUIDE.md)
-* [HOW_TO_ADD_GALLERY_PHOTOS.md](file:///c:/Users/Hamdy/OneDrive/Documents/Projects/Invitations/HOW_TO_ADD_GALLERY_PHOTOS.md)
+📄 **لمزيد من التفاصيل والدلائل المخصصة، راجع الملفات المرفقة للمشروع:**
+* [FIREBASE_INTEGRATION_GUIDE.md](./FIREBASE_INTEGRATION_GUIDE.md)
+* [GITHUB_PUBLISHING_GUIDE.md](./GITHUB_PUBLISHING_GUIDE.md)
+* [HOW_TO_ADD_GALLERY_PHOTOS.md](./HOW_TO_ADD_GALLERY_PHOTOS.md)
+* [MAIL_SETUP.md](./MAIL_SETUP.md)
 
 ---
 
@@ -322,6 +327,78 @@ const weddingConfig = {
      * زر **"حفظ في Firestore DB"**: يقوم بتحديث الإعدادات مباشرة في سحابة Firebase لتنعكس فوراً على موقع الدعوة دون الحاجة لإعادة نشر الكود!
      * زر **"تحميل weddingConfig.js"**: لتحميل نسخة كود محدثة لوضعها في ملفات المشروع البرمجية.
      * زر **"استعادة الافتراضي"**: لاستعادة القيم الأصلية عند الرغبة.
+
+---
+
+## 9. 🎭 نظام الثيمات البصرية المتكامل (Complete Visual Theme System)
+
+يمتلك المشروع نظام ثيمات بصري متكامل لا يقتصر على تغيير الألوان فقط، بل يغيّر الهوية البصرية الكاملة للدعوة (الصور، الرسومات، الأيقونات، الأختام الشمعية، الحركات، الخطوط، وتخطيط الأقسام) مع الحفاظ التام على المحتوى المخصص والبيانات.
+
+### 🎨 الثيمات الخمسة المتاحة (`src/config/themesConfig.js`)
+
+| المعرف (`id`) | الاسم | الهوية البصرية والأصول |
+| :--- | :--- | :--- |
+| **`default`** | الكلاسيكي الدافئ *(التصميم الأصلي المحفوظ)* | عاج دافئ وذهب معتق (`#FDFAF6`, `#C9A96E`)، رسمة العروسين المائية الأصلية (`/couple-illustration.png`)، زهور مائية، ظرف كلاسيكي وختم قلب ذهبي. |
+| **`elegant-luxury`** | الفخامة الذهبية *(Noir & 24k Gold)* | أسود أوبسيديان وذهب 24 قيراط (`#0F0D0B`, `#D4AF37`)، إطارات آرت ديكو ثمانية، ظرف تكسيدو، ذرات ذهبية طائرة (`gold-dust`)، ومعرض غير متماثل. |
+| **`minimalist-modern`** | العصري البسيط *(Editorial Alabaster)* | أبيض ألاباستر، حبر كربوني، وأخضر زيتوني (`#F8F7F4`, `#1E201D`, `#5F6F52`)، خطوط هندسية رفيعة، تخطيط مجلة سويسرية، ومعرض Bento من 3 أعمدة. |
+| **`romantic-floral`** | الرومانسي الزهري *(English Rose Garden)* | باستيل وردي وزهري ناعم (`#FFF8FA`, `#D97C93`)، أقواس بتلات، بتلات ورود متساقطة (`floating-petals`)، ظرف مربوط بشريط، ومعرض بولارويد. |
+| **`royal-classic`** | الملكي الكلاسيكي *(Imperial Emerald & Gold)* | زمرد إمبراطوري وذهب معتق وياقوت ملكي (`#0B3B2E`, `#C89B3C`)، تيجان وأقواس كاتدرائية، بريق ذهبي (`royal-sparkles`)، وإطارات متحفية. |
+
+### 🖼️ الأصول والمكونات البصرية الخاصة بكل ثيم
+* **الأصول الثابتة (`public/themes/<theme-id>/`):** يحتوي كل ثيم (عدا `default`) على `hero-illustration.png`، `hero-illustration.svg`، `envelope-card.svg`، و6 صور معرض `gallery-1.svg`..`gallery-6.svg`.
+* **المكونات البصرية (`src/components/ui/`):**
+  * `ThemeVisuals.jsx`: يوفّر `ThemeHeroBackdrop`، `ThemeHeaderCrest`، `ThemeWaxSeal`، `ThemeAmbientEffects` (يحترم `prefers-reduced-motion`)، و`ThemePreviewBanner`.
+  * `FloralCornerSVG.jsx` و `OrnamentDivider.jsx`: يعرضان زخارف الزوايا والفواصل المخصصة لكل ثيم.
+  * `SectionWrapper.jsx`: يغلّف الأقسام بسمات الثيم وحركات الظهور (`animations.revealDuration` / `revealEase`).
+* **تنسيقات الثيمات (`src/styles/themes.css`):** تطبق عبر السمة `html[data-theme="<theme-id>"]` مع انتقال سلس (`theme-transitioning`).
+
+### 👁️ المعاينة الحية والتفعيل في لوحة التحكم (`ThemeManager.jsx`)
+* يمكن للمشرف فتح **تصاميم الدعوة (Themes)** في لوحة التحكم (`AdminPortal.jsx` أو `AdminApp.jsx`).
+* **المعاينة المؤقتة (Live Preview):** عبر `setTemporaryThemePreview(themeId)` وحدث `THEME_PREVIEW_EVENT`، يمكن معاينة أي ثيم على الموقع الحي فوراً عبر شريط `ThemePreviewBanner` دون حفظه للزوار.
+* **التطبيق والحفظ الدائم:** عند الضغط على **"تطبيق وحفظ التصميم"**، يتم حفظ `theme` في `localStorage` (`wedding_active_theme` و `wedding_config_override`) وفي **Firestore** (`config/wedding`).
+
+### ➕ كيفية إضافة ثيم جديد مستقبلاً
+1. أضف مجلد أصول جديداً في `public/themes/<new-theme-id>/` (`hero-illustration.png`, `hero-illustration.svg`, `envelope-card.svg`, `gallery-1..6.svg`).
+2. أضف كائن تعريف الثيم في مصفوفة `WEDDING_THEMES` داخل `src/config/themesConfig.js` (بما في ذلك `palette`, `typography`, `assets`, `icons`, `animations`, `layout`, `preview`).
+3. أضف متغيرات CSS الخاصة بالثيم تحت المحدد `html[data-theme="<new-theme-id>"]` في `src/styles/themes.css`.
+4. أضف أي أشكال زخرفية أو تأثيرات جديدة في `ThemeVisuals.jsx` / `FloralCornerSVG.jsx` / `OrnamentDivider.jsx` إذا لزم الأمر.
+
+---
+
+## 10. 🧩 نظام الإعدادات الديناميكي والأقسام المخصصة (Dynamic Configuration System)
+
+يفصل المشروع بشكل صارم بين **المحتوى والهيكل (Content & Structure)** الذي يديره نظام الإعدادات الديناميكي، وبين **العرض البصري (Visual Presentation)** الذي يديره نظام الثيمات.
+
+### 🔄 العلاقة بين الإعدادات والثيمات
+1. **المحتوى والهيكل (`weddingConfig.js` + `configManager.js` + `WeddingConfigContext.jsx`):** يتحكم في النصوص، أسماء العروسين، المواعيد، قائمة الهدايا، ترتيب الأقسام (`sectionOrder`)، تفعيل/إخفاء الأقسام (`sections[key].enabled`)، والأقسام المخصصة (`customSections`).
+2. **العرض البصري (`themesConfig.js` + `themes.css` + `ThemeVisuals.jsx`):** يطبّق الألوان، الخطوط، الإطارات، الأيقونات، والحركات على أي قسم موجود ديناميكياً.
+3. **التكيّف التلقائي:** لا تعتمد الثيمات على أقسام ثابتة (Hardcoded)؛ بل يقوم `App.jsx` و`Navigation.jsx` بقراءة `normalizeSectionOrder(weddingConfig.sectionOrder, weddingConfig.customSections)` وعرض الأقسام المفعلة فقط بالترتيب المحدد.
+
+### 🛠️ إمكانيات التخصيص الديناميكي (`DynamicSectionsEditor.jsx`)
+من تبويب **إعدادات الزفاف** في لوحة التحكم:
+* **إضافة قسم مخصص (Add Custom Section):** إنشاء قسم جديد بمعرّف فريد (`id`)، شارة (`badgeAr/En`)، عنوان (`titleAr/En`)، وصف فرعي (`subtitleAr/En`)، فقرات متعددة (`paragraphsAr/En`)، اقتباس (`quoteAr/En`)، وزر رابط اختياري (`ctaTextAr/En`, `ctaUrl`).
+* **تعديل الأقسام الحالية:** تعديل عناوين وأوصاف الأقسام الأساسية (`details`, `countdown`, `families`, `venue`, `gallery`, `dressCode`, `wishlist`, `rsvp`, `wishes`, `share`) دون المساس بالكود.
+* **إعادة ترتيب الأقسام (Reorder):** تحريك أي قسم أساسي أو مخصص للأعلى أو الأسفل (`↑` / `↓`) عبر `sectionOrder`.
+* **إخفاء أو حذف الأقسام:** تعطيل أي قسم عبر `isSectionEnabled(config, key)` أو حذف الأقسام المخصصة نهائياً.
+* **وراثة الثيم:** يتم عرض كل قسم مخصص عبر `src/components/CustomSection/CustomSection.jsx` باستخدام `<SectionWrapper />` و`<ThemeHeaderCrest />` و`<OrnamentDivider />` و`<FloralCornerSVG />`، مما يضمن تناسقه التلقائي مع جميع الثيمات الخمسة.
+* **الحفظ والمزامنة:** تُحفظ التعديلات في `localStorage` وفي **Firestore** (`config/wedding`) وتصل لحظياً لجميع الزوار عبر `subscribeWeddingConfigFromDB` (`onSnapshot`) في `WeddingConfigContext.jsx`.
+
+---
+
+## 11. 📐 إرشادات التطوير والهيكلة التقنية (Technical & Development Guidelines)
+
+* **هيكلة المشروع (`src/`):**
+  * `src/config/`: إعدادات الزفاف (`weddingConfig.js`) وتعريفات الثيمات (`themesConfig.js`).
+  * `src/context/`: مزود السياق والمزامنة اللحظية (`WeddingConfigContext.jsx`).
+  * `src/utils/`: إدارة الدمج والتخزين (`configManager.js`) ومسارات الأصول (`getAssetUrl`).
+  * `src/services/`: طبقة الخدمات (`firebase/firestore.js`, `mail/otpService.js`, `index.js`).
+  * `src/components/`: مكونات الأقسام، لوحة التحكم (`Admin/`), والمكونات البصرية القابلة لإعادة الاستخدام (`ui/`).
+  * `src/admin/`: نقطة الدخول المستقلة للوحة الإدارة (`admin.html`, `adminMain.jsx`, `AdminApp.jsx`).
+* **التوافق مع الإعدادات السابقة (Backward Compatibility):** تحافظ دالة `mergeConfig(override)` في `configManager.js` على التوافق الكامل مع أي إعدادات قديمة مخزنة قبل التحديث (تعيين `theme: 'default'` وتطبيع `sectionOrder` و`customSections` تلقائياً).
+* **الأداء وإمكانية الوصول (Performance & Accessibility):**
+  * احترام إعدادات تقليل الحركة (`@media (prefers-reduced-motion: reduce)` و `useReducedMotion` في Framer Motion).
+  * تحميل خطوط الثيمات الإضافية عند الحاجة عبر `ensureThemeFontsLoaded()`.
+* **التصميم المتجاوب ومعالجة الأخطاء:** جميع المكونات والأقسام المخصصة مبنية بتصميم متجاوب (`clamp()` و CSS Grid/Flexbox) مع معالجة آمنة لحالات غياب بيانات Firestore (الرجوع التلقائي إلى `localStorage` ثم `weddingConfig.js`).
 
 ---
 

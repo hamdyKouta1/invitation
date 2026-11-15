@@ -5,7 +5,10 @@ import { Share2, Copy, Check, MessageCircle } from 'lucide-react';
 import { buildWhatsAppUrl, copyToClipboard, nativeShare, canNativeShare } from '../../utils/shareUtils';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
+import { ThemeHeaderCrest } from '../ui/ThemeVisuals';
 import useAnalytics, { EVENTS } from '../../hooks/useAnalytics';
+import weddingConfig from '../../config/weddingConfig';
+import useWeddingConfig from '../../hooks/useWeddingConfig';
 import './ShareInvitation.css';
 
 const ShareInvitation = () => {
@@ -13,6 +16,18 @@ const ShareInvitation = () => {
   const { track } = useAnalytics();
   const [copied, setCopied] = useState(false);
   const lang = i18n.language;
+  const isAr = lang === 'ar';
+  const liveConfig = useWeddingConfig() || weddingConfig;
+
+  if (liveConfig.sections?.share?.enabled === false) return null;
+
+  const secCfg = liveConfig.sections?.share || {};
+  const sectionTitle = isAr
+    ? (secCfg.titleAr || t('share.title'))
+    : (secCfg.titleEn || t('share.title'));
+  const sectionSubtitle = isAr
+    ? (secCfg.subtitleAr || t('share.subtitle'))
+    : (secCfg.subtitleEn || t('share.subtitle'));
 
   const handleWhatsApp = () => {
     track(EVENTS.SHARE_CLICKED, { method: 'whatsapp' });
@@ -36,8 +51,9 @@ const ShareInvitation = () => {
   return (
     <SectionWrapper id="share">
       <div className="section__header">
-        <h2 className="section__title font-serif">{t('share.title')}</h2>
-        <p className="section__subtitle">{t('share.subtitle')}</p>
+        <ThemeHeaderCrest sectionIndex="11" />
+        <h2 className="section__title font-serif">{sectionTitle}</h2>
+        <p className="section__subtitle">{sectionSubtitle}</p>
         <OrnamentDivider symbol="✦" />
       </div>
 
