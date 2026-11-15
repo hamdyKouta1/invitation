@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 900" fill="none">
+  <defs>
+    <radialGradient id="rcBg" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#114636"/>
+      <stop offset="60%" stop-color="#072A20"/>
+      <stop offset="100%" stop-color="#041913"/>
+    </radialGradient>
+    <linearGradient id="imperialGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF0B8"/>
+      <stop offset="35%" stop-color="#D4AF37"/>
+      <stop offset="70%" stop-color="#9A761C"/>
+      <stop offset="100%" stop-color="#E6C65A"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="900" fill="url(#rcBg)"/>
+
+  <!-- Outer Baroque Palace Border -->
+  <rect x="45" y="45" width="710" height="810" stroke="url(#imperialGold)" stroke-width="3"/>
+  <rect x="60" y="60" width="680" height="780" stroke="url(#imperialGold)" stroke-width="1.2"/>
+
+  <!-- Palace Parchment Trefoil Cathedral Arch -->
+  <path d="M145 790 V350 C145 210 265 130 400 105 C535 130 655 210 655 350 V790 Z" fill="#F9F4E8" stroke="url(#imperialGold)" stroke-width="4"/>
+  <path d="M165 772 V355 C165 225 275 150 400 128 C525 150 635 225 635 355 V772 Z" fill="none" stroke="#721121" stroke-width="1.5" stroke-dasharray="8 4"/>
+
+  <!-- Imperial Crown & Heraldic Crest at Arch Apex -->
+  <g transform="translate(400, 82)">
+    <polygon points="-45,10 -30,-22 -12,-4 0,-30 12,-4 30,-22 45,10" fill="url(#imperialGold)" stroke="#721121" stroke-width="1.5"/>
+    <rect x="-45" y="10" width="90" height="10" rx="3" fill="#721121" stroke="url(#imperialGold)" stroke-width="1.2"/>
+    <circle cx="0" cy="-34" r="5" fill="#FFF0B8"/>
+    <circle cx="-30" cy="-25" r="4" fill="#721121"/>
+    <circle cx="30" cy="-25" r="4" fill="#721121"/>
+  </g>
+
+  <!-- Royal Velvet Drapery Swags inside Arch -->
+  <path d="M165 270 Q280 330 400 210 Q520 330 635 270 L635 190 Q510 135 400 128 Q290 135 165 190 Z" fill="#721121" fill-opacity="0.16" stroke="url(#imperialGold)" stroke-width="1.5"/>
+
+  <!-- Royal Couple Portrait in Palace Hall -->
+  <g transform="translate(0, 20)">
+    <!-- Groom in Imperial Ceremonial Tailcoat with Gold Epaulettes -->
+    <circle cx="355" cy="330" r="31" fill="#0A3528" stroke="url(#imperialGold)" stroke-width="2.2"/>
+    <!-- Gold Epaulettes -->
+    <ellipse cx="305" cy="382" rx="18" ry="8" fill="url(#imperialGold)"/>
+    <ellipse cx="405" cy="382" rx="18" ry="8" fill="url(#imperialGold)"/>
+    <path d="M292 720 L305 382 L405 382 L416 720 Z" fill="#072A20" stroke="url(#imperialGold)" stroke-width="2"/>
+    <!-- Royal Crimson Sash -->
+    <path d="M312 382 L402 530 L388 545 L298 395 Z" fill="#721121" stroke="url(#imperialGold)" stroke-width="1.2"/>
+    <!-- Bride in Royal Ballgown & Imperial Tiara -->
+    <circle cx="452" cy="345" r="29" fill="#0A3528" stroke="url(#imperialGold)" stroke-width="2.2"/>
+    <polygon points="430,322 441,304 452,315 463,304 474,322" fill="url(#imperialGold)"/>
+    <path d="M415 405 C428 385 476 385 488 405 L585 720 L365 720 Z" fill="#0A3528" fill-opacity="0.9" stroke="url(#imperialGold)" stroke-width="2.5"/>
+    <!-- Baroque Gold Embroidery on Royal Gown -->
+    <path d="M452 405 V720" stroke="url(#imperialGold)" stroke-width="1.8" stroke-dasharray="6 4"/>
+    <circle cx="452" cy="520" r="10" fill="url(#imperialGold)"/>
+    <circle cx="452" cy="600" r="14" fill="url(#imperialGold)"/>
+  </g>
+
+  <!-- Royal Scroll Banner at Base -->
+  <rect x="220" y="742" width="360" height="36" rx="6" fill="#721121" stroke="url(#imperialGold)" stroke-width="2"/>
+  <text x="400" y="765" text-anchor="middle" fill="#F9F4E8" font-family="Cinzel, serif" font-size="14" letter-spacing="6">IMPERIAL ROYAL DECREE</text>
+</svg>

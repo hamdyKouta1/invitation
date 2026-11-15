@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 720" fill="none">
+      <defs>
+        <linearGradient id="gBg2" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#FFF9FA"/>
+          <stop offset="100%" stop-color="#F6E0E5"/>
+        </linearGradient>
+      </defs>
+      <rect width="600" height="720" fill="url(#gBg2)"/>
+      <rect x="28" y="28" width="544" height="664" stroke="#C86D7E" stroke-width="2" opacity="0.75"/>
+      <rect x="42" y="42" width="516" height="636" stroke="#7A9A8B" stroke-width="1" stroke-dasharray="6 4" opacity="0.55"/>
+      <text x="300" y="95" text-anchor="middle" fill="#C86D7E" font-family="sans-serif" font-size="13" letter-spacing="6" opacity="0.85">FOREVER & ALWAYS</text>
+      <g transform="translate(0, 65)">
+        <g stroke="#C86D7E" stroke-width="2.5" fill="none">
+        <path d="M260 170 L275 245 C278 265 252 265 255 245 Z"/>
+        <line x1="265" y1="260" x2="265" y2="320"/>
+        <line x1="245" y1="320" x2="285" y2="320"/>
+        <path d="M340 170 L325 245 C322 265 348 265 345 245 Z"/>
+        <line x1="335" y1="260" x2="335" y2="320"/>
+        <line x1="315" y1="320" x2="355" y2="320"/>
+        <circle cx="300" cy="145" r="5" fill="#7A9A8B"/>
+        <circle cx="285" cy="130" r="3.5" fill="#C86D7E"/>
+        <circle cx="315" cy="132" r="4" fill="#C86D7E"/>
+      </g>
+      </g>
+      <line x1="180" y1="490" x2="420" y2="490" stroke="#C86D7E" stroke-width="1.2" opacity="0.6"/>
+      <text x="300" y="545" text-anchor="middle" fill="#4A252C" font-family="Lora, serif" font-size="26">Heirloom Rings in Roses</text>
+      <text x="300" y="590" text-anchor="middle" fill="#C86D7E" font-family="sans-serif" font-size="22">خواتم المحبة بين الزهور</text>
+    </svg>

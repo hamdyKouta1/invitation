@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" fill="none">
+  <rect width="600" height="400" fill="#110E0B"/>
+  <rect x="18" y="18" width="564" height="364" stroke="#D4AF37" stroke-width="2"/>
+  <rect x="28" y="28" width="544" height="344" stroke="#D4AF37" stroke-width="0.8" stroke-dasharray="6 4"/>
+  <!-- Corner Art Deco Fans -->
+  <path d="M18 70 L70 18 M18 95 L95 18 M582 70 L530 18 M582 95 L505 18 M18 330 L70 382 M582 330 L530 382" stroke="#D4AF37" stroke-width="1.2" opacity="0.7"/>
+  <polygon points="300,55 314,75 300,95 286,75" fill="#D4AF37"/>
+  <text x="300" y="155" text-anchor="middle" fill="#F3E5AB" font-family="Cinzel, serif" font-size="22" letter-spacing="8">BLACK TIE GALA</text>
+  <text x="300" y="225" text-anchor="middle" fill="#D4AF37" font-family="Playfair Display, serif" font-style="italic" font-size="52">Save the Date</text>
+  <line x1="190" y1="265" x2="410" y2="265" stroke="#D4AF37" stroke-width="1.2"/>
+  <circle cx="300" cy="265" r="5" fill="#FFF3C4"/>
+  <text x="300" y="310" text-anchor="middle" fill="#C8B99E" font-family="Montserrat, sans-serif" font-size="14" letter-spacing="5">24K EDITION • VIP INVITATION</text>
+</svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 720" fill="none">
+      <defs>
+        <linearGradient id="gBg3" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#FFF9FA"/>
+          <stop offset="100%" stop-color="#F6E0E5"/>
+        </linearGradient>
+      </defs>
+      <rect width="600" height="720" fill="url(#gBg3)"/>
+      <rect x="28" y="28" width="544" height="664" stroke="#C86D7E" stroke-width="2" opacity="0.75"/>
+      <rect x="42" y="42" width="516" height="636" stroke="#7A9A8B" stroke-width="1" stroke-dasharray="6 4" opacity="0.55"/>
+      <text x="300" y="95" text-anchor="middle" fill="#C86D7E" font-family="sans-serif" font-size="13" letter-spacing="6" opacity="0.85">DREAMY LIGHT</text>
+      <g transform="translate(0, 65)">
+        <g stroke="#C86D7E" stroke-width="2" fill="none">
+        <polygon points="300,150 315,205 370,220 315,235 300,290 285,235 230,220 285,205" fill="#C86D7E" fill-opacity="0.25"/>
+        <circle cx="235" cy="165" r="5" fill="#7A9A8B"/>
+        <circle cx="365" cy="175" r="4" fill="#7A9A8B"/>
+        <circle cx="355" cy="285" r="6" fill="#C86D7E"/>
+      </g>
+      </g>
+      <line x1="180" y1="490" x2="420" y2="490" stroke="#C86D7E" stroke-width="1.2" opacity="0.6"/>
+      <text x="300" y="545" text-anchor="middle" fill="#4A252C" font-family="Lora, serif" font-size="26">Golden Hour in the Meadow</text>
+      <text x="300" y="590" text-anchor="middle" fill="#C86D7E" font-family="sans-serif" font-size="22">لحظات الغروب الرومانسية</text>
+    </svg>

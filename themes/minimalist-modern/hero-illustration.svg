@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 900" fill="none">
+  <rect width="800" height="900" fill="#FAF9F6"/>
+  <!-- Architectural Offset Blocks -->
+  <rect x="90" y="90" width="520" height="680" fill="#F0EDE6"/>
+  <rect x="210" y="160" width="490" height="640" fill="#E5E0D5" opacity="0.65"/>
+  <!-- Olive Cypress Geometric Accent Arch -->
+  <path d="M230 740 V350 A180 180 0 0 1 590 350 V740 Z" fill="#6B705C" fill-opacity="0.16"/>
+  <!-- Crisp Editorial Hairline Frame -->
+  <rect x="130" y="120" width="540" height="660" stroke="#181818" stroke-width="2"/>
+  <line x1="130" y1="180" x2="670" y2="180" stroke="#181818" stroke-width="1"/>
+  <text x="155" y="156" fill="#181818" font-family="Plus Jakarta Sans, sans-serif" font-size="13" letter-spacing="5">ISSUE NO. 01 — EDITORIAL</text>
+  <text x="645" y="156" text-anchor="end" fill="#6B705C" font-family="Plus Jakarta Sans, sans-serif" font-size="13" letter-spacing="3">MMXXVI</text>
+
+  <!-- Minimalist Fine-Line Continuous Art Couple -->
+  <g stroke="#181818" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Groom Abstract Fine-Art Contour -->
+    <circle cx="360" cy="320" r="34" fill="#FAF9F6"/>
+    <path d="M295 720 L310 415 C312 385 335 370 365 370 C395 370 412 388 415 420 L422 720" fill="#181818"/>
+    <polygon points="345,370 378,370 362,445" fill="#FAF9F6"/>
+    <!-- Bride Modern Architectural Gown -->
+    <circle cx="458" cy="340" r="30" fill="#FAF9F6"/>
+    <path d="M430 398 C442 385 478 385 490 398 L535 720 L385 720 L422 480 Z" fill="#FAF9F6" stroke="#181818" stroke-width="2.5"/>
+    <!-- Minimalist Botanical Olive Branch Accent -->
+    <path d="M440 530 Q490 480 545 440" stroke="#6B705C" stroke-width="2"/>
+    <ellipse cx="475" cy="495" rx="14" ry="6" transform="rotate(-35 475 495)" fill="#6B705C" stroke="none"/>
+    <ellipse cx="505" cy="470" rx="14" ry="6" transform="rotate(-35 505 470)" fill="#6B705C" stroke="none"/>
+    <ellipse cx="495" cy="505" rx="13" ry="5" transform="rotate(15 495 505)" fill="#6B705C" stroke="none"/>
+  </g>
+
+  <!-- Crosshair Registration Marks -->
+  <g stroke="#181818" stroke-width="1.2">
+    <line x1="90" y1="820" x2="130" y2="820"/>
+    <line x1="110" y1="800" x2="110" y2="840"/>
+    <line x1="670" y1="820" x2="710" y2="820"/>
+    <line x1="690" y1="800" x2="690" y2="840"/>
+  </g>
+</svg>
