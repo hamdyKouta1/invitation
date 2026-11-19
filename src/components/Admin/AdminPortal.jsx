@@ -1148,6 +1148,7 @@ const AdminPortal = ({ onClose }) => {
               saving={savingConfig}
               onSelectTheme={(id) => handleConfigChange(null, 'theme', id)}
               onApplyAndSaveTheme={handleApplyAndSaveTheme}
+              onCloseAdmin={onClose}
             />
           </div>
         )}
@@ -1208,6 +1209,7 @@ const AdminPortal = ({ onClose }) => {
                   saving={savingConfig}
                   onSelectTheme={(id) => handleConfigChange(null, 'theme', id)}
                   onApplyAndSaveTheme={handleApplyAndSaveTheme}
+                  onCloseAdmin={onClose}
                 />
               </div>
 

@@ -7,8 +7,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { submitRSVP, checkAlreadySubmitted } from '../../services/index.js';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
+import { ThemeHeaderCrest } from '../ui/ThemeVisuals';
 import useAnalytics, { EVENTS } from '../../hooks/useAnalytics';
 import weddingConfig from '../../config/weddingConfig';
+import { useWeddingConfig } from '../../hooks/useWeddingConfig';
 import './RSVP.css';
 
 const buildSchema = (t, maxGuests) =>
@@ -25,8 +27,9 @@ const buildSchema = (t, maxGuests) =>
 const RSVP = ({ onWishesUpdated }) => {
   const { t, i18n } = useTranslation();
   const isAr = i18n.language === 'ar';
-  const groomName = isAr ? weddingConfig.groom.name : weddingConfig.groom.nameEn;
-  const brideName = isAr ? weddingConfig.bride.name : weddingConfig.bride.nameEn;
+  const liveConfig = useWeddingConfig() || weddingConfig;
+  const groomName = isAr ? liveConfig.groom.name : liveConfig.groom.nameEn;
+  const brideName = isAr ? liveConfig.bride.name : liveConfig.bride.nameEn;
   const { track } = useAnalytics();
   const [status, setStatus] = useState(
     checkAlreadySubmitted() ? 'already_submitted' : 'idle'
@@ -73,11 +76,12 @@ const RSVP = ({ onWishesUpdated }) => {
     }
   };
 
-  if (!weddingConfig.rsvp.enabled) return null;
+  if (!liveConfig.rsvp?.enabled) return null;
 
   return (
     <SectionWrapper id="rsvp" alt>
       <div className="section__header">
+        <ThemeHeaderCrest sectionIndex="08" />
         <h2 className="section__title font-serif">{t('rsvp.title')}</h2>
         <p className="section__subtitle">{t('rsvp.subtitle')}</p>
         <OrnamentDivider symbol="✦" />

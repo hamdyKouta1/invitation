@@ -115,7 +115,7 @@ export const syncConfigWithFirestore = async (getWeddingConfigFromDB, saveWeddin
       const currentActive = getActiveConfig();
       applyThemeToDOM(currentActive.theme);
 
-      const firebaseEnabled = import.meta?.env?.VITE_FIREBASE_ENABLED === 'true';
+      const firebaseEnabled = import.meta.env.VITE_FIREBASE_ENABLED === 'true';
       if (firebaseEnabled && saveWeddingConfigToDB) {
         console.info('[ConfigManager] No config in Firestore yet. Uploading weddingConfig to Firestore...');
         await saveWeddingConfigToDB(currentActive);

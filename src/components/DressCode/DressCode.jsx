@@ -3,6 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
+import { ThemeHeaderCrest } from '../ui/ThemeVisuals';
+import weddingConfig from '../../config/weddingConfig';
+import { useWeddingConfig } from '../../hooks/useWeddingConfig';
 import './DressCode.css';
 
 const SuitIcon = () => (
@@ -44,10 +47,14 @@ const WOMEN_COLORS = [
 const DressCode = () => {
   const { t, i18n } = useTranslation();
   const isAr = i18n.language === 'ar';
+  const liveConfig = useWeddingConfig() || weddingConfig;
+
+  if (!liveConfig.dressCode?.enabled) return null;
 
   return (
     <SectionWrapper id="dress-code" alt>
       <div className="section__header">
+        <ThemeHeaderCrest sectionIndex="07" />
         <h2 className="section__title font-serif">{t('dressCode.title')}</h2>
         <p className="section__subtitle">{t('dressCode.subtitle')}</p>
         <OrnamentDivider symbol="✦" />

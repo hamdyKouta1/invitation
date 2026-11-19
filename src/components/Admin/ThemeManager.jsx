@@ -1,43 +1,54 @@
 import React, { useState } from 'react';
 import {
   Palette,
-  CheckCircle,
   Eye,
+  Check,
   Sparkles,
   RotateCcw,
   X,
-  Check,
+  Type,
   Layers,
+  CheckCircle2,
+  Image as ImageIcon,
+  Wand2,
+  LayoutGrid,
+  ExternalLink,
 } from 'lucide-react';
 import {
   WEDDING_THEMES,
   DEFAULT_THEME_ID,
   getThemeById,
+  setTemporaryThemePreview,
+  clearTemporaryThemePreview,
 } from '../../config/themesConfig';
+import { getAssetUrl } from '../../utils/assetUtils';
+import FloralCornerSVG from '../ui/FloralCornerSVG';
+import OrnamentDivider from '../ui/OrnamentDivider';
+import { ThemeHeaderCrest, ThemeSealIcon } from '../ui/ThemeVisuals';
 import './ThemeManager.css';
 
 const ThemeManager = ({
   activeThemeId = DEFAULT_THEME_ID,
-  selectedThemeId = DEFAULT_THEME_ID,
   configData = {},
   saving = false,
   onSelectTheme,
   onApplyAndSaveTheme,
+  onCloseAdmin,
 }) => {
-  const [previewThemeId, setPreviewThemeId] = useState(null);
-  const [previewScene, setPreviewScene] = useState('invitation'); // 'invitation' | 'envelope'
+  const [previewTheme, setPreviewTheme] = useState(null);
+  const [previewTab, setPreviewTab] = useState('hero'); // 'hero' | 'envelope' | 'gallery' | 'specs'
 
-  const currentActiveTheme = getThemeById(activeThemeId);
-  const previewTheme = previewThemeId ? getThemeById(previewThemeId) : null;
-
-  const groomAr = configData?.groom?.name || 'حمدى';
-  const brideAr = configData?.bride?.name || 'رودينا';
+  const groomAr = configData?.groom?.name || 'حمـدى';
+  const brideAr = configData?.bride?.name || 'رودينـا';
   const groomEn = configData?.groom?.nameEn || 'Hamdy';
   const brideEn = configData?.bride?.nameEn || 'Rodina';
-  const dateDisplay = configData?.wedding?.dateDisplay || '١١ سبتمبر ٢٠٢٦';
-  const venueName = configData?.venue?.nameAr || 'حديقة جراند لامور';
+  const dateAr = configData?.wedding?.dateDisplay || '٢١ أغسطس ٢٠٢٦';
+  const venueAr = configData?.venue?.nameAr || 'قاعة اللؤلؤة ببورسعيد';
 
-  const handleCardApply = (themeId) => {
+  const currentActiveTheme = getThemeById(activeThemeId);
+
+  const handleApplyTheme = (themeId) => {
+    clearTemporaryThemePreview(themeId);
     if (onSelectTheme) {
       onSelectTheme(themeId);
     }
@@ -46,101 +57,140 @@ const ThemeManager = ({
     }
   };
 
+  const handleRestoreDefault = () => {
+    handleApplyTheme(DEFAULT_THEME_ID);
+  };
+
+  const handleLiveSitePreview = (themeId) => {
+    setTemporaryThemePreview(themeId);
+    setPreviewTheme(null);
+    if (onCloseAdmin) {
+      onCloseAdmin();
+    }
+  };
+
+  const getHeroImgSrc = (theme) => getAssetUrl(theme?.assets?.heroImage || '/couple-illustration.png');
+  const getHeroFallbackSrc = (theme) =>
+    theme?.assets?.heroFallbackSvg
+      ? getAssetUrl(theme.assets.heroFallbackSvg)
+      : getAssetUrl('/couple-illustration.png');
+
   return (
-    <div className="admin-theme-manager" id="admin-theme-manager">
-      {/* ─── Active Theme Status Bar ──────────────────────────── */}
-      <div className="admin-theme-status-bar">
-        <div className="admin-theme-status-bar__info">
-          <div className="admin-theme-status-bar__icon">
-            <Palette size={24} />
+    <div className="theme-manager">
+      {/* ─── Active Theme Status Banner ─── */}
+      <div className="theme-manager__status-bar">
+        <div className="theme-manager__status-info">
+          <div className="theme-manager__status-thumb-wrap">
+            <img
+              src={getHeroImgSrc(currentActiveTheme)}
+              onError={(e) => {
+                e.currentTarget.src = getHeroFallbackSrc(currentActiveTheme);
+              }}
+              alt={currentActiveTheme.nameAr}
+              className="theme-manager__status-thumb"
+            />
           </div>
           <div>
-            <span className="admin-theme-status-bar__label">
-              التصميم النشط والمطبق حالياً على الموقع (Active Theme):
+            <span className="theme-manager__status-label">
+              التصميم المفعّل حالياً على الموقع (Currently Active Theme):
             </span>
-            <div className="admin-theme-status-bar__active-name">
-              <span id="active-theme-indicator">{currentActiveTheme.nameAr}</span>
-              <div className="admin-theme-status-bar__swatches">
-                {currentActiveTheme.palette.map((swatch, idx) => (
-                  <span
-                    key={idx}
-                    className="admin-theme-status-bar__dot"
-                    style={{ backgroundColor: swatch.hex }}
-                    title={swatch.nameAr}
-                  />
-                ))}
-              </div>
+            <div className="theme-manager__status-title-row">
+              <strong className="theme-manager__status-name">{currentActiveTheme.nameAr}</strong>
+              <span className="theme-manager__badge theme-manager__badge--active">
+                <CheckCircle2 size={13} /> نشط ومفعّل
+              </span>
               {currentActiveTheme.isDefault && (
-                <span className="admin-badge admin-badge--gold">التصميم الأصلي الافتراضي</span>
+                <span className="theme-manager__badge theme-manager__badge--default">
+                  التصميم الأصلي الافتراضي
+                </span>
               )}
             </div>
           </div>
         </div>
 
-        <div className="admin-theme-status-bar__actions">
+        <div className="theme-manager__status-actions">
+          <div className="theme-manager__active-swatches" title="لوحة ألوان التصميم الحالي">
+            {currentActiveTheme.palette.map((swatch, idx) => (
+              <span
+                key={idx}
+                className="theme-manager__mini-swatch"
+                style={{ backgroundColor: swatch.hex }}
+                title={`${swatch.nameAr} (${swatch.hex})`}
+              />
+            ))}
+          </div>
+
           {activeThemeId !== DEFAULT_THEME_ID && (
             <button
               type="button"
-              onClick={() => handleCardApply(DEFAULT_THEME_ID)}
+              onClick={handleRestoreDefault}
               disabled={saving}
-              className="admin-btn admin-btn--outline"
-              id="btn-restore-default-theme"
-              title="إرجاع التصميم الأصلي الافتراضي"
+              className="theme-manager__restore-btn"
+              title="العودة إلى التصميم الأصلي للدعوة"
             >
-              <RotateCcw size={16} />
-              <span>استعادة التصميم الأصلي</span>
+              <RotateCcw size={15} />
+              <span>استعادة التصميم الأصلي (Default)</span>
             </button>
           )}
         </div>
       </div>
 
-      {/* ─── 5 Themes Cards Grid ──────────────────────────────── */}
-      <div className="admin-themes-grid">
+      {/* ─── Themes Grid (5 Complete Visual Themes) ─── */}
+      <div className="theme-manager__grid">
         {WEDDING_THEMES.map((theme) => {
-          const isActive = activeThemeId === theme.id;
-          const isSelected = selectedThemeId === theme.id;
+          const isCurrentActive = activeThemeId === theme.id;
           const p = theme.preview;
 
           return (
             <div
               key={theme.id}
-              id={`theme-card-${theme.id}`}
-              data-testid={`theme-card-${theme.id}`}
-              className={`admin-theme-card ${isActive ? 'admin-theme-card--active' : ''} ${
-                isSelected ? 'admin-theme-card--selected' : ''
-              }`}
+              className={`theme-card ${isCurrentActive ? 'theme-card--active' : ''}`}
             >
-              {/* Miniature Visual Invitation Preview */}
+              {/* ── Visual Mockup Stage with Actual Hero Artwork & Ornaments ── */}
               <div
-                className="admin-theme-mockup"
+                className={`theme-card__stage theme-card__stage--${theme.id}`}
                 style={{ background: p.bgGradient }}
-                onClick={() => setPreviewThemeId(theme.id)}
-                title="اضغط لمعاينة التصميم بالكامل"
+                onClick={() => {
+                  setPreviewTheme(theme);
+                  setPreviewTab('hero');
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label={`معاينة تصميم ${theme.nameAr}`}
+                onKeyDown={(e) => e.key === 'Enter' && setPreviewTheme(theme)}
               >
-                <div className="admin-theme-mockup__badges">
-                  <div>
-                    {isActive ? (
-                      <span className="admin-theme-pill admin-theme-pill--active">
-                        <CheckCircle size={13} /> نشط حالياً
-                      </span>
-                    ) : isSelected ? (
-                      <span className="admin-theme-pill admin-theme-pill--selected">
-                        <Sparkles size={13} /> محدد
-                      </span>
-                    ) : null}
-                  </div>
-                  <div>
-                    {theme.isDefault && (
-                      <span className="admin-theme-pill admin-theme-pill--default">
-                        الأصلي الافتراضي
-                      </span>
-                    )}
-                  </div>
+                {/* Top Status Badges */}
+                <div className="theme-card__badges">
+                  {theme.isDefault ? (
+                    <span className="theme-card__pill theme-card__pill--original">
+                      ★ التصميم الأصلي (Default)
+                    </span>
+                  ) : (
+                    <span className="theme-card__pill theme-card__pill--category">
+                      {theme.categoryAr}
+                    </span>
+                  )}
+
+                  {isCurrentActive && (
+                    <span className="theme-card__pill theme-card__pill--active">
+                      <Check size={12} /> مفعّل حالياً
+                    </span>
+                  )}
                 </div>
 
-                {/* Mini Hero Card */}
+                {/* Theme-Specific Corner Ornaments inside Stage */}
+                <FloralCornerSVG
+                  themeOverride={theme.id}
+                  className="theme-card__corner theme-card__corner--tl"
+                />
+                <FloralCornerSVG
+                  themeOverride={theme.id}
+                  className="theme-card__corner theme-card__corner--br"
+                />
+
+                {/* Miniature Invitation Card with Actual Theme Hero Image */}
                 <div
-                  className="admin-theme-mockup__card"
+                  className={`theme-card__mini-invite theme-card__mini-invite--${theme.layout?.heroVariant || 'classic-arch'}`}
                   style={{
                     background: p.cardBg,
                     border: p.cardBorder,
@@ -148,122 +198,167 @@ const ThemeManager = ({
                     color: p.textPrimary,
                   }}
                 >
-                  <span
-                    className="admin-theme-mockup__ornament"
-                    style={{ color: p.accent }}
-                  >
-                    {p.ornament} SAVE THE DATE {p.ornament}
-                  </span>
-                  <div
-                    className="admin-theme-mockup__names"
-                    style={{
-                      fontFamily: `'${theme.typography.displayAr}', serif`,
-                      color: p.textPrimary,
-                    }}
-                  >
-                    {groomAr} &amp; {brideAr}
+                  <div className="theme-card__mini-thumb-frame">
+                    <img
+                      src={getHeroImgSrc(theme)}
+                      onError={(e) => {
+                        e.currentTarget.src = getHeroFallbackSrc(theme);
+                      }}
+                      alt={theme.nameEn}
+                      className="theme-card__mini-hero-img"
+                      loading="lazy"
+                    />
                   </div>
-                  <div
-                    style={{
-                      fontSize: '0.78rem',
-                      fontFamily: `'${theme.typography.displayEn}', serif`,
-                      color: p.accent,
-                    }}
-                  >
-                    {groomEn} &amp; {brideEn}
+
+                  <div className="theme-card__mini-meta">
+                    <span
+                      className="theme-card__mini-ornament"
+                      style={{ color: p.accent }}
+                    >
+                      {p.ornament} {theme.layout?.heroLabelEn?.split(' ')[0]} {p.ornament}
+                    </span>
+                    <div
+                      className="theme-card__mini-names"
+                      style={{
+                        color: p.textPrimary,
+                        fontFamily: `'${theme.typography.displayAr}', serif`,
+                      }}
+                    >
+                      {groomAr} <span style={{ color: p.accent }}>&amp;</span> {brideAr}
+                    </div>
+                    <div
+                      className="theme-card__mini-date"
+                      style={{ color: p.textSecondary }}
+                    >
+                      {dateAr}
+                    </div>
                   </div>
-                  <span
-                    className="admin-theme-mockup__date"
-                    style={{ color: p.textSecondary }}
-                  >
-                    {dateDisplay}
-                  </span>
-                  <span
-                    className="admin-theme-mockup__btn"
-                    style={{
-                      background: p.buttonBg,
-                      color: p.buttonText,
-                      borderRadius: p.buttonRadius,
-                    }}
-                  >
-                    تأكيد الحضور
-                  </span>
                 </div>
 
-                {/* Mini Wax Seal Indicator */}
-                <div
-                  className="admin-theme-mockup__seal"
-                  style={{ background: p.sealBg }}
-                  title="شكل الختم الشمعي للظرف"
-                >
-                  ♥
+                {/* Quick Hover Overlay */}
+                <div className="theme-card__stage-overlay">
+                  <span className="theme-card__stage-preview-cta">
+                    <Eye size={16} /> معاينة الهوية البصرية الكاملة
+                  </span>
                 </div>
               </div>
 
-              {/* Card Body */}
-              <div className="admin-theme-card__body">
-                <div>
-                  <span className="admin-theme-card__category">
-                    {theme.categoryAr} • {theme.categoryEn}
-                  </span>
-                  <h4 className="admin-theme-card__title">{theme.nameAr}</h4>
+              {/* ── Card Details Body ── */}
+              <div className="theme-card__body">
+                <div className="theme-card__header">
+                  <div>
+                    <h4 className="theme-card__title">{theme.nameAr}</h4>
+                    <span className="theme-card__subtitle">{theme.nameEn}</span>
+                  </div>
                 </div>
 
-                <p className="admin-theme-card__desc">{theme.descriptionAr}</p>
+                <p className="theme-card__desc">{theme.descriptionAr}</p>
 
-                {/* Color Palette Swatches */}
-                <div className="admin-theme-swatches">
-                  {theme.palette.map((c, idx) => (
-                    <span
-                      key={idx}
-                      className="admin-theme-swatch"
-                      style={{ backgroundColor: c.hex }}
-                      title={`${c.nameAr} (${c.hex})`}
-                    />
-                  ))}
-                  <span className="admin-theme-swatches__label">لوحة الألوان</span>
+                {/* 4 Visual Identity Pillars (Images, Gallery, Icons, Motion) */}
+                <div className="theme-card__pillars">
+                  <div className="theme-card__pillar">
+                    <ImageIcon size={13} className="theme-card__pillar-icon" />
+                    <div>
+                      <span className="theme-card__pillar-label">الصورة والإطار:</span>
+                      <strong className="theme-card__pillar-val">{theme.assets?.imageFrameLabelAr}</strong>
+                    </div>
+                  </div>
+                  <div className="theme-card__pillar">
+                    <LayoutGrid size={13} className="theme-card__pillar-icon" />
+                    <div>
+                      <span className="theme-card__pillar-label">تخطيط المعرض:</span>
+                      <strong className="theme-card__pillar-val">{theme.assets?.galleryLayoutLabelAr}</strong>
+                    </div>
+                  </div>
+                  <div className="theme-card__pillar">
+                    <Sparkles size={13} className="theme-card__pillar-icon" />
+                    <div>
+                      <span className="theme-card__pillar-label">الأيقونات والزخارف:</span>
+                      <strong className="theme-card__pillar-val">{theme.icons?.labelAr}</strong>
+                    </div>
+                  </div>
+                  <div className="theme-card__pillar">
+                    <Wand2 size={13} className="theme-card__pillar-icon" />
+                    <div>
+                      <span className="theme-card__pillar-label">الحركات والمؤثرات:</span>
+                      <strong className="theme-card__pillar-val">{theme.animations?.labelAr}</strong>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Font Combinations */}
-                <div className="admin-theme-fonts">
-                  <span className="admin-theme-font-tag" title="English Display Font">
-                    EN: {theme.typography.displayEn}
+                {/* Palette Swatches */}
+                <div className="theme-card__meta-section">
+                  <span className="theme-card__meta-label">
+                    <Palette size={13} /> لوحة الألوان (Color Palette):
                   </span>
-                  <span className="admin-theme-font-tag" title="Arabic Font">
-                    AR: {theme.typography.displayAr} / {theme.typography.bodyAr}
-                  </span>
+                  <div className="theme-card__swatches">
+                    {theme.palette.map((sw, i) => (
+                      <div key={i} className="theme-card__swatch-item" title={`${sw.nameAr} (${sw.hex})`}>
+                        <span
+                          className="theme-card__swatch-circle"
+                          style={{ backgroundColor: sw.hex }}
+                        />
+                        <span className="theme-card__swatch-name">{sw.nameAr}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
-                {/* Actions */}
-                <div className="admin-theme-card__actions">
+                {/* Typography Info */}
+                <div className="theme-card__meta-section">
+                  <span className="theme-card__meta-label">
+                    <Type size={13} /> الخطوط (Typography):
+                  </span>
+                  <div className="theme-card__fonts-row">
+                    <span className="theme-card__font-tag">{theme.typography.displayEn}</span>
+                    <span className="theme-card__font-tag">{theme.typography.headingEn}</span>
+                    <span className="theme-card__font-tag">{theme.typography.displayAr}</span>
+                  </div>
+                </div>
+
+                {/* Card Actions */}
+                <div className="theme-card__actions">
                   <button
                     type="button"
-                    className="admin-theme-btn admin-theme-btn--preview"
-                    onClick={() => setPreviewThemeId(theme.id)}
-                    id={`btn-preview-theme-${theme.id}`}
+                    className="theme-card__btn theme-card__btn--preview"
+                    onClick={() => {
+                      setPreviewTheme(theme);
+                      setPreviewTab('hero');
+                    }}
                   >
                     <Eye size={15} />
-                    <span>معاينة</span>
+                    <span>معاينة التفاصيل</span>
                   </button>
+
+                  {onCloseAdmin && (
+                    <button
+                      type="button"
+                      className="theme-card__btn theme-card__btn--live"
+                      onClick={() => handleLiveSitePreview(theme.id)}
+                      title="معاينة التصميم مباشرة على صفحات الموقع دون حفظه حتى تعتمد التغيير"
+                    >
+                      <ExternalLink size={14} />
+                      <span>تجربة حية</span>
+                    </button>
+                  )}
 
                   <button
                     type="button"
-                    disabled={saving}
-                    className={`admin-theme-btn ${
-                      isActive ? 'admin-theme-btn--applied' : 'admin-theme-btn--apply'
+                    disabled={saving || isCurrentActive}
+                    className={`theme-card__btn ${
+                      isCurrentActive ? 'theme-card__btn--applied' : 'theme-card__btn--apply'
                     }`}
-                    onClick={() => handleCardApply(theme.id)}
-                    id={`btn-apply-theme-${theme.id}`}
+                    onClick={() => handleApplyTheme(theme.id)}
                   >
-                    {isActive ? (
+                    {isCurrentActive ? (
                       <>
-                        <Check size={16} />
-                        <span>مطبق حالياً</span>
+                        <Check size={15} />
+                        <span>التصميم المفعّل</span>
                       </>
                     ) : (
                       <>
-                        <Sparkles size={16} />
-                        <span>تفعيل وتطبيق</span>
+                        <Sparkles size={15} />
+                        <span>{saving ? 'جارٍ الحفظ...' : 'تفعيل وحفظ'}</span>
                       </>
                     )}
                   </button>
@@ -274,375 +369,369 @@ const ThemeManager = ({
         })}
       </div>
 
-      {/* ─── Interactive Full Theme Preview Modal ─────────────── */}
+      {/* ─── Interactive Full Visual System Preview Modal ─── */}
       {previewTheme && (
         <div
-          className="admin-theme-preview-overlay"
+          className="theme-preview-modal-overlay"
+          onClick={() => setPreviewTheme(null)}
           role="dialog"
           aria-modal="true"
           aria-label={`معاينة تصميم ${previewTheme.nameAr}`}
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setPreviewThemeId(null);
-          }}
         >
-          <div className="admin-theme-preview-modal">
-            {/* Header */}
-            <div className="admin-theme-preview-modal__header">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-                <Layers size={20} style={{ color: '#d4af37' }} />
+          <div
+            className="theme-preview-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Top Header */}
+            <div className="theme-preview-modal__header">
+              <div className="theme-preview-modal__title-wrap">
+                <Palette size={20} className="theme-preview-modal__icon" />
                 <div>
-                  <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#f8f4ef' }}>
-                    معاينة حية: {previewTheme.nameAr}
+                  <h3 className="theme-preview-modal__title">
+                    معاينة الهوية البصرية الكاملة: {previewTheme.nameAr}
                   </h3>
-                  <span style={{ fontSize: '0.78rem', color: '#a89f91' }}>
-                    {previewTheme.nameEn} — {previewTheme.descriptionEn}
-                  </span>
+                  <span className="theme-preview-modal__sub">{previewTheme.nameEn}</span>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <div className="admin-theme-preview-modal__tabs">
-                  <button
-                    type="button"
-                    className={`admin-theme-preview-tab ${
-                      previewScene === 'invitation' ? 'admin-theme-preview-tab--active' : ''
-                    }`}
-                    onClick={() => setPreviewScene('invitation')}
-                  >
-                    واجهة الدعوة والأقسام
-                  </button>
-                  <button
-                    type="button"
-                    className={`admin-theme-preview-tab ${
-                      previewScene === 'envelope' ? 'admin-theme-preview-tab--active' : ''
-                    }`}
-                    onClick={() => setPreviewScene('envelope')}
-                  >
-                    شاشة الظرف والختم
-                  </button>
-                </div>
-
+              {/* 4-Tab Preview Switcher */}
+              <div className="theme-preview-modal__mode-tabs">
                 <button
                   type="button"
-                  onClick={() => setPreviewThemeId(null)}
-                  className="admin-modal-close"
-                  id="btn-close-theme-preview"
-                  title="إغلاق المعاينة"
+                  className={`theme-preview-modal__mode-btn ${
+                    previewTab === 'hero' ? 'theme-preview-modal__mode-btn--active' : ''
+                  }`}
+                  onClick={() => setPreviewTab('hero')}
                 >
-                  <X size={20} />
+                  <Layers size={14} />
+                  <span>البطاقة والصورة (Hero)</span>
+                </button>
+                <button
+                  type="button"
+                  className={`theme-preview-modal__mode-btn ${
+                    previewTab === 'envelope' ? 'theme-preview-modal__mode-btn--active' : ''
+                  }`}
+                  onClick={() => setPreviewTab('envelope')}
+                >
+                  <Sparkles size={14} />
+                  <span>الظرف والختم (Envelope)</span>
+                </button>
+                <button
+                  type="button"
+                  className={`theme-preview-modal__mode-btn ${
+                    previewTab === 'gallery' ? 'theme-preview-modal__mode-btn--active' : ''
+                  }`}
+                  onClick={() => setPreviewTab('gallery')}
+                >
+                  <LayoutGrid size={14} />
+                  <span>المعرض والصور (Gallery)</span>
+                </button>
+                <button
+                  type="button"
+                  className={`theme-preview-modal__mode-btn ${
+                    previewTab === 'specs' ? 'theme-preview-modal__mode-btn--active' : ''
+                  }`}
+                  onClick={() => setPreviewTab('specs')}
+                >
+                  <Wand2 size={14} />
+                  <span>الأيقونات والخطوط والحركات</span>
                 </button>
               </div>
+
+              <button
+                type="button"
+                className="theme-preview-modal__close"
+                onClick={() => setPreviewTheme(null)}
+                aria-label="إغلاق المعاينة"
+              >
+                <X size={20} />
+              </button>
             </div>
 
-            {/* Quick Theme Switcher Strip inside Modal */}
+            {/* Modal Live Stage */}
             <div
-              style={{
-                display: 'flex',
-                gap: '0.5rem',
-                padding: '0.65rem 1.5rem',
-                background: '#151210',
-                borderBottom: '1px solid rgba(255,255,255,0.06)',
-                overflowX: 'auto',
-              }}
-            >
-              {WEDDING_THEMES.map((tItem) => (
-                <button
-                  key={tItem.id}
-                  type="button"
-                  onClick={() => setPreviewThemeId(tItem.id)}
-                  style={{
-                    background:
-                      previewTheme.id === tItem.id
-                        ? 'rgba(212, 175, 55, 0.2)'
-                        : 'rgba(255,255,255,0.04)',
-                    border:
-                      previewTheme.id === tItem.id
-                        ? '1px solid #d4af37'
-                        : '1px solid rgba(255,255,255,0.08)',
-                    color: previewTheme.id === tItem.id ? '#d4af37' : '#c4b5a0',
-                    padding: '0.35rem 0.75rem',
-                    borderRadius: '8px',
-                    fontSize: '0.8rem',
-                    cursor: 'pointer',
-                    whiteSpace: 'nowrap',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.4rem',
-                  }}
-                >
-                  <span
-                    style={{
-                      width: 10,
-                      height: 10,
-                      borderRadius: '50%',
-                      background: tItem.preview.accent,
-                      display: 'inline-block',
-                    }}
-                  />
-                  {tItem.nameAr}
-                </button>
-              ))}
-            </div>
-
-            {/* Interactive Preview Stage */}
-            <div
-              className="admin-theme-preview-stage"
+              className="theme-preview-modal__viewport"
               style={{ background: previewTheme.preview.bgGradient }}
             >
-              {previewScene === 'envelope' ? (
-                /* Envelope Mockup Scene */
+              {/* Corner Ornaments in Viewport */}
+              <FloralCornerSVG
+                themeOverride={previewTheme.id}
+                className="theme-preview-viewport__corner theme-preview-viewport__corner--tl"
+              />
+              <FloralCornerSVG
+                themeOverride={previewTheme.id}
+                className="theme-preview-viewport__corner theme-preview-viewport__corner--br"
+              />
+
+              {/* TAB 1: HERO & IMAGE FRAME PREVIEW */}
+              {previewTab === 'hero' && (
                 <div
+                  className="theme-preview-invite-card"
                   style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '1.25rem',
-                    padding: '1.5rem 0',
+                    background: previewTheme.preview.cardBg,
+                    border: previewTheme.preview.cardBorder,
+                    borderRadius: previewTheme.preview.cardRadius,
+                    color: previewTheme.preview.textPrimary,
                   }}
                 >
-                  <span
-                    style={{
-                      color: previewTheme.preview.accent,
-                      letterSpacing: '0.25em',
-                      fontSize: '0.85rem',
-                      fontFamily: `'${previewTheme.typography.headingEn}', serif`,
-                    }}
-                  >
-                    SAVE THE DATE
-                  </span>
+                  <ThemeHeaderCrest themeOverride={previewTheme.id} sectionIndex="01" />
 
                   <div
+                    className="theme-preview-invite__eyebrow"
+                    style={{ color: previewTheme.preview.accent }}
+                  >
+                    SAVE THE DATE • احفظوا التاريخ
+                  </div>
+
+                  {/* Actual Theme Hero Image in Theme Frame */}
+                  <div className={`theme-preview-invite__hero-frame theme-preview-invite__hero-frame--${previewTheme.id}`}>
+                    <img
+                      src={getHeroImgSrc(previewTheme)}
+                      onError={(e) => {
+                        e.currentTarget.src = getHeroFallbackSrc(previewTheme);
+                      }}
+                      alt={previewTheme.nameAr}
+                      className="theme-preview-invite__hero-img"
+                    />
+                  </div>
+
+                  <div
+                    className="theme-preview-invite__names-ar"
                     style={{
-                      width: '320px',
-                      height: '205px',
-                      background: previewTheme.preview.envelopeBg,
-                      border: previewTheme.preview.cardBorder,
-                      borderRadius: previewTheme.id === 'minimalist-modern' ? '2px' : '16px',
-                      position: 'relative',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      boxShadow: '0 20px 50px rgba(0,0,0,0.35)',
-                      overflow: 'hidden',
+                      fontFamily: `'${previewTheme.typography.displayAr}', serif`,
+                      color: previewTheme.preview.textPrimary,
                     }}
                   >
+                    {groomAr} <span style={{ color: previewTheme.preview.accent }}>&amp;</span> {brideAr}
+                  </div>
+
+                  <div
+                    className="theme-preview-invite__names-en"
+                    style={{
+                      fontFamily: `'${previewTheme.typography.displayEn}', cursive, serif`,
+                      color: previewTheme.preview.textSecondary,
+                    }}
+                  >
+                    {groomEn} &amp; {brideEn}
+                  </div>
+
+                  <OrnamentDivider themeOverride={previewTheme.id} />
+
+                  <div className="theme-preview-invite__details">
                     <div
+                      className="theme-preview-invite__date-box"
                       style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        height: '105px',
-                        background: previewTheme.preview.envelopeFlap,
-                        clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
-                        borderBottom: previewTheme.preview.cardBorder,
-                      }}
-                    />
-                    <div
-                      style={{
-                        width: '62px',
-                        height: '62px',
-                        borderRadius: '50%',
-                        background: previewTheme.preview.sealBg,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#fff',
-                        fontSize: '1.35rem',
-                        boxShadow: '0 6px 20px rgba(0,0,0,0.4)',
-                        zIndex: 2,
+                        borderColor: previewTheme.preview.accent,
+                        color: previewTheme.preview.textPrimary,
                       }}
                     >
-                      ♥
+                      <strong>{dateAr}</strong>
+                      <span>{venueAr}</span>
                     </div>
                   </div>
 
-                  <span
+                  <button
+                    type="button"
+                    className="theme-preview-invite__cta"
                     style={{
-                      color: previewTheme.preview.textPrimary,
-                      fontFamily: `'${previewTheme.typography.headingEn}', '${previewTheme.typography.bodyAr}', serif`,
-                      fontSize: '1.15rem',
+                      background: previewTheme.preview.buttonBg,
+                      color: previewTheme.preview.buttonText,
+                      borderRadius: previewTheme.preview.buttonRadius,
                     }}
                   >
-                    اضغط لفتح الدعوة • Tap to Open Invitation
-                  </span>
+                    تأكيد الحضور والتهنئة (RSVP)
+                  </button>
                 </div>
-              ) : (
-                /* Full Invitation Hero + Cards Preview */
+              )}
+
+              {/* TAB 2: ENVELOPE & WAX SEAL PREVIEW */}
+              {previewTab === 'envelope' && (
+                <div className="theme-preview-envelope-wrap">
+                  <div
+                    className="theme-preview-envelope"
+                    style={{
+                      background: previewTheme.preview.envelopeBg,
+                      border: previewTheme.preview.cardBorder,
+                    }}
+                  >
+                    <div
+                      className="theme-preview-envelope__flap"
+                      style={{ background: previewTheme.preview.envelopeFlap }}
+                    />
+                    <img
+                      src={getAssetUrl(previewTheme.assets?.envelopeCardImage || '/og-image.jpg')}
+                      alt="Envelope Card"
+                      className="theme-preview-envelope__card-img"
+                    />
+                    <div
+                      className="theme-preview-envelope__seal"
+                      style={{ background: previewTheme.preview.sealBg }}
+                    >
+                      <ThemeSealIcon themeOverride={previewTheme.id} />
+                    </div>
+                  </div>
+                  <p
+                    className="theme-preview-envelope__caption"
+                    style={{ color: previewTheme.preview.textPrimary }}
+                  >
+                    بطاقة الدعوة داخل الظرف + الختم المخصص ({previewTheme.icons?.labelAr})
+                  </p>
+                </div>
+              )}
+
+              {/* TAB 3: GALLERY LAYOUT & PHOTOGRAPHY PREVIEW */}
+              {previewTab === 'gallery' && (
+                <div className="theme-preview-gallery-showcase">
+                  <div className="theme-preview-gallery-header" style={{ color: previewTheme.preview.textPrimary }}>
+                    <h4>{previewTheme.assets?.galleryLayoutLabelAr}</h4>
+                    <span>{previewTheme.assets?.galleryLayoutLabelEn}</span>
+                  </div>
+                  <div className="theme-preview-gallery-grid">
+                    {(previewTheme.assets?.galleryImages?.length > 0
+                      ? previewTheme.assets.galleryImages.slice(0, 3)
+                      : [
+                          { id: 'd1', url: '/couple-illustration.png', titleAr: 'صورة العروسين', titleEn: 'Couple Portrait' },
+                          { id: 'd2', url: '/og-image.jpg', titleAr: 'بطاقة الدعوة', titleEn: 'Save the Date' },
+                          { id: 'd3', url: '/watercolor-floral-1.png', titleAr: 'زخارف الورد المائية', titleEn: 'Watercolor Florals' },
+                        ]
+                    ).map((gImg, idx) => (
+                      <div
+                        key={gImg.id || idx}
+                        className="theme-preview-gallery-card"
+                        style={{
+                          background: previewTheme.preview.cardBg,
+                          border: previewTheme.preview.cardBorder,
+                          color: previewTheme.preview.textPrimary,
+                        }}
+                      >
+                        <img
+                          src={getAssetUrl(gImg.url)}
+                          alt={gImg.titleAr}
+                          className="theme-preview-gallery-card__img"
+                        />
+                        <div className="theme-preview-gallery-card__caption">
+                          <strong>{gImg.titleAr}</strong>
+                          <span>{gImg.titleEn}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 4: ICONS, TYPOGRAPHY & ANIMATION SPECIMENS */}
+              {previewTab === 'specs' && (
                 <div
+                  className="theme-preview-specs-card"
                   style={{
-                    width: '100%',
-                    maxWidth: '520px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '1.25rem',
+                    background: previewTheme.preview.cardBg,
+                    border: previewTheme.preview.cardBorder,
+                    color: previewTheme.preview.textPrimary,
                   }}
                 >
-                  {/* Hero Arch Card */}
-                  <div
-                    style={{
-                      background: previewTheme.preview.cardBg,
-                      border: previewTheme.preview.cardBorder,
-                      borderRadius: previewTheme.preview.cardRadius,
-                      padding: '2.25rem 1.5rem',
-                      textAlign: 'center',
-                      color: previewTheme.preview.textPrimary,
-                      boxShadow: '0 16px 40px rgba(0,0,0,0.2)',
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontSize: '0.75rem',
-                        letterSpacing: '0.25em',
-                        color: previewTheme.preview.textSecondary,
-                        marginBottom: '0.5rem',
-                      }}
-                    >
-                      {previewTheme.preview.ornament} SAVE THE DATE {previewTheme.preview.ornament}
+                  <div className="theme-preview-specs__row">
+                    <div className="theme-preview-specs__box">
+                      <span className="theme-preview-specs__label">شعار الترويسة (Header Crest)</span>
+                      <div className="theme-preview-specs__canvas">
+                        {previewTheme.id === 'default' ? (
+                          <span style={{ fontSize: '1.6rem', color: previewTheme.preview.accent }}>✦ ❧ ✦</span>
+                        ) : (
+                          <ThemeHeaderCrest themeOverride={previewTheme.id} sectionIndex="01" />
+                        )}
+                      </div>
                     </div>
-
-                    <div
-                      style={{
-                        fontFamily: `'${previewTheme.typography.displayAr}', serif`,
-                        fontSize: '2rem',
-                        fontWeight: 700,
-                        color: previewTheme.preview.textPrimary,
-                        marginBottom: '0.25rem',
-                      }}
-                    >
-                      {groomAr} &amp; {brideAr}
-                    </div>
-
-                    <div
-                      style={{
-                        fontFamily: `'${previewTheme.typography.displayEn}', cursive, serif`,
-                        fontSize: '1.5rem',
-                        color: previewTheme.preview.accent,
-                        marginBottom: '0.75rem',
-                      }}
-                    >
-                      {groomEn} &amp; {brideEn}
-                    </div>
-
-                    <p
-                      style={{
-                        fontSize: '0.9rem',
-                        color: previewTheme.preview.textSecondary,
-                        margin: '0 auto 1rem',
-                        maxWidth: '340px',
-                        fontFamily: `'${previewTheme.typography.bodyAr}', sans-serif`,
-                      }}
-                    >
-                      يسعدنا دعوتكم لمشاركتنا فرحة زفافنا في {venueName}
-                    </p>
-
-                    {/* Countdown Mini Row */}
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        gap: '0.6rem',
-                        marginBottom: '1.25rem',
-                      }}
-                    >
-                      {[
-                        { v: '120', l: 'يوم' },
-                        { v: '18', l: 'ساعة' },
-                        { v: '45', l: 'دقيقة' },
-                      ].map((u, i) => (
+                    <div className="theme-preview-specs__box">
+                      <span className="theme-preview-specs__label">الختم المخصص (Wax Seal)</span>
+                      <div className="theme-preview-specs__canvas">
                         <div
-                          key={i}
-                          style={{
-                            padding: '0.45rem 0.85rem',
-                            border: previewTheme.preview.cardBorder,
-                            borderRadius: previewTheme.preview.buttonRadius === '2px' ? '2px' : '10px',
-                            background: 'rgba(255,255,255,0.04)',
-                          }}
+                          className="theme-preview-specs__seal-demo"
+                          style={{ background: previewTheme.preview.sealBg }}
                         >
-                          <div style={{ fontSize: '1.1rem', fontWeight: 700, color: previewTheme.preview.accent }}>
-                            {u.v}
-                          </div>
-                          <div style={{ fontSize: '0.68rem', color: previewTheme.preview.textSecondary }}>
-                            {u.l}
-                          </div>
+                          <ThemeSealIcon themeOverride={previewTheme.id} />
                         </div>
-                      ))}
+                      </div>
                     </div>
+                  </div>
 
-                    <span
-                      style={{
-                        display: 'inline-block',
-                        padding: '0.6rem 1.75rem',
-                        background: previewTheme.preview.buttonBg,
-                        color: previewTheme.preview.buttonText,
-                        borderRadius: previewTheme.preview.buttonRadius,
-                        fontWeight: 600,
-                        fontSize: '0.9rem',
-                      }}
-                    >
-                      تأكيد الحضور • RSVP
-                    </span>
+                  <div className="theme-preview-specs__divider-demo">
+                    <span className="theme-preview-specs__label">الفاصل الزخرفي (Ornament Divider):</span>
+                    <OrnamentDivider themeOverride={previewTheme.id} />
+                  </div>
+
+                  <div className="theme-preview-specs__typo-demo">
+                    <div>
+                      <span className="theme-preview-specs__label">خط العناوين الإنجليزي ({previewTheme.typography.displayEn}):</span>
+                      <p style={{ fontFamily: `'${previewTheme.typography.displayEn}', serif`, fontSize: '1.6rem', margin: '0.25rem 0' }}>
+                        {groomEn} &amp; {brideEn} — Forever Begins
+                      </p>
+                    </div>
+                    <div>
+                      <span className="theme-preview-specs__label">الخط العربي ({previewTheme.typography.displayAr}):</span>
+                      <p style={{ fontFamily: `'${previewTheme.typography.displayAr}', serif`, fontSize: '1.45rem', margin: '0.25rem 0' }}>
+                        {groomAr} و {brideAr} — دعوة زفاف مباركة
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="theme-preview-specs__motion-badge">
+                    <Wand2 size={16} />
+                    <span>نظام الحركة والمؤثرات الحية: <strong>{previewTheme.animations?.labelAr}</strong> ({previewTheme.animations?.labelEn})</span>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Footer */}
-            <div className="admin-theme-preview-modal__footer">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                {previewTheme.palette.map((c, i) => (
-                  <span
-                    key={i}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.35rem',
-                      fontSize: '0.75rem',
-                      color: '#c4b5a0',
-                      background: 'rgba(255,255,255,0.05)',
-                      padding: '0.2rem 0.55rem',
-                      borderRadius: '6px',
-                    }}
+            {/* Modal Bottom Quick-Switcher & Apply Bar */}
+            <div className="theme-preview-modal__footer">
+              <div className="theme-preview-modal__quick-list">
+                {WEDDING_THEMES.map((tItem) => (
+                  <button
+                    key={tItem.id}
+                    type="button"
+                    onClick={() => setPreviewTheme(tItem)}
+                    className={`theme-preview-modal__quick-chip ${
+                      previewTheme.id === tItem.id ? 'theme-preview-modal__quick-chip--selected' : ''
+                    }`}
                   >
                     <span
-                      style={{
-                        width: 12,
-                        height: 12,
-                        borderRadius: '50%',
-                        background: c.hex,
-                        border: '1px solid rgba(255,255,255,0.3)',
-                      }}
+                      className="theme-preview-modal__chip-dot"
+                      style={{ backgroundColor: tItem.preview.accent }}
                     />
-                    {c.nameAr}
-                  </span>
+                    <span>{tItem.nameAr.split(' (')[0]}</span>
+                  </button>
                 ))}
               </div>
 
-              <div style={{ display: 'flex', gap: '0.65rem' }}>
-                <button
-                  type="button"
-                  onClick={() => setPreviewThemeId(null)}
-                  className="admin-btn admin-btn--ghost"
-                >
-                  إغلاق
-                </button>
-                <button
-                  type="button"
-                  disabled={saving}
-                  onClick={() => {
-                    handleCardApply(previewTheme.id);
-                    setPreviewThemeId(null);
-                  }}
-                  className="admin-btn admin-btn--primary"
-                  id="btn-modal-apply-theme"
-                >
-                  <CheckCircle size={17} />
-                  <span>
-                    {activeThemeId === previewTheme.id
-                      ? 'هذا التصميم مطبق حالياً'
-                      : 'تطبيق وحفظ هذا التصميم'}
+              <div className="theme-preview-modal__actions">
+                {onCloseAdmin && (
+                  <button
+                    type="button"
+                    className="admin-btn admin-btn--outline"
+                    onClick={() => handleLiveSitePreview(previewTheme.id)}
+                  >
+                    <ExternalLink size={16} />
+                    <span>معاينة حية على الموقع الكامل</span>
+                  </button>
+                )}
+
+                {activeThemeId === previewTheme.id ? (
+                  <span className="theme-preview-modal__active-note">
+                    <CheckCircle2 size={16} /> هذا التصميم مفعّل حالياً على الموقع
                   </span>
-                </button>
+                ) : (
+                  <button
+                    type="button"
+                    disabled={saving}
+                    className="admin-btn admin-btn--primary"
+                    onClick={() => {
+                      handleApplyTheme(previewTheme.id);
+                      setPreviewTheme(null);
+                    }}
+                  >
+                    <Sparkles size={16} />
+                    <span>تفعيل وحفظ هذا التصميم الآن</span>
+                  </button>
+                )}
               </div>
             </div>
           </div>

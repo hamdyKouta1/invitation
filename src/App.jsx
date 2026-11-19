@@ -24,6 +24,7 @@ import MusicControl from './components/MusicControl/MusicControl';
 import AdminPortal from './components/Admin/AdminPortal';
 import OrnamentDivider from './components/ui/OrnamentDivider';
 import FloralCornerSVG from './components/ui/FloralCornerSVG';
+import { ThemeAmbientEffects, ThemePreviewBanner } from './components/ui/ThemeVisuals';
 import weddingConfig from './config/weddingConfig';
 import { applyThemeToDOM } from './config/themesConfig';
 import { getWeddingConfigFromDB, saveWeddingConfigToDB } from './services';
@@ -151,6 +152,12 @@ function App() {
 
   return (
     <div className="app" data-theme={activeTheme}>
+      {/* ── Theme-Specific Live Ambient Effects (Stardust, Petals, Architectural Lines, Lanterns) ── */}
+      <ThemeAmbientEffects />
+
+      {/* ── Temporary Live Theme Preview Floating Banner (Admin Preview Mode) ── */}
+      <ThemePreviewBanner onReopenAdmin={() => setIsAdminOpen(true)} />
+
       {/* ── Secret Admin Management Portal (2FA Protected) ── */}
       {isAdminOpen && <AdminPortal onClose={handleCloseAdmin} />}
 
