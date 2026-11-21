@@ -2201,3 +2201,89 @@ html[data-theme="royal-classic"] .wishlist-cash-card__copy-btn:hover {
   background: linear-gradient(135deg, #721121 0%, #520A16 100%);
   color: #FFF3C4;
 }
+
+/* ============================================================================
+ * 6. GOLDEN THEME — Warm Champagne Linen, Antique Bronze Gold, Calendar & Agenda
+ * ============================================================================ */
+html[data-theme="golden-theme"] {
+  --cream-50: #FAF8F3;
+  --cream-100: #F7F4EC;
+  --cream-200: #F4EFE6;
+  --cream-300: #EFE8DC;
+  --gold-200: #C5A878;
+  --gold-300: #A6895B;
+  --gold-400: #8C734B;
+  --brown-300: #8A7960;
+  --brown-400: #7C6541;
+  --brown-500: #5C4B32;
+  --text-primary: #5C4B32;
+  --text-secondary: #7C6541;
+  --text-muted: #9E855C;
+  background-color: #FAF8F3;
+  color: #5C4B32;
+}
+
+html[data-theme="golden-theme"] body,
+html[data-theme="golden-theme"] .app {
+  background-color: #FAF8F3;
+  color: #5C4B32;
+}
+
+html[data-theme="golden-theme"] .section {
+  background-color: #FAF8F3;
+  border-bottom: 1px solid #ECE5D5;
+}
+
+html[data-theme="golden-theme"] .section--alt {
+  background-color: #F6F2EA;
+}
+
+html[data-theme="golden-theme"] .section__title {
+  color: #7C6541;
+  font-weight: 400;
+}
+
+/* Golden Theme Envelope & Heart Medallion Wax Seal */
+html[data-theme="golden-theme"] .envelope-screen {
+  background: linear-gradient(180deg, #FAF8F3 0%, #F3ECE0 100%);
+}
+
+html[data-theme="golden-theme"] .envelope__seal--golden-theme {
+  background: radial-gradient(circle at 35% 35%, #C5A878 0%, #A6895B 65%, #7C6541 100%);
+  border: 1.5px solid #FAF8F3;
+  box-shadow: 0 8px 22px rgba(124, 101, 65, 0.32);
+}
+
+/* Golden Theme Hero Card & Cards */
+html[data-theme="golden-theme"] .hero__arch-card {
+  background: #FDFCF9;
+  border: 1px solid #E5DEC9;
+  border-radius: 4px;
+  box-shadow: 0 10px 32px rgba(140, 115, 75, 0.06);
+}
+
+html[data-theme="golden-theme"] .family-card,
+html[data-theme="golden-theme"] .venue-card,
+html[data-theme="golden-theme"] .dress-card,
+html[data-theme="golden-theme"] .rsvp-card,
+html[data-theme="golden-theme"] .wish-card,
+html[data-theme="golden-theme"] .wishlist-card,
+html[data-theme="golden-theme"] .custom-section-card,
+html[data-theme="golden-theme"] .wishlist-cash-card {
+  background: #FDFCF9;
+  border: 1px solid #E5DEC9;
+  border-radius: 4px;
+  box-shadow: 0 6px 20px rgba(140, 115, 75, 0.05);
+  color: #5C4B32;
+}
+
+html[data-theme="golden-theme"] .venue-card__cta,
+html[data-theme="golden-theme"] .rsvp-submit-btn,
+html[data-theme="golden-theme"] .custom-section__cta,
+html[data-theme="golden-theme"] .wishlist-cash-card__copy-btn,
+html[data-theme="golden-theme"] .wishlist-card__reserve-btn {
+  background: linear-gradient(135deg, #A6895B 0%, #8C734B 100%);
+  color: #FAF8F3;
+  border: 1px solid #8C734B;
+  border-radius: 4px;
+}

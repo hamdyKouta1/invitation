@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 420" fill="none">
+  <rect width="600" height="420" fill="#FAF8F3"/>
+  <rect x="18" y="18" width="564" height="384" stroke="#E5DEC9" stroke-width="1.5"/>
+  <rect x="26" y="26" width="548" height="368" stroke="#A6895B" stroke-width="1"/>
+  <path d="M300 155 C300 155 272 133 272 116 A14 14 0 0 1 300 109 A14 14 0 0 1 328 116 C328 133 300 155 300 155 Z" stroke="#8C734B" stroke-width="1.5" fill="rgba(166,137,91,0.18)"/>
+  <text x="300" y="215" text-anchor="middle" fill="#8C734B" font-family="Cormorant Garamond, Georgia, serif" font-size="22" letter-spacing="6">THE BIG DAY IS ALMOST HERE</text>
+  <text x="300" y="270" text-anchor="middle" fill="#7C6541" font-family="Great Vibes, Georgia, serif" font-size="42">Counting Down to Forever</text>
+  <line x1="210" y1="310" x2="390" y2="310" stroke="#D5C8A8" stroke-width="1"/>
+</svg>

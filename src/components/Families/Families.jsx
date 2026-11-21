@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import weddingConfig from '../../config/weddingConfig';
 import useWeddingConfig from '../../hooks/useWeddingConfig';
+import { getEventTypeById } from '../../config/eventTypesConfig';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
 import { ThemeHeaderCrest } from '../ui/ThemeVisuals';
@@ -64,10 +65,16 @@ const Families = () => {
   const groom = liveConfig.groom || {};
   const bride = liveConfig.bride || {};
   const secCfg = liveConfig.sections?.families || {};
+  const eventMeta = getEventTypeById(liveConfig.eventType);
+
+  const defaultSectionTitle =
+    liveConfig.eventType && liveConfig.eventType !== 'wedding'
+      ? (isAr ? eventMeta.hostsSectionTitleAr : eventMeta.hostsSectionTitleEn)
+      : t('families.title');
 
   const sectionTitle = isAr
-    ? (secCfg.titleAr || t('families.title'))
-    : (secCfg.titleEn || t('families.title'));
+    ? (secCfg.titleAr || defaultSectionTitle)
+    : (secCfg.titleEn || defaultSectionTitle);
 
   const honorPhrase = isAr
     ? (secCfg.subtitleAr || liveConfig.invitationPhraseAr)

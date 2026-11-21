@@ -73,6 +73,22 @@ export const ThemeSealIcon = ({ themeOverride = null }) => {
     );
   }
 
+  if (activeTheme === 'golden-theme') {
+    return (
+      <svg width="30" height="30" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+        {/* Golden Theme Embossed Double-Ring Heart Seal */}
+        <circle cx="18" cy="18" r="15" stroke="rgba(250,248,243,0.75)" strokeWidth="1" />
+        <circle cx="18" cy="18" r="12.5" stroke="rgba(250,248,243,0.45)" strokeWidth="0.8" strokeDasharray="2 2" />
+        <path
+          d="M18 26.2S9.5 20.2 9.5 14.3A4.6 4.6 0 0 1 18 11.8 4.6 4.6 0 0 1 26.5 14.3C26.5 20.2 18 26.2 18 26.2Z"
+          stroke="#FAF8F3"
+          strokeWidth="1.5"
+          fill="rgba(250,248,243,0.22)"
+        />
+      </svg>
+    );
+  }
+
   // ─── DEFAULT THEME (Original HeartSVG — 100% Untouched) ───
   return (
     <svg
@@ -162,6 +178,23 @@ export const ThemeHeaderCrest = ({ sectionIndex = '01', themeOverride = null }) 
           <circle cx="60" cy="5" r="3" fill="#FFF0B8" />
           <circle cx="46" cy="11" r="2.2" fill="#721121" />
           <circle cx="74" cy="11" r="2.2" fill="#721121" />
+        </svg>
+      </div>
+    );
+  }
+
+  if (activeTheme === 'golden-theme') {
+    return (
+      <div className="theme-crest theme-crest--golden-theme" aria-hidden="true" style={{ marginBottom: '0.35rem' }}>
+        <svg width="96" height="28" viewBox="0 0 96 28" fill="none">
+          <line x1="6" y1="14" x2="36" y2="14" stroke="#D5C8A8" strokeWidth="1" />
+          <path
+            d="M48 22S40 16.5 40 11.2A4.2 4.2 0 0 1 48 9 4.2 4.2 0 0 1 56 11.2C56 16.5 48 22 48 22Z"
+            stroke="#A6895B"
+            strokeWidth="1.3"
+            fill="none"
+          />
+          <line x1="60" y1="14" x2="90" y2="14" stroke="#D5C8A8" strokeWidth="1" />
         </svg>
       </div>
     );

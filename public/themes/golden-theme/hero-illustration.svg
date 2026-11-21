@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 720" fill="none">
+  <rect width="600" height="720" fill="#FAF8F3"/>
+  <rect x="24" y="24" width="552" height="672" stroke="#E5DEC9" stroke-width="1.5"/>
+  <rect x="34" y="34" width="532" height="652" stroke="#D5C8A8" stroke-width="1"/>
+  <!-- Golden Arch & Delicate Line Art Hearts -->
+  <path d="M130 620 V290 A170 170 0 0 1 470 290 V620 Z" fill="#F6F2EA" stroke="#A6895B" stroke-width="1.5"/>
+  <path d="M144 608 V292 A156 156 0 0 1 456 292 V608 Z" stroke="#D5C8A8" stroke-width="1" stroke-dasharray="4 4"/>
+  <!-- Fine Line Botanical & Heart Crest -->
+  <path d="M300 185 C300 185 268 160 268 140 A16 16 0 0 1 300 132 A16 16 0 0 1 332 140 C332 160 300 185 300 185 Z" fill="#A6895B" opacity="0.9"/>
+  <circle cx="300" cy="360" r="95" stroke="#A6895B" stroke-width="1.2" fill="#FDFCF9"/>
+  <path d="M275 375 C275 335 325 335 325 375" stroke="#8C734B" stroke-width="1.8" stroke-linecap="round"/>
+  <circle cx="286" cy="335" r="14" stroke="#8C734B" stroke-width="1.6"/>
+  <circle cx="314" cy="338" r="13" stroke="#A6895B" stroke-width="1.6"/>
+  <text x="300" y="515" text-anchor="middle" fill="#8C734B" font-family="Cormorant Garamond, Georgia, serif" font-size="24" letter-spacing="4">FOREVER BEGINS</text>
+  <text x="300" y="555" text-anchor="middle" fill="#A6895B" font-family="Great Vibes, cursive, serif" font-size="34">Golden Edition</text>
+</svg>

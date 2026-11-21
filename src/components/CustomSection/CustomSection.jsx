@@ -8,6 +8,7 @@ import { ThemeHeaderCrest } from '../ui/ThemeVisuals';
 import useWeddingConfig from '../../hooks/useWeddingConfig';
 import { getThemeById } from '../../config/themesConfig';
 import { getAssetUrl } from '../../utils/assetUtils';
+import { sanitizeUrl, isSafeImageUrl } from '../../utils/security';
 import './CustomSection.css';
 
 const CustomSection = ({ section, sectionIndex = '✦' }) => {
@@ -39,9 +40,22 @@ const CustomSection = ({ section, sectionIndex = '✦' }) => {
     ? (section.ctaTextAr || section.ctaTextEn || '')
     : (section.ctaTextEn || section.ctaTextAr || '');
 
-  const paragraphs = typeof content === 'string'
-    ? content.split('\n').map((p) => p.trim()).filter(Boolean)
-    : [];
+  const quote = isAr
+    ? (section.quoteAr || section.quoteEn || '')
+    : (section.quoteEn || section.quoteAr || '');
+
+  const rawParagraphs = isAr
+    ? (Array.isArray(section.paragraphsAr) ? section.paragraphsAr : null)
+    : (Array.isArray(section.paragraphsEn) ? section.paragraphsEn : null);
+
+  const paragraphs = rawParagraphs
+    ? rawParagraphs.map((p) => String(p).trim()).filter(Boolean)
+    : typeof content === 'string'
+      ? content.split('\n').map((p) => p.trim()).filter(Boolean)
+      : [];
+
+  const safeCtaUrl = sanitizeUrl(section.ctaUrl, '');
+  const safeImageUrl = isSafeImageUrl(section.imageUrl) ? getAssetUrl(section.imageUrl) : '';
 
   return (
     <SectionWrapper
@@ -72,11 +86,11 @@ const CustomSection = ({ section, sectionIndex = '✦' }) => {
         )}
 
         <div className="custom-section-card__inner">
-          {section.imageUrl && (
+          {safeImageUrl && (
             <div className="custom-section__image-wrap">
               <img
-                src={getAssetUrl(section.imageUrl)}
-                alt={title || 'Wedding highlight'}
+                src={safeImageUrl}
+                alt={title || 'Event highlight'}
                 className="custom-section__image"
                 loading="lazy"
               />
@@ -93,10 +107,16 @@ const CustomSection = ({ section, sectionIndex = '✦' }) => {
             </div>
           )}
 
-          {ctaText && section.ctaUrl && (
+          {quote && (
+            <blockquote className="custom-section__quote font-serif">
+              “{quote}”
+            </blockquote>
+          )}
+
+          {ctaText && safeCtaUrl && (
             <div className="custom-section__actions">
               <a
-                href={section.ctaUrl}
+                href={safeCtaUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="custom-section__cta"

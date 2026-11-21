@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import weddingConfig from '../../config/weddingConfig';
 import useWeddingConfig from '../../hooks/useWeddingConfig';
 import { getThemeById } from '../../config/themesConfig';
+import { getEventTypeById } from '../../config/eventTypesConfig';
 import SectionWrapper from '../ui/SectionWrapper';
 import OrnamentDivider from '../ui/OrnamentDivider';
 import { ThemeHeaderCrest } from '../ui/ThemeVisuals';
@@ -71,8 +72,62 @@ const DetailThemeIcon = ({ type, activeTheme }) => {
     );
   }
 
+  if (activeTheme === 'golden-theme') {
+    return (
+      <div className="wedding-details__theme-icon wedding-details__theme-icon--golden" aria-hidden="true">
+        <svg width="32" height="30" viewBox="0 0 32 30" fill="none">
+          <path
+            d="M16 26.5S4 18.6 4 10.6A6.5 6.5 0 0 1 16 7a6.5 6.5 0 0 1 12 3.6C28 18.6 16 26.5 16 26.5Z"
+            stroke="#9E855C"
+            strokeWidth="1.3"
+            fill="rgba(166,137,91,0.12)"
+          />
+        </svg>
+      </div>
+    );
+  }
+
   return null;
 };
+
+const DEFAULT_GOLDEN_AGENDA = [
+  {
+    id: 'ag-1',
+    timeAr: '٥:٠٠ مساءً',
+    timeEn: '5:00 PM',
+    titleAr: 'استقبال الضيوف والترحيب',
+    titleEn: 'Guest Arrival & Welcome Drinks',
+    descriptionAr: 'بداية التجمع واستقبال الأحبة في القاعة',
+    descriptionEn: 'Welcome reception and music as guests arrive',
+  },
+  {
+    id: 'ag-2',
+    timeAr: '٦:٣٠ مساءً',
+    timeEn: '6:30 PM',
+    titleAr: 'دخول العروسين وبدء المراسم',
+    titleEn: 'Grand Entrance & Ceremony',
+    descriptionAr: 'لحظة الدخول وبداية مراسم الاحتفال الرسمية',
+    descriptionEn: 'The grand entrance and official celebration ceremony',
+  },
+  {
+    id: 'ag-3',
+    timeAr: '٨:٣٠ مساءً',
+    timeEn: '8:30 PM',
+    titleAr: 'مأدبة العشاء وتقطيع الكيك',
+    titleEn: 'Dinner Reception & Cake Cutting',
+    descriptionAr: 'مشاركة العشاء الاحتفالي واللحظات السعيدة',
+    descriptionEn: 'Celebratory dinner, toasts, and cake cutting',
+  },
+  {
+    id: 'ag-4',
+    timeAr: '١٠:٠٠ مساءً',
+    timeEn: '10:00 PM',
+    titleAr: 'سهرة الاحتفال والرقص',
+    titleEn: 'Evening Celebration & Dancing',
+    descriptionAr: 'أجمل الأوقات الموسيقية والاحتفال حتى الختام',
+    descriptionEn: 'Music, joy, and dancing under the lights',
+  },
+];
 
 const WeddingDetails = () => {
   const { t, i18n } = useTranslation();
@@ -89,10 +144,23 @@ const WeddingDetails = () => {
   const time = isAr ? liveConfig.wedding?.time  : liveConfig.wedding?.timeEn;
 
   const secCfg = liveConfig.sections?.details || {};
+  const eventMeta = getEventTypeById(liveConfig.eventType);
+  const defaultTitle =
+    liveConfig.eventType && liveConfig.eventType !== 'wedding'
+      ? (isAr ? eventMeta.detailsSectionTitleAr : eventMeta.detailsSectionTitleEn)
+      : t('details.title');
   const sectionTitle = isAr
-    ? (secCfg.titleAr || t('details.title'))
-    : (secCfg.titleEn || t('details.title'));
+    ? (secCfg.titleAr || defaultTitle)
+    : (secCfg.titleEn || defaultTitle);
   const sectionSubtitle = isAr ? secCfg.subtitleAr : secCfg.subtitleEn;
+  const isGoldenTheme = activeTheme === 'golden-theme';
+  const configuredAgenda = Array.isArray(liveConfig.agenda) ? liveConfig.agenda : [];
+  const agendaList =
+    configuredAgenda.length > 0
+      ? configuredAgenda
+      : isGoldenTheme
+        ? DEFAULT_GOLDEN_AGENDA
+        : [];
 
   const fadeUp = {
     hidden: { opacity: 0, y: 25 },
@@ -150,6 +218,61 @@ const WeddingDetails = () => {
           <span className="wedding-details__time font-serif">{time}</span>
         </motion.div>
       </motion.div>
+
+      {/* Golden Theme "OUR SPECIAL DAY" Framed Agenda & Timeline Card */}
+      {agendaList.length > 0 && (
+        <motion.div
+          className="golden-agenda-card"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+        >
+          <div className="golden-agenda__header">
+            <span className="golden-agenda__eyebrow">
+              {isAr ? 'برنامج يومنا المميز' : 'OUR SPECIAL DAY'}
+            </span>
+            <h3 className="golden-agenda__title font-serif">
+              {isAr ? 'فقرات وأجندة الاحتفال' : 'The Order of Events'}
+            </h3>
+          </div>
+
+          <div className="golden-agenda__timeline">
+            {agendaList.map((slot, idx) => (
+              <div key={slot.id || idx} className="golden-agenda__item">
+                <div className="golden-agenda__time-col">
+                  <span className="golden-agenda__time font-serif">
+                    {isAr ? (slot.timeAr || slot.time) : (slot.timeEn || slot.time)}
+                  </span>
+                </div>
+
+                <div className="golden-agenda__marker-col" aria-hidden="true">
+                  <span className="golden-agenda__heart-dot">
+                    <svg width="18" height="16" viewBox="0 0 24 22" fill="none">
+                      <path
+                        d="M12 20S2.5 13.8 2.5 7.5A4.8 4.8 0 0 1 12 4.8a4.8 4.8 0 0 1 9.5 2.7C21.5 13.8 12 20 12 20Z"
+                        fill="#A6895B"
+                      />
+                    </svg>
+                  </span>
+                  {idx < agendaList.length - 1 && <span className="golden-agenda__line" />}
+                </div>
+
+                <div className="golden-agenda__content-col">
+                  <h4 className="golden-agenda__event-title font-serif">
+                    {isAr ? (slot.titleAr || slot.title) : (slot.titleEn || slot.title)}
+                  </h4>
+                  {(slot.descriptionAr || slot.descriptionEn) && (
+                    <p className="golden-agenda__event-desc">
+                      {isAr ? slot.descriptionAr : slot.descriptionEn}
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      )}
 
       {/* Bottom decorative line */}
       <OrnamentDivider symbol="✦" className="wedding-details__bottom-divider" />

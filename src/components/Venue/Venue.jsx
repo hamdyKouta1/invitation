@@ -8,6 +8,7 @@ import OrnamentDivider from '../ui/OrnamentDivider';
 import { ThemeHeaderCrest } from '../ui/ThemeVisuals';
 import FloralCornerSVG from '../ui/FloralCornerSVG';
 import useAnalytics, { EVENTS } from '../../hooks/useAnalytics';
+import { sanitizeUrl } from '../../utils/security';
 import './Venue.css';
 
 const Venue = () => {
@@ -26,16 +27,20 @@ const Venue = () => {
     : (secCfg.titleEn || t('venue.title'));
   const sectionSubtitle = isAr ? secCfg.subtitleAr : secCfg.subtitleEn;
 
+  const safeMapsUrl = sanitizeUrl(venue.mapsUrl, 'https://maps.google.com');
+
   const handleMapsClick = () => {
     track(EVENTS.VENUE_CLICKED);
-    window.open(venue.mapsUrl, '_blank', 'noopener,noreferrer');
+    if (safeMapsUrl) {
+      window.open(safeMapsUrl, '_blank', 'noopener,noreferrer');
+    }
   };
 
-  const embedUrl =
-    venue.mapsEmbedUrl ||
-    `https://maps.google.com/maps?q=${encodeURIComponent(
-      (venue.nameEn || '') + ' ' + (venue.cityEn || '')
-    )}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+  const defaultEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(
+    (venue.nameEn || '') + ' ' + (venue.cityEn || '')
+  )}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+
+  const embedUrl = sanitizeUrl(venue.mapsEmbedUrl, defaultEmbedUrl);
 
   return (
     <SectionWrapper id="venue">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
@@ -24,7 +24,6 @@ import ShareInvitation from './components/ShareInvitation/ShareInvitation';
 import CustomSection from './components/CustomSection/CustomSection';
 import Navigation from './components/Navigation/Navigation';
 import MusicControl from './components/MusicControl/MusicControl';
-import AdminPortal from './components/Admin/AdminPortal';
 import OrnamentDivider from './components/ui/OrnamentDivider';
 import FloralCornerSVG from './components/ui/FloralCornerSVG';
 import { ThemeAmbientEffects, ThemePreviewBanner } from './components/ui/ThemeVisuals';
@@ -33,10 +32,11 @@ import { getWeddingConfigFromDB, saveWeddingConfigToDB } from './services';
 import { syncConfigWithFirestore, normalizeSectionOrder, isSectionEnabled } from './utils/configManager';
 import { WeddingConfigProvider, useWeddingConfig } from './context/WeddingConfigContext';
 
-import './App.css';
-import './styles/themes.css';
+// Lazy-load CustomerDashboard and OwnerAdmin so public guests download a minimal initial bundle (Phase 9A)
+const CustomerDashboard = lazy(() => import('./components/CustomerDashboard/CustomerDashboard'));
+const OwnerAdmin = lazy(() => import('./components/OwnerAdmin/OwnerAdmin'));
 
-const SECRET_HASH = import.meta.env.VITE_ADMIN_SECRET_ENDPOINT || 'admin-secret';
+import './App.css';
 
 /* ─── Footer ──────────────────────────────────────────────── */
 const Footer = () => {
@@ -87,13 +87,14 @@ const Footer = () => {
 /* ─── App Content ─────────────────────────────────────────── */
 function AppContent() {
   const [envelopeOpened, setEnvelopeOpened] = useState(false);
-  const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [activePortalMode, setActivePortalMode] = useState(null); // null | 'customer' | 'owner'
   const musicControlRef = useRef(null);
   const wishesRef = useRef(null);
 
   const weddingConfig = useWeddingConfig();
   const { i18n } = useTranslation();
   const activeTheme = weddingConfig?.theme || 'default';
+  const isAdminOpen = Boolean(activePortalMode);
 
   // Ensure the active theme attribute is synced onto <html> whenever it changes
   useEffect(() => {
@@ -109,19 +110,30 @@ function AppContent() {
     }
   }, [weddingConfig.meta, i18n.language]);
 
-  // Check URL hash / query param for secret admin endpoint on mount and hash changes
+  // Check URL hash / query param for Customer Dashboard or Owner Admin on mount and hash changes (Phase 5)
   useEffect(() => {
-    const checkAdminEndpoint = () => {
+    const checkPortalEndpoint = () => {
       const hash = window.location.hash.replace(/^#/, '');
       const params = new URLSearchParams(window.location.search);
-      if (hash === SECRET_HASH || hash === 'admin' || hash === 'admin-secret' || params.get('portal') === 'admin') {
-        setIsAdminOpen(true);
+      const portalParam = params.get('portal');
+
+      if (hash === 'owner-admin' || portalParam === 'owner') {
+        setActivePortalMode('owner');
+      } else if (
+        hash === 'dashboard' ||
+        hash === 'customer-dashboard' ||
+        hash === 'admin' ||
+        hash === 'admin-secret' ||
+        portalParam === 'dashboard' ||
+        portalParam === 'admin'
+      ) {
+        setActivePortalMode('customer');
       }
     };
 
-    checkAdminEndpoint();
-    window.addEventListener('hashchange', checkAdminEndpoint);
-    return () => window.removeEventListener('hashchange', checkAdminEndpoint);
+    checkPortalEndpoint();
+    window.addEventListener('hashchange', checkPortalEndpoint);
+    return () => window.removeEventListener('hashchange', checkPortalEndpoint);
   }, []);
 
   // Priority 1: Fetch live wedding config from Firestore DB on init (and auto-seed if missing)
@@ -157,7 +169,7 @@ function AppContent() {
   };
 
   const handleCloseAdmin = () => {
-    setIsAdminOpen(false);
+    setActivePortalMode(null);
     if (window.location.hash) {
       history.replaceState(null, '', window.location.pathname + window.location.search);
     }
@@ -225,10 +237,18 @@ function AppContent() {
       <ThemeAmbientEffects />
 
       {/* ── Temporary Live Theme Preview Floating Banner (Admin Preview Mode) ── */}
-      <ThemePreviewBanner onReopenAdmin={() => setIsAdminOpen(true)} />
+      <ThemePreviewBanner onReopenAdmin={() => setActivePortalMode('owner')} />
 
-      {/* ── Secret Admin Management Portal (2FA Protected) ── */}
-      {isAdminOpen && <AdminPortal onClose={handleCloseAdmin} />}
+      {/* ── Phase 5: Separated Customer Dashboard & Owner Admin (Lazy Loaded) ── */}
+      {activePortalMode && (
+        <Suspense fallback={null}>
+          {activePortalMode === 'owner' ? (
+            <OwnerAdmin onClose={handleCloseAdmin} />
+          ) : (
+            <CustomerDashboard onClose={handleCloseAdmin} />
+          )}
+        </Suspense>
+      )}
 
       {/* Floating Music Control — Always rendered so music is available anywhere */}
       <MusicControl ref={musicControlRef} />

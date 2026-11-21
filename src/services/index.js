@@ -1,12 +1,57 @@
 /**
- * Service Index — Dual Mode (Mock / Firebase)
+ * Service Index — Dual Mode (Mock / Per-Customer Firebase)
  *
- * Set VITE_FIREBASE_ENABLED=true in .env to switch to Firebase.
- * The UI layer always imports from this file, never directly
- * from firebase/ or mock/ directories.
+ * Set VITE_FIREBASE_ENABLED=true in .env to connect to the customer's
+ * dedicated Firebase project.
  */
 
+import { getScopedStorageKey } from '../utils/security.js';
+
 const FIREBASE_ENABLED = import.meta.env.VITE_FIREBASE_ENABLED === 'true';
+
+// ─── Customer Authentication (Firebase Auth — Phase 4 & 5) ────
+export const loginCustomer = async (email, password) => {
+  if (FIREBASE_ENABLED) {
+    const { loginCustomerWithFirebase } = await import('./firebase/auth.js');
+    return loginCustomerWithFirebase(email, password);
+  }
+  throw new Error('firebase_auth_required');
+};
+
+export const logoutCustomer = async () => {
+  if (FIREBASE_ENABLED) {
+    const { logoutCustomerFromFirebase } = await import('./firebase/auth.js');
+    return logoutCustomerFromFirebase();
+  }
+};
+
+export const sendPasswordReset = async (email) => {
+  if (FIREBASE_ENABLED) {
+    const { sendCustomerPasswordReset } = await import('./firebase/auth.js');
+    return sendCustomerPasswordReset(email);
+  }
+  throw new Error('firebase_auth_required');
+};
+
+export const subscribeCustomerAuthState = (callback) => {
+  if (FIREBASE_ENABLED) {
+    let unsubscribe = null;
+    let cancelled = false;
+    import('./firebase/auth.js')
+      .then(({ subscribeCustomerAuth }) => {
+        if (!cancelled) {
+          unsubscribe = subscribeCustomerAuth(callback);
+        }
+      })
+      .catch(() => callback(null));
+    return () => {
+      cancelled = true;
+      if (typeof unsubscribe === 'function') unsubscribe();
+    };
+  }
+  callback(null);
+  return () => {};
+};
 
 // ─── RSVP ─────────────────────────────────────────────────────
 export const submitRSVP = async (data) => {
@@ -20,7 +65,7 @@ export const submitRSVP = async (data) => {
 };
 
 export const checkAlreadySubmitted = () => {
-  return localStorage.getItem('wedding_rsvp_submitted') === 'true';
+  return localStorage.getItem(getScopedStorageKey('wedding_rsvp_submitted')) === 'true';
 };
 
 export const getWishes = async () => {
@@ -30,6 +75,16 @@ export const getWishes = async () => {
   } else {
     const { getWishes: fn } = await import('./mock/mockService.js');
     return fn();
+  }
+};
+
+export const deleteWish = async (id) => {
+  if (FIREBASE_ENABLED) {
+    const { deleteWish: fn } = await import('./firebase/firestore.js');
+    return fn(id);
+  } else {
+    const { deleteWish: fn } = await import('./mock/mockService.js');
+    return fn(id);
   }
 };
 
@@ -76,7 +131,6 @@ export const saveGalleryImages = async (images) => {
 
 export const resetGalleryImages = async () => {
   if (FIREBASE_ENABLED) {
-    // In Firestore mode, "reset" means delete all gallery docs and re-insert defaults
     const { clearAllGalleryImages, addGalleryImage: addFn } = await import('./firebase/firestore.js');
     const { mockGalleryImages } = await import('./mock/mockData.js');
     if (clearAllGalleryImages) {
@@ -85,16 +139,20 @@ export const resetGalleryImages = async () => {
     for (const img of mockGalleryImages) {
       await addFn(img);
     }
-    window.dispatchEvent(new CustomEvent('gallery_updated'));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('gallery_updated'));
+    }
     return { success: true };
   }
   const { resetGalleryImages: fn } = await import('./mock/mockService.js');
   const res = await fn();
-  window.dispatchEvent(new CustomEvent('gallery_updated'));
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('gallery_updated'));
+  }
   return res;
 };
 
-// ─── Guest Management (Admin) ─────────────────────────────────
+// ─── Guest Management (Customer Dashboard) ────────────────────
 export const getGuests = async () => {
   if (FIREBASE_ENABLED) {
     const { getGuests: fn } = await import('./firebase/firestore.js');
@@ -145,7 +203,7 @@ export const clearAllGuests = async () => {
   }
 };
 
-// ─── Wedding Config DB Sync ────────────────────────────────────
+// ─── Event / Wedding Config DB Sync ────────────────────────────
 export const getWeddingConfigFromDB = async () => {
   if (FIREBASE_ENABLED) {
     const { getWeddingConfigFirestore } = await import('./firebase/firestore.js');
@@ -167,13 +225,15 @@ export const subscribeWeddingConfigFromDB = (callback) => {
     let unsubscribe = null;
     let isCancelled = false;
 
-    import('./firebase/firestore.js').then(({ subscribeWeddingConfigFirestore }) => {
-      if (!isCancelled) {
-        unsubscribe = subscribeWeddingConfigFirestore(callback);
-      }
-    }).catch((err) => {
-      console.warn('[Service] Failed to load Firestore config subscription:', err);
-    });
+    import('./firebase/firestore.js')
+      .then(({ subscribeWeddingConfigFirestore }) => {
+        if (!isCancelled) {
+          unsubscribe = subscribeWeddingConfigFirestore(callback);
+        }
+      })
+      .catch((err) => {
+        console.warn('[Service] Failed to load Firestore config subscription:', err);
+      });
 
     return () => {
       isCancelled = true;

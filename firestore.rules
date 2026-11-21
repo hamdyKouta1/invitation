@@ -1,0 +1,81 @@
+rules_version = '2';
+
+// ============================================================================
+// HARDENED PER-CUSTOMER FIRESTORE SECURITY RULES (Phase 1 & Phase 4)
+// ============================================================================
+// Deploy to the customer's dedicated Firebase project via:
+//   npx firebase-tools deploy --only firestore:rules --project <customer-project-id>
+//
+// Security Boundaries:
+// 1. Public Guests (request.auth == null):
+//    - Can read published invitation config, gallery photos, wishlist, and public wishes.
+//    - Can create validated RSVP and wish submissions.
+//    - CANNOT read 'rsvps' (protects guest phone numbers and private PII — SEC-005).
+//    - CANNOT modify config, gallery, or delete any records (SEC-003).
+// 2. Authenticated Customer (request.auth != null):
+//    - Authenticated via Firebase Auth in THIS customer's dedicated Firebase project.
+//    - Can read, filter, update, and delete RSVP and wish records in their Customer Dashboard.
+// ============================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticatedCustomer() {
+      return request.auth != null;
+    }
+
+    function isValidRsvpCreate() {
+      let data = request.resource.data;
+      return data.name is string
+        && data.name.size() >= 1
+        && data.name.size() <= 100
+        && (!('phone' in data) || (data.phone is string && data.phone.size() <= 40))
+        && (!('message' in data) || (data.message is string && data.message.size() <= 1000))
+        && (!('guestsCount' in data) || (data.guestsCount is number && data.guestsCount >= 0 && data.guestsCount <= 25));
+    }
+
+    function isValidWishCreate() {
+      let data = request.resource.data;
+      return data.name is string
+        && data.name.size() >= 1
+        && data.name.size() <= 100
+        && data.message is string
+        && data.message.size() >= 1
+        && data.message.size() <= 1000
+        && !('phone' in data);
+    }
+
+    // 1. Published Event Configuration
+    match /config/{document} {
+      allow read: if true;
+      allow write: if isAuthenticatedCustomer();
+    }
+
+    // 2. Private Guest RSVP Records (Contains Phone Numbers — Strictly Private to Customer)
+    match /rsvps/{document} {
+      allow create: if isValidRsvpCreate();
+      allow read, update, delete: if isAuthenticatedCustomer();
+    }
+
+    // 3. Public Wishes Wall (PII-Free: Name + Message Only)
+    match /wishes/{document} {
+      allow read: if true;
+      allow create: if isValidWishCreate();
+      allow update, delete: if isAuthenticatedCustomer();
+    }
+
+    // 4. Photo Gallery
+    match /gallery/{document} {
+      allow read: if true;
+      allow write: if isAuthenticatedCustomer();
+    }
+
+    // 5. Wishlist / Gift Registry
+    match /wishlist/{document} {
+      allow read: if true;
+      allow update: if isAuthenticatedCustomer()
+        || request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'reservedBy', 'reservedAt']);
+      allow create, delete: if isAuthenticatedCustomer();
+    }
+  }
+}

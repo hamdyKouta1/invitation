@@ -120,3 +120,184 @@
     padding-top: var(--space-2);
   }
 }
+
+/* ─── Golden Theme Countdown & Monthly Calendar Card ────────────────────── */
+.golden-countdown__eyebrow {
+  font-family: 'Lato', 'Alexandria', sans-serif;
+  font-size: 0.76rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #9E855C;
+  margin-bottom: 0.5rem;
+}
+
+.countdown-grid--golden-calendar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(72px, 118px));
+  gap: 0.85rem;
+  justify-content: center;
+  padding: 1.25rem 0 0.75rem;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.countdown-unit--golden-theme {
+  background: #FDFCF9;
+  border: 1px solid #E5DEC9;
+  border-radius: 2px;
+  padding: 1.35rem 0.65rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  box-shadow: 0 2px 10px rgba(140, 115, 75, 0.04);
+}
+
+.countdown-unit--golden-theme .countdown-unit__value {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  min-width: auto;
+  font-family: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+  font-size: clamp(2rem, 5.5vw, 2.75rem);
+  font-weight: 400;
+  color: #7C6541;
+}
+
+.countdown-unit--golden-theme .countdown-unit__value::before {
+  display: none;
+}
+
+.countdown-unit--golden-theme .countdown-unit__label {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  color: #9E855C;
+}
+
+.golden-countdown-extras {
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.golden-countdown__caption {
+  font-family: 'Lato', 'Alexandria', sans-serif;
+  font-size: 0.92rem;
+  color: #8A7960;
+  margin: 0.85rem 0 2rem;
+}
+
+.golden-calendar-card {
+  background: #FDFCF9;
+  border: 1px solid #E5DEC9;
+  border-radius: 2px;
+  padding: 2.25rem 1.75rem 2rem;
+  box-shadow: 0 6px 24px rgba(140, 115, 75, 0.05);
+}
+
+.golden-calendar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+  padding: 0 0.35rem;
+}
+
+.golden-calendar__month {
+  font-family: 'Cormorant Garamond', 'Amiri', Georgia, serif;
+  font-size: clamp(1.35rem, 4vw, 1.75rem);
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: #8C734B;
+  margin: 0;
+}
+
+.golden-calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 1rem;
+}
+
+.golden-calendar__weekday {
+  font-family: 'Lato', 'Alexandria', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #9E855C;
+  text-align: center;
+}
+
+.golden-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  row-gap: 0.95rem;
+  align-items: center;
+  justify-items: center;
+}
+
+.golden-calendar__cell {
+  width: 42px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.golden-calendar__day-num {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.92rem;
+  color: #4A3E2D;
+}
+
+.golden-calendar__heart-day {
+  position: relative;
+  width: 42px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.golden-calendar__heart-day svg {
+  position: absolute;
+  inset: 0;
+}
+
+.golden-calendar__heart-day-num {
+  position: relative;
+  z-index: 1;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #FAF8F3;
+  margin-top: -2px;
+}
+
+.golden-calendar__footer {
+  margin-top: 2rem;
+  padding-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+}
+
+.golden-calendar__script {
+  font-family: 'Great Vibes', 'Aref Ruqaa', cursive;
+  font-size: clamp(1.65rem, 4.8vw, 2.15rem);
+  color: #8C734B;
+}
+
+@media (max-width: 480px) {
+  .countdown-grid--golden-calendar {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+  }
+
+  .golden-calendar-card {
+    padding: 1.5rem 1rem;
+  }
+}

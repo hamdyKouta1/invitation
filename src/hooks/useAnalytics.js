@@ -1,13 +1,34 @@
 /**
- * useAnalytics — Optional analytics event tracking
+ * useAnalytics — Optional analytics event tracking (Phase 9A — ARC-007)
  *
- * Events are only fired when analytics is enabled in weddingConfig.
- * Safe to call even when disabled.
+ * Reads analytics configuration dynamically from getActiveConfig() and
+ * lazily loads Google Analytics 4 (gtag.js) when enabled and configured.
  */
 
-import weddingConfig from '../config/weddingConfig';
+import { getActiveConfig } from '../utils/configManager';
 
-const ENABLED = weddingConfig.analytics?.enabled === true;
+let _gtagInitializedForId = null;
+
+const ensureGtagLoaded = (measurementId) => {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  if (!measurementId || _gtagInitializedForId === measurementId) return;
+
+  _gtagInitializedForId = measurementId;
+  if (!document.getElementById('ga4-gtag-script')) {
+    const script = document.createElement('script');
+    script.id = 'ga4-gtag-script';
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
+    document.head.appendChild(script);
+  }
+
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function gtag() {
+    window.dataLayer.push(arguments);
+  };
+  window.gtag('js', new Date());
+  window.gtag('config', measurementId);
+};
 
 export const EVENTS = {
   INVITATION_OPENED:  'invitation_opened',
@@ -24,20 +45,23 @@ export const EVENTS = {
 
 const useAnalytics = () => {
   const track = (eventName, params = {}) => {
-    if (!ENABLED) return;
+    const activeCfg = getActiveConfig();
+    const analytics = activeCfg?.analytics;
+    if (!analytics?.enabled) return;
 
     try {
-      // Google Analytics 4 (if gtag is loaded)
-      if (typeof window.gtag === 'function') {
+      if (analytics.gaMeasurementId && analytics.gaMeasurementId !== 'G-XXXXXXXXXX') {
+        ensureGtagLoaded(analytics.gaMeasurementId);
+      }
+
+      if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
         window.gtag('event', eventName, params);
       }
 
-      // Console logging in development
       if (import.meta.env.DEV) {
         console.info(`[Analytics] ${eventName}`, params);
       }
     } catch (err) {
-      // Analytics should never break the app
       console.warn('[Analytics] Track failed:', err);
     }
   };

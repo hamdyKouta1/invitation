@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import weddingConfig from '../../config/weddingConfig';
 import useWeddingConfig from '../../hooks/useWeddingConfig';
 import { getThemeById } from '../../config/themesConfig';
+import { getEventTypeById } from '../../config/eventTypesConfig';
 import OrnamentDivider from '../ui/OrnamentDivider';
 import FloralCornerSVG from '../ui/FloralCornerSVG';
 import { ThemeHeaderCrest } from '../ui/ThemeVisuals';
@@ -17,11 +18,21 @@ const Hero = () => {
   const liveConfig = useWeddingConfig() || weddingConfig;
   const activeTheme = liveConfig?.theme || 'default';
   const themeObj = getThemeById(activeTheme);
+  const eventMeta = getEventTypeById(liveConfig?.eventType);
+  const isCoupleEvent = eventMeta.mode === 'couple';
 
   if (liveConfig.sections?.hero?.enabled === false) return null;
 
-  const groomName = isAr ? liveConfig.groom?.name : liveConfig.groom?.nameEn;
-  const brideName = isAr ? liveConfig.bride?.name : liveConfig.bride?.nameEn;
+  const groomName = isAr
+    ? (liveConfig.honoree?.titleAr || liveConfig.groom?.name)
+    : (liveConfig.honoree?.titleEn || liveConfig.groom?.nameEn);
+  const brideName = isAr
+    ? (liveConfig.honoree?.subtitleAr ?? liveConfig.bride?.name)
+    : (liveConfig.honoree?.subtitleEn ?? liveConfig.bride?.nameEn);
+  const showSecondHeading = isCoupleEvent || Boolean(brideName);
+  const editorialIssueLabel = isAr
+    ? (liveConfig.editorialLabelAr || eventMeta.editorialLabelAr)
+    : (liveConfig.editorialLabelEn || eventMeta.editorialLabelEn);
   const dateDisplay = isAr ? liveConfig.wedding?.dateDisplay : liveConfig.wedding?.dateDisplayEn;
   const timeDisplay = isAr ? liveConfig.wedding?.time : liveConfig.wedding?.timeEn;
   const venueName = isAr ? liveConfig.venue?.nameAr : liveConfig.venue?.nameEn;
@@ -83,7 +94,7 @@ const Hero = () => {
         >
           {/* Top Editorial Magazine Masthead */}
           <div className="hero-editorial__masthead">
-            <span className="hero-editorial__issue">ISSUE NO. 01 — THE WEDDING EDITION</span>
+            <span className="hero-editorial__issue">{editorialIssueLabel}</span>
             <span className="hero-editorial__dot">•</span>
             <span className="hero-editorial__year">{saveTheDateText}</span>
           </div>
@@ -118,13 +129,18 @@ const Hero = () => {
 
               <h1 className="hero__groom-name font-script">{groomName}</h1>
 
-              <div className="hero__and">
-                <span className="hero__and-line" aria-hidden="true" />
-                <span className="hero__and-text font-serif">{t('hero.and')}</span>
-                <span className="hero__and-line" aria-hidden="true" />
-              </div>
-
-              <h2 className="hero__bride-name font-script">{brideName}</h2>
+              {showSecondHeading && (
+                <>
+                  {isCoupleEvent && (
+                    <div className="hero__and">
+                      <span className="hero__and-line" aria-hidden="true" />
+                      <span className="hero__and-text font-serif">{t('hero.and')}</span>
+                      <span className="hero__and-line" aria-hidden="true" />
+                    </div>
+                  )}
+                  <h2 className="hero__bride-name font-script">{brideName}</h2>
+                </>
+              )}
 
               <OrnamentDivider />
 

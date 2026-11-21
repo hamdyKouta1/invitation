@@ -1,0 +1,11 @@
+# ============================================================================
+# TEMPLATE UPDATE PROTECTION (.gitattributes — Phase 2: ISO-004)
+# ============================================================================
+# Protects customer-specific configuration files from being overwritten when
+# merging shared core template updates from the master template repository.
+# ============================================================================
+
+src/config/weddingConfig.js merge=ours
+src/config/customerConfig.js merge=ours
+public/og-image.jpg merge=ours
+public/wedding-song.mp3 merge=ours

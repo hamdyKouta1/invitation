@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" fill="none">
+  <rect width="600" height="800" fill="#F6F2EA"/>
+  <rect x="24" y="24" width="552" height="752" stroke="#E5DEC9" stroke-width="1.5"/>
+  <path d="M160 640 V280 A140 140 0 0 1 440 280 V640 Z" fill="#FAF8F3" stroke="#A6895B" stroke-width="1.5"/>
+  <text x="300" y="460" text-anchor="middle" fill="#7C6541" font-family="Georgia, serif" font-size="24" letter-spacing="4">OUR SPECIAL DAY</text>
+</svg>

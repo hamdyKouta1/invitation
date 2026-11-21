@@ -8,6 +8,12 @@ import {
   clearTemporaryThemePreview,
   getTemporaryThemePreview,
 } from '../config/themesConfig.js';
+import {
+  DEFAULT_EVENT_TYPE_ID,
+  isValidEventTypeId,
+  getEventTypeById,
+} from '../config/eventTypesConfig.js';
+import { getScopedStorageKey } from './security.js';
 
 export {
   applyThemeToDOM,
@@ -16,7 +22,9 @@ export {
   getTemporaryThemePreview,
 };
 
-const CONFIG_STORAGE_KEY = 'wedding_config_override';
+const BASE_CONFIG_STORAGE_KEY = 'wedding_config_override';
+const getConfigStorageKey = () => getScopedStorageKey(BASE_CONFIG_STORAGE_KEY);
+const getThemeStorageKey = () => getScopedStorageKey(THEME_STORAGE_KEY);
 export const CONFIG_UPDATE_EVENT = 'wedding_config_changed';
 
 /**
@@ -112,7 +120,7 @@ const mergeSectionsMap = (overrideSections = {}, mergedFeatures = {}) => {
  */
 export const mergeConfig = (override) => {
   const storedTheme =
-    typeof localStorage !== 'undefined' ? localStorage.getItem(THEME_STORAGE_KEY) : null;
+    typeof localStorage !== 'undefined' ? localStorage.getItem(getThemeStorageKey()) : null;
 
   if (!override || typeof override !== 'object') {
     const resolvedTheme = isValidThemeId(storedTheme)
@@ -120,12 +128,23 @@ export const mergeConfig = (override) => {
       : isValidThemeId(weddingConfig.theme)
         ? weddingConfig.theme
         : DEFAULT_THEME_ID;
+    const defaultEventType = isValidEventTypeId(weddingConfig.eventType)
+      ? weddingConfig.eventType
+      : DEFAULT_EVENT_TYPE_ID;
     return {
       ...weddingConfig,
+      eventType: defaultEventType,
+      eventMeta: getEventTypeById(defaultEventType),
       theme: resolvedTheme,
       sectionOrder: normalizeSectionOrder(weddingConfig.sectionOrder, weddingConfig.customSections),
     };
   }
+
+  const candidateEventType = override.eventType || weddingConfig.eventType || DEFAULT_EVENT_TYPE_ID;
+  const resolvedEventType = isValidEventTypeId(candidateEventType)
+    ? candidateEventType
+    : DEFAULT_EVENT_TYPE_ID;
+  const eventMeta = getEventTypeById(resolvedEventType);
 
   const groom = { ...weddingConfig.groom, ...(override.groom || {}) };
   const bride = { ...weddingConfig.bride, ...(override.bride || {}) };
@@ -158,13 +177,24 @@ export const mergeConfig = (override) => {
   });
 
   const sectionOrder = normalizeSectionOrder(override.sectionOrder, customSections);
+  const isCoupleMode = eventMeta.mode === 'couple';
+  const primaryDisplayAr = isCoupleMode
+    ? `${groom.name} و${bride.name}`
+    : (override.honoree?.titleAr || groom.name);
+  const primaryDisplayEn = isCoupleMode
+    ? `${groom.nameEn} & ${bride.nameEn}`
+    : (override.honoree?.titleEn || groom.nameEn);
 
   return {
     ...weddingConfig,
     ...override,
+    eventType: resolvedEventType,
+    eventMeta,
     theme: resolvedTheme,
     groom,
     bride,
+    honoree: override.honoree || weddingConfig.honoree || null,
+    agenda: Array.isArray(override.agenda) ? override.agenda : (weddingConfig.agenda || []),
     wedding: { ...weddingConfig.wedding, ...(override.wedding || {}) },
     venue: { ...weddingConfig.venue, ...(override.venue || {}) },
     music: { ...weddingConfig.music, ...(override.music || {}) },
@@ -180,23 +210,39 @@ export const mergeConfig = (override) => {
       ...(override.sharing || {}),
       messageAr:
         override.sharing?.messageAr ||
-        `🎉 دعوة زفاف ${groom.name} و${bride.name} — شاركونا فرحتنا! {url}`,
+        (resolvedEventType === 'wedding'
+          ? `🎉 دعوة زفاف ${groom.name} و${bride.name} — شاركونا فرحتنا! {url}`
+          : `🎉 ${eventMeta.badgeAr}: ${primaryDisplayAr} — يسعدنا حضوركم! {url}`),
       messageEn:
         override.sharing?.messageEn ||
-        `🎉 ${groom.nameEn} & ${bride.nameEn}'s Wedding Invitation — Join us on our special day! {url}`,
+        (resolvedEventType === 'wedding'
+          ? `🎉 ${groom.nameEn} & ${bride.nameEn}'s Wedding Invitation — Join us on our special day! {url}`
+          : `🎉 ${eventMeta.badgeEn}: ${primaryDisplayEn} — Join us! {url}`),
     },
     meta: {
       ...weddingConfig.meta,
       ...(override.meta || {}),
-      titleAr: override.meta?.titleAr || `دعوة زفاف ${groom.name} و${bride.name}`,
-      titleEn: override.meta?.titleEn || `${groom.nameEn} & ${bride.nameEn}'s Wedding Invitation`,
+      titleAr:
+        override.meta?.titleAr ||
+        (resolvedEventType === 'wedding'
+          ? `دعوة زفاف ${groom.name} و${bride.name}`
+          : `${eventMeta.badgeAr} — ${primaryDisplayAr}`),
+      titleEn:
+        override.meta?.titleEn ||
+        (resolvedEventType === 'wedding'
+          ? `${groom.nameEn} & ${bride.nameEn}'s Wedding Invitation`
+          : `${primaryDisplayEn} — ${eventMeta.badgeEn}`),
     },
     invitationPhraseAr:
       override.invitationPhraseAr ||
-      `تتشرف ${groom.familyTitleAr} و${bride.familyTitleAr} بدعوتكم لحضور حفل زفاف نجليهما`,
+      (resolvedEventType === 'wedding'
+        ? `تتشرف ${groom.familyTitleAr} و${bride.familyTitleAr} بدعوتكم لحضور حفل زفاف نجليهما`
+        : `نتشرف بدعوتكم لحضور ومشاركتنا ${eventMeta.nameAr.split(' (')[0]}`),
     invitationPhraseEn:
       override.invitationPhraseEn ||
-      `${groom.familyTitleEn} & ${bride.familyTitleEn} cordially request the honor of your presence at the wedding of their children`,
+      (resolvedEventType === 'wedding'
+        ? `${groom.familyTitleEn} & ${bride.familyTitleEn} cordially request the honor of your presence at the wedding of their children`
+        : `We cordially request the honor of your presence at our ${eventMeta.nameEn}`),
   };
 };
 
@@ -250,7 +296,7 @@ export const getActiveConfig = (override = null) => {
       return mergeConfig(override);
     }
     const stored =
-      typeof localStorage !== 'undefined' ? localStorage.getItem(CONFIG_STORAGE_KEY) : null;
+      typeof localStorage !== 'undefined' ? localStorage.getItem(getConfigStorageKey()) : null;
     if (!stored) {
       return mergeConfig(null);
     }
@@ -271,8 +317,8 @@ export const saveActiveConfig = (newConfig) => {
     const resolvedTheme = isValidThemeId(merged?.theme) ? merged.theme : DEFAULT_THEME_ID;
 
     if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(merged));
-      localStorage.setItem(THEME_STORAGE_KEY, resolvedTheme);
+      localStorage.setItem(getConfigStorageKey(), JSON.stringify(merged));
+      localStorage.setItem(getThemeStorageKey(), resolvedTheme);
     }
 
     applyThemeToDOM(resolvedTheme);
@@ -324,8 +370,8 @@ export const syncConfigWithFirestore = async (getWeddingConfigFromDB, saveWeddin
 export const resetActiveConfig = () => {
   try {
     if (typeof localStorage !== 'undefined') {
-      localStorage.removeItem(CONFIG_STORAGE_KEY);
-      localStorage.removeItem(THEME_STORAGE_KEY);
+      localStorage.removeItem(getConfigStorageKey());
+      localStorage.removeItem(getThemeStorageKey());
     }
     applyThemeToDOM(DEFAULT_THEME_ID);
     const resetMerged = mergeConfig(null);
@@ -384,10 +430,9 @@ const weddingConfig = {
   defaultLanguage: ${JSON.stringify(merged.defaultLanguage || "ar")},
 
   /**
-   * ─── THEME ────────────────────────────────────────────────
-   * Active invitation theme:
-   * 'default' | 'elegant-luxury' | 'minimalist-modern' | 'romantic-floral' | 'royal-classic'
+   * ─── THEME & EVENT TYPE ───────────────────────────────────
    */
+  eventType: ${JSON.stringify(merged.eventType || DEFAULT_EVENT_TYPE_ID)},
   theme: ${JSON.stringify(theme)},
 
   /**

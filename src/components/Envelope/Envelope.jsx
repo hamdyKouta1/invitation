@@ -70,6 +70,15 @@ const Envelope = ({ onOpen, onTriggerMusic }) => {
       rightWing: '#06241B',
       bottomFold: '#0D3D2E',
     },
+    'golden-theme': {
+      backFill: '#F2ECE1',
+      stroke: '#A6895B',
+      flapOuter: '#FAF8F3',
+      flapInner: '#FDFCF9',
+      leftWing: '#EFE8DC',
+      rightWing: '#EAE2D4',
+      bottomFold: '#F6F1E7',
+    },
   }[activeTheme] || {
     backFill: '#EDE4D8',
     stroke: '#C9A96E',

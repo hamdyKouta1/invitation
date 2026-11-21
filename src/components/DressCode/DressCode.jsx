@@ -89,6 +89,9 @@ const DressCode = () => {
     ? (dc.noteDescAr || t('dressCode.noteDesc'))
     : (dc.noteDescEn || t('dressCode.noteDesc'));
 
+  const menColors = Array.isArray(dc.menColors) && dc.menColors.length > 0 ? dc.menColors : MEN_COLORS;
+  const womenColors = Array.isArray(dc.womenColors) && dc.womenColors.length > 0 ? dc.womenColors : WOMEN_COLORS;
+
   return (
     <SectionWrapper id="dress-code" alt>
       <div className="section__header">
@@ -123,7 +126,7 @@ const DressCode = () => {
                 {isAr ? 'درجات الألوان الموصى بها:' : 'Suggested Tone Palette:'}
               </span>
               <div className="palette-swatches">
-                {MEN_COLORS.map((c, i) => (
+                {menColors.map((c, i) => (
                   <div key={i} className="swatch-item" title={isAr ? c.nameAr : c.nameEn}>
                     <span
                       className="swatch-circle"
@@ -161,7 +164,7 @@ const DressCode = () => {
                 {isAr ? 'درجات الألوان الموصى بها:' : 'Suggested Tone Palette:'}
               </span>
               <div className="palette-swatches">
-                {WOMEN_COLORS.map((c, i) => (
+                {womenColors.map((c, i) => (
                   <div key={i} className="swatch-item" title={isAr ? c.nameAr : c.nameEn}>
                     <span
                       className="swatch-circle"
