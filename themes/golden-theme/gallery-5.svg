@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" fill="none">
+  <rect width="800" height="600" fill="#FAF8F3"/>
+  <rect x="24" y="24" width="752" height="552" stroke="#E5DEC9" stroke-width="1.5"/>
+  <path d="M400 320 C400 320 352 283 352 254 A24 24 0 0 1 400 242 A24 24 0 0 1 448 254 C448 283 400 320 400 320 Z" stroke="#8C734B" stroke-width="2" fill="rgba(166,137,91,0.2)"/>
+  <text x="400" y="420" text-anchor="middle" fill="#7C6541" font-family="Georgia, serif" font-size="24" letter-spacing="5">FOREVER BEGINS</text>
+</svg>

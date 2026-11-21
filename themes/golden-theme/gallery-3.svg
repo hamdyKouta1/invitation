@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" fill="none">
+  <rect width="600" height="600" fill="#FAF8F3"/>
+  <rect x="24" y="24" width="552" height="552" stroke="#E5DEC9" stroke-width="1.5"/>
+  <circle cx="275" cy="280" r="65" stroke="#A6895B" stroke-width="2.5" fill="none"/>
+  <circle cx="325" cy="280" r="65" stroke="#8C734B" stroke-width="2.5" fill="none"/>
+  <text x="300" y="450" text-anchor="middle" fill="#7C6541" font-family="Georgia, serif" font-size="22" letter-spacing="4">THE VOWS</text>
+</svg>
